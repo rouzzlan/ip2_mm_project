@@ -1,11 +1,11 @@
-package service;
+package be.kdg.musicmaker.service;
 
-import DTO.UserDTO;
+import be.kdg.musicmaker.DTO.UserDTO;
+import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.repository.UserRepository;
 import ma.glasnost.orika.MapperFacade;
-import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
 
 import java.util.List;
 

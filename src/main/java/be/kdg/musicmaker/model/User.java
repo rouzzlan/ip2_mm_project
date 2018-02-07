@@ -1,21 +1,33 @@
-package DTO;
+package be.kdg.musicmaker.model;
 
-public class UserDTO {
+import javax.persistence.*;
+
+@Entity
+@Table(name = "User")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+
     private String username;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
 
-    public UserDTO() {
+    public User() {
     }
 
-    public UserDTO(String username, String firstname, String lastname, String email, String password) {
+    public User(String username, String firstname, String lastname, String email, String password) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -56,5 +68,17 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

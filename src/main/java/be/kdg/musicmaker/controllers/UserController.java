@@ -1,14 +1,14 @@
-package controllers;
+package be.kdg.musicmaker.controllers;
 
-import DTO.UserDTO;
-import model.User;
+import be.kdg.musicmaker.DTO.UserDTO;
+import be.kdg.musicmaker.service.UserManager;
+import be.kdg.musicmaker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import service.UserManager;
 
 import java.util.List;
 

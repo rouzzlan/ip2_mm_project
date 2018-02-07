@@ -1,6 +1,6 @@
-package repository;
+package be.kdg.musicmaker.repository;
 
-import model.User;
+import be.kdg.musicmaker.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
