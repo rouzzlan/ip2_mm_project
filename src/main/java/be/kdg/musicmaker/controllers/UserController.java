@@ -4,6 +4,9 @@ import be.kdg.musicmaker.DTO.UserDTO;
 import be.kdg.musicmaker.service.UserManager;
 import be.kdg.musicmaker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,5 +36,9 @@ public class UserController {
         return "userlist";
 
 
+    }
+    @RequestMapping(value = "/getusersJson")
+    public HttpEntity<List<User>> getUsersJson(){
+        return new ResponseEntity<>(manager.getUsers(), HttpStatus.OK);
     }
 }
