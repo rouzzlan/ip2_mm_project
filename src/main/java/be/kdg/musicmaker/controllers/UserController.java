@@ -20,6 +20,7 @@ public class UserController {
     @Autowired
     UserManager manager;
 
+    //http://127.0.0.1:8080/createuser
     @RequestMapping(value = "/createuser", method = RequestMethod.GET)
     public String addUser(Model model){
         model.addAttribute("userDTO", new UserDTO());
@@ -37,6 +38,7 @@ public class UserController {
 
 
     }
+    //http://127.0.0.1:8080/getusersJson
     @RequestMapping(value = "/getusersJson")
     public HttpEntity<List<User>> getUsersJson(){
         return new ResponseEntity<>(manager.getUsers(), HttpStatus.OK);
