@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -35,9 +36,14 @@ public class UserController {
     public String getUsers(){
         List<User> users = manager.getUsers();
         return "userlist";
-
-
     }
+
+    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    public ResponseEntity <String> postUser(@RequestBody UserDTO userDTO){
+        System.out.println(userDTO.toString());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     //http://127.0.0.1:8080/getusersJson
     @RequestMapping(value = "/getusersJson")
     public HttpEntity<List<User>> getUsersJson(){
