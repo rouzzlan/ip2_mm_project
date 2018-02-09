@@ -24,6 +24,7 @@ public class UserController {
     @RequestMapping(value = "/adduser", method = RequestMethod.POST)
     public ResponseEntity <String> postUser(@RequestBody UserDTO userDTO){
         System.out.println(userDTO.toString());
+        manager.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
