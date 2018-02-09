@@ -21,24 +21,7 @@ public class UserController {
     @Autowired
     UserManager manager;
 
-    //http://127.0.0.1:8080/createuser
-    @RequestMapping(value = "/createuser", method = RequestMethod.GET)
-    public String addUser(Model model){
-        model.addAttribute("userDTO", new UserDTO());
-        return "createuser";
-    }
-    @RequestMapping(value = "/createuser", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute UserDTO userDTO){
-        manager.createUser(userDTO);
-        return "home";
-    }
-    @RequestMapping(value = "/getusers", method = RequestMethod.GET)
-    public String getUsers(){
-        List<User> users = manager.getUsers();
-        return "userlist";
-    }
-
-    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/adduser", method = RequestMethod.POST)
     public ResponseEntity <String> postUser(@RequestBody UserDTO userDTO){
         System.out.println(userDTO.toString());
         return ResponseEntity.status(HttpStatus.CREATED).build();
