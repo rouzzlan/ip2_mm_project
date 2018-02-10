@@ -4,10 +4,10 @@
     <bytecodeTargetLevel>
       <module name="ip2_mm_p2_main" target="1.8" />
       <module name="ip2_mm_p2_test" target="1.8" />
+      <module name="ip2_mm_project2_main" target="1.8" />
+      <module name="ip2_mm_project2_test" target="1.8" />
       <module name="ip2_mm_project_main" target="1.8" />
       <module name="ip2_mm_project_test" target="1.8" />
-      <module name="SpringBoot-ip2_mm_p2_main" target="1.8" />
-      <module name="SpringBoot-ip2_mm_p2_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
