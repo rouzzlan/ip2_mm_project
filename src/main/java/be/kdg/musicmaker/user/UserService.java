@@ -45,4 +45,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Boolean isRolesEmpty() {
+        if (roleRepository.count() == 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean isUsersEmpty() {
+        if (userRepository.count() == 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
