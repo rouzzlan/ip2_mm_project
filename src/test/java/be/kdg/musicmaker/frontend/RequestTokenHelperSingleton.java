@@ -83,4 +83,7 @@ public class RequestTokenHelperSingleton {
         }
         return token;
     }
+    public String getOauthToken(){
+        return OAUTH_TOKEN;
+    }
 }

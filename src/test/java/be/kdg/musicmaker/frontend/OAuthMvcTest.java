@@ -3,6 +3,9 @@ package be.kdg.musicmaker.frontend;
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.security.ResourceServerConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +23,8 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.LinkedList;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -55,14 +60,21 @@ public class OAuthMvcTest {
     }
     private String obtainAccessToken(String username, String password) throws Exception {
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "password");
-        params.add("username", username);
-        params.add("password", password);
+//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "password");
+//        params.add("username", username);
+//        params.add("password", password);
+
+        LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
+        componentList.add(new BasicNameValuePair("grant_type", "password"));
+        componentList.add(new BasicNameValuePair("username", username));
+        componentList.add(new BasicNameValuePair("password", password));
+
 
         ResultActions result
-                = mockMvc.perform(post("/oauth/token").contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .params(params).header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString("mmapp:mmapp".getBytes()))
+                = mockMvc.perform(post("/oauth/token")
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .with(httpBasic("mmapp", "mmapp"))).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
@@ -72,9 +84,21 @@ public class OAuthMvcTest {
         return jsonParser.parseMap(resultString).get("access_token").toString();
     }
     @Test
-    public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
-        final String accessToken = obtainAccessToken("user3@user.com", "user3");
+    public void getTokenTest() {
+        String accessToken = "";
+        try {
+            accessToken = obtainAccessToken("user3@user.com", "user3");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
     }
+//    @Test
+//    public void GetTokenTest2() throws Exception {
+//        RequestTokenHelperSingleton helperSingleton = RequestTokenHelperSingleton.getInstance();
+//        final String accessToken = helperSingleton.getOauthToken();
+//        System.out.println("token:" + accessToken);
+//        assertTrue(accessToken.length() > 0);
+//    }
 }
