@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.frontend;
 
+
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.security.CorsFilter;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -32,7 +33,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
-public class OAuthMvcTest {
+public class CreateUserByAdminTest {
+    private static final String LeerlingJSON = "{\"username\":\"testLeerling1\",\"password\":\"leerling1\",\"firstname\":\"kim\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.kim@user.com\",\"Role\":[{\"name\":\"ROLE_LEERLING\"}]}";
+    private static final String LeerkrachtJSON = "{\"username\":\"testLeerkracht1\",\"password\":\"leerkracht1\",\"firstname\":\"tommy\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.tommy@user.com\",\"Role\":[{\"name\":\"ROLE_LESGEVER\"}]}";
+    private static final String BeheerderJSON = "{\"username\":\"testBeheerder1\",\"password\":\"beheerder1\",\"firstname\":\"Octaaf\",\"lastname\":\"De Bolle\",\"email\":\"debolle.octaaf@user.com\",\"Role\":[{\"name\":\"ROLE_BEHEERDER\"}]}";
+    private static final String AdminUsername = "user3@user.com" ;
+    private static final String Adminpass = "user3";
+    private static String ACCESS_TOKEN = "";
+
 
     @Autowired
     private WebApplicationContext wac;
@@ -46,7 +54,24 @@ public class OAuthMvcTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
+        try {
+            ACCESS_TOKEN = obtainAccessToken(AdminUsername, Adminpass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    @Test
+    public void createLeerling(){
+
+    }
+
+
+
+
+
+
+
     private String obtainAccessToken(String username, String password) throws Exception {
 
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
@@ -66,16 +91,5 @@ public class OAuthMvcTest {
         String resultString = result.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(resultString).get("access_token").toString();
-    }
-    @Test
-    public void getTokenTest() {
-        String accessToken = "";
-        try {
-            accessToken = obtainAccessToken("user3@user.com", "user3");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("token:" + accessToken);
-        assertTrue(accessToken.length() > 0);
     }
 }
