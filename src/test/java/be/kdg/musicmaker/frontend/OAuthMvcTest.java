@@ -43,12 +43,6 @@ public class OAuthMvcTest {
     @Autowired
     private WebApplicationContext wac;
 
-//    @Autowired
-//    private FilterChainProxy springSecurityFilterChain;
-
-    @Autowired
-    private ResourceServerConfig resourceServerConfig;
-
     @Autowired
     private CorsFilter corsFilter;
 
@@ -60,11 +54,6 @@ public class OAuthMvcTest {
                 .addFilter(corsFilter).build();
     }
     private String obtainAccessToken(String username, String password) throws Exception {
-
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "password");
-//        params.add("username", username);
-//        params.add("password", password);
 
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
         componentList.add(new BasicNameValuePair("grant_type", "password"));
@@ -95,11 +84,4 @@ public class OAuthMvcTest {
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
     }
-//    @Test
-//    public void GetTokenTest2() throws Exception {
-//        RequestTokenHelperSingleton helperSingleton = RequestTokenHelperSingleton.getInstance();
-//        final String accessToken = helperSingleton.getOauthToken();
-//        System.out.println("token:" + accessToken);
-//        assertTrue(accessToken.length() > 0);
-//    }
 }
