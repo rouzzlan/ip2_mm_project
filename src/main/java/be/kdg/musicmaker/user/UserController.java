@@ -17,6 +17,7 @@ public class UserController {
 
     @RequestMapping(value = "/adduser", method = RequestMethod.POST)
     public ResponseEntity<String> postUser(@RequestBody User user){
+        //todo dto toevoegen en omzetten naar user object
         System.out.println(user.toString());
         userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -47,26 +47,6 @@ public class OAuthMvcTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
     }
-    private String obtainAccessToken(String username, String password) throws Exception {
-
-        LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
-        componentList.add(new BasicNameValuePair("grant_type", "password"));
-        componentList.add(new BasicNameValuePair("username", username));
-        componentList.add(new BasicNameValuePair("password", password));
-
-
-        ResultActions result
-                = mockMvc.perform(post("http://127.0.0.1:8080/oauth/token")
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .with(httpBasic("mmapp", "mmapp"))).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-
-        String resultString = result.andReturn().getResponse().getContentAsString();
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("access_token").toString();
-    }
     @Test
     public void getTokenTest() {
         String accessToken = "";
@@ -77,5 +57,25 @@ public class OAuthMvcTest {
         }
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
+    }
+    private String obtainAccessToken(String username, String password) throws Exception {
+
+        LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
+        componentList.add(new BasicNameValuePair("grant_type", "password"));
+        componentList.add(new BasicNameValuePair("username", username));
+        componentList.add(new BasicNameValuePair("password", password));
+
+
+        ResultActions result
+                = mockMvc.perform(post("/oauth/token")
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .with(httpBasic("mmapp", "mmapp"))).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        String resultString = result.andReturn().getResponse().getContentAsString();
+        JacksonJsonParser jsonParser = new JacksonJsonParser();
+        return jsonParser.parseMap(resultString).get("access_token").toString();
     }
 }
