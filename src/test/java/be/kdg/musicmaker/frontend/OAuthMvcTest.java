@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -55,7 +56,7 @@ public class OAuthMvcTest {
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
     }
     private String obtainAccessToken(String username, String password) throws Exception {
@@ -72,7 +73,7 @@ public class OAuthMvcTest {
 
 
         ResultActions result
-                = mockMvc.perform(post("/oauth/token")
+                = mockMvc.perform(post("http://127.0.0.1:8080/oauth/token")
                 .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .with(httpBasic("mmapp", "mmapp"))).andDo(print())
