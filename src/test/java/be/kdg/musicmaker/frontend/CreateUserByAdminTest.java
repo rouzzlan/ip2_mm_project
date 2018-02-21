@@ -2,7 +2,6 @@ package be.kdg.musicmaker.frontend;
 
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.model.UserDTO;
 import be.kdg.musicmaker.security.CorsFilter;
@@ -31,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,13 +45,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class CreateUserByAdminTest {
-    private static final String LeerlingJSON = "{\"username\":\"testLeerling1\",\"password\":\"leerling1\",\"firstname\":\"kim\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.kim@user.com\",\"roles\":[{\"name\":\"ROLE_LEERLING\"}]}";
-    private static final String LeerkrachtJSON = "{\"username\":\"testLeerkracht1\",\"password\":\"leerkracht1\",\"firstname\":\"tommy\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.tommy@user.com\",\"roles\":[{\"name\":\"ROLE_LESGEVER\"}]}";
-    private static final String BeheerderJSON = "{\"username\":\"testBeheerder1\",\"password\":\"beheerder1\",\"firstname\":\"Octaaf\",\"lastname\":\"De Bolle\",\"email\":\"debolle.octaaf@user.com\",\"roles\":[{\"name\":\"ROLE_BEHEERDER\"}]}";
     private UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
-    private static final String AdminUsername = "user3@user.com";
-    private static final String Adminpass = "user3";
-    private static String ACCESS_TOKEN = "";
+    private static String ACCESS_TOKEN_Admin = "";
+    private static String ACCESS_TOKEN_Student = "";
+    private static String ACCESS_TOKEN_Teacher = "";
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -73,14 +68,16 @@ public class CreateUserByAdminTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
         try {
-            ACCESS_TOKEN = obtainAccessToken(AdminUsername, Adminpass);
+            ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
+            ACCESS_TOKEN_Student = obtainAccessToken("user@user.com", "user");
+            ACCESS_TOKEN_Teacher = obtainAccessToken("user2@user.com", "user2");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void createLeerling() throws UserNotFoundException {
+    public void createStudentByAdmin() throws UserNotFoundException {
         String jsonString = "";
         try {
             jsonString = objectMapper.writeValueAsString(leerlingDTO);
@@ -88,7 +85,7 @@ public class CreateUserByAdminTest {
             e.printStackTrace();
         }
         try {
-            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN)
+            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
                     .andExpect(status().isCreated());
         } catch (Exception e) {
@@ -98,17 +95,35 @@ public class CreateUserByAdminTest {
         assertNotNull(leerling);
     }
     @Test
-    public void createUserUnauthorized() throws Exception {
-        UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
+    public void createStudentByTeacher() throws UserNotFoundException {
         String jsonString = "";
-        String leerlingAccessToken = obtainAccessToken("user@user.com", "user");
         try {
             jsonString = objectMapper.writeValueAsString(leerlingDTO);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         try {
-            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + leerlingAccessToken)
+            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
+                    .andExpect(status().isForbidden());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        User leerling = userService.doesUserExist("kim.vermuilen@mm.app");
+        assertNotNull(leerling);
+    }
+
+    @Test
+    public void createUserUnauthorized() throws Exception {
+        UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(leerlingDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
                     .andExpect(status().isForbidden());
         } catch (Exception e) {
@@ -118,7 +133,7 @@ public class CreateUserByAdminTest {
 
     @Test
     public void getRoles() throws Exception {
-        ResultActions result = this.mockMvc.perform(get("/getRoles").header("Authorization", "Bearer " + ACCESS_TOKEN)).andDo(print())
+        ResultActions result = this.mockMvc.perform(get("/getRoles").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
         List roles = objectMapper.readValue(result.andReturn().getResponse().getContentAsString(), List.class);
