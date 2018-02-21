@@ -104,7 +104,7 @@ public class CreateUserByAdminTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
         List roles = objectMapper.readValue(result.andReturn().getResponse().getContentAsString(), List.class);
-        assertTrue(roles.size() == 3);
+        assertTrue(roles.size() == userService.getRoles().size());
     }
 
 
