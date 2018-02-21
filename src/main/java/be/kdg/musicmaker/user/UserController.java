@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.user;
 
 import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,7 @@ public class UserController {
     UserService userService;
 
     @RequestMapping(value = "/adduser", method = RequestMethod.POST)
-    public ResponseEntity<String> postUser(@RequestBody User user){
-        //todo dto toevoegen en omzetten naar user object
-        System.out.println(user.toString());
+    public ResponseEntity<String> postUser(@RequestBody UserDTO user){
         userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
