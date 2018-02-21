@@ -50,6 +50,7 @@ public class CreateUserByAdminTest {
     private static final String LeerlingJSON = "{\"username\":\"testLeerling1\",\"password\":\"leerling1\",\"firstname\":\"kim\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.kim@user.com\",\"roles\":[{\"name\":\"ROLE_LEERLING\"}]}";
     private static final String LeerkrachtJSON = "{\"username\":\"testLeerkracht1\",\"password\":\"leerkracht1\",\"firstname\":\"tommy\",\"lastname\":\"vermuilen\",\"email\":\"vermuilen.tommy@user.com\",\"roles\":[{\"name\":\"ROLE_LESGEVER\"}]}";
     private static final String BeheerderJSON = "{\"username\":\"testBeheerder1\",\"password\":\"beheerder1\",\"firstname\":\"Octaaf\",\"lastname\":\"De Bolle\",\"email\":\"debolle.octaaf@user.com\",\"roles\":[{\"name\":\"ROLE_BEHEERDER\"}]}";
+    private UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
     private static final String AdminUsername = "user3@user.com";
     private static final String Adminpass = "user3";
     private static String ACCESS_TOKEN = "";
@@ -80,7 +81,6 @@ public class CreateUserByAdminTest {
 
     @Test
     public void createLeerling() throws UserNotFoundException {
-        UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
         String jsonString = "";
         try {
             jsonString = objectMapper.writeValueAsString(leerlingDTO);
@@ -96,6 +96,24 @@ public class CreateUserByAdminTest {
         }
         User leerling = userService.doesUserExist("kim.vermuilen@mm.app");
         assertNotNull(leerling);
+    }
+    @Test
+    public void createUserUnauthorized() throws Exception {
+        UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
+        String jsonString = "";
+        String leerlingAccessToken = obtainAccessToken("user@user.com", "user");
+        try {
+            jsonString = objectMapper.writeValueAsString(leerlingDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + leerlingAccessToken)
+                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
+                    .andExpect(status().isForbidden());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

@@ -48,7 +48,7 @@ public class OAuthMvcTest {
                 .addFilter(corsFilter).build();
     }
     @Test
-    public void getTokenTest() {
+    public void getAdminTokenTest() {
         String accessToken = "";
         try {
             accessToken = obtainAccessToken("user3@user.com", "user3");
@@ -58,6 +58,19 @@ public class OAuthMvcTest {
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
     }
+
+    @Test
+    public void getStudentTokenTest() {
+        String accessToken = "";
+        try {
+            accessToken = obtainAccessToken("user@user.com", "user");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("token:" + accessToken);
+        assertTrue(accessToken.length() > 0);
+    }
+
     private String obtainAccessToken(String username, String password) throws Exception {
 
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
