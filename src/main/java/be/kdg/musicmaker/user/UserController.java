@@ -23,7 +23,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value = "/getusersJson")
+    @GetMapping(value = "/getrolesJson")
     public HttpEntity<List<Role>> getRulesJson(){
         return new ResponseEntity<>(userService.getRoles(), HttpStatus.OK);
     }
