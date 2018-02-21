@@ -26,17 +26,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
-public class CreateUserByAdminTest {
+public class CreateUserTest {
     private UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
     private static String ACCESS_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Student = "";
@@ -114,7 +113,7 @@ public class CreateUserByAdminTest {
     }
 
     @Test
-    public void createUserUnauthorized() throws Exception {
+    public void createStudentByStudent() throws Exception {
         UserDTO leerlingDTO = new UserDTO("testLeerling1", "kim", "vermuilen", "kim.vermuilen@mm.app", "kim", Arrays.asList("ROLE_LEERLING"));
         String jsonString = "";
         try {
