@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -96,6 +97,17 @@ public class CreateUserByAdminTest {
         User leerling = userService.doesUserExist("kim.vermuilen@mm.app");
         assertNotNull(leerling);
     }
+
+    @Test
+    public void getRoles() throws Exception {
+        ResultActions result = this.mockMvc.perform(get("/getRoles").header("Authorization", "Bearer " + ACCESS_TOKEN)).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+        List roles = objectMapper.readValue(result.andReturn().getResponse().getContentAsString(), List.class);
+        assertTrue(roles.size() == 3);
+    }
+
+
 
     private String obtainAccessToken(String username, String password) throws Exception {
 
