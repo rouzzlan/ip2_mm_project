@@ -58,7 +58,17 @@ public class OAuthMvcTest {
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
     }
-
+    @Test
+    public void getTeacherTokenTest() {
+        String accessToken = "";
+        try {
+            accessToken = obtainAccessToken("user2@user.com", "user2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("token:" + accessToken);
+        assertTrue(accessToken.length() > 0);
+    }
     @Test
     public void getStudentTokenTest() {
         String accessToken = "";
