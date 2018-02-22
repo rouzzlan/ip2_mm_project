@@ -17,7 +17,7 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-    @RequestMapping(value = "/addEvents", method = RequestMethod.POST)
+    @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
     public ResponseEntity<String> postEvent(@RequestBody Event event) {
         eventService.createEvent(event);
         return ResponseEntity.status(HttpStatus.CREATED).build();
