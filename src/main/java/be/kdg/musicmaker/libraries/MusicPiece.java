@@ -1,19 +1,25 @@
-package be.kdg.musicmaker.fileManagement;
+package be.kdg.musicmaker.libraries;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-//@Entity
-//@Table(name="Music Piece")
+@Entity
+@Table(name = "Music_Piece")
 public class MusicPiece {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotNull
+    @Column(name = "music_title")
     private String title;
+    @NotNull
     private String artist;
+    @Column(name = "music_language")
     private String language;
     private String topic;
-//    @Lob
-//    @Column(name="music file")
+    @NotNull
+    @Lob
+    @Column(name = "music_file")
     private byte[] musicClip;
 
     public MusicPiece() {
@@ -65,5 +71,9 @@ public class MusicPiece {
 
     public void setMusicClip(byte[] musicClip) {
         this.musicClip = musicClip;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
