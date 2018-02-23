@@ -22,10 +22,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.Assert;
+import org.junit.Assert;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.LinkedList;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -41,6 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FileDownloadTest {
     private static String ACCESS_TOKEN_Admin = "";
     private ObjectMapper objectMapper = new ObjectMapper();
+    private ClassLoader classLoader;
+    private File musicFile;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -57,14 +60,14 @@ public class FileDownloadTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception{
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
-        try {
-            ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        classLoader = getClass().getClassLoader();
+        musicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
+//        byte[] fileArray = Files.readAllBytes(musicFile.toPath());
+        ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
+
     }
 
 
@@ -84,11 +87,10 @@ public class FileDownloadTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("audio/mpeg"));
         byte[] byteArray = result.andReturn().getResponse().getContentAsByteArray();
-        String fileName = result.andReturn().getRequest().getHeader("filename");
-        File tempFile = testFolder.newFile("testfile.MP3");
+        File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
 
-        Assert.notNull(tempFile);
+        Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
 
     }
 
