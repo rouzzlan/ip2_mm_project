@@ -9,10 +9,16 @@ import java.util.List;
 public class MusicLibraryService {
     @Autowired
     MusicLibraryRepository musicLibraryRepository;
-    public void addMusicPiece(MusicPiece musicPiece){
+
+    public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
-    public List<MusicPiece> getMusicPiece(String title){
+
+    public List<MusicPiece> getMusicPiecesByTitle(String title) {
         return musicLibraryRepository.findByTitle(title);
+    }
+
+    public MusicPiece getMusicPieceById(Long id) {
+        return musicLibraryRepository.findOne(id);
     }
 }

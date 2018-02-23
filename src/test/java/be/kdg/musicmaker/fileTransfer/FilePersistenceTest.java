@@ -27,43 +27,59 @@ public class FilePersistenceTest {
     @Autowired
     MusicLibraryService musicLibraryService;
 
-    private MultipartFile musicFile;
+    private MultipartFile mpMusicFile1;
     private MusicPiece musicPiece1;
+    private ClassLoader classLoader;
+    private File musicFile;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
     public void setup() throws IOException, URISyntaxException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
-        byte[] fileArray = Files.readAllBytes(file.toPath());
-        musicFile = new MockMultipartFile("musicClip", "musicTestFile.MP3", "MP3", fileArray);
+        classLoader = getClass().getClassLoader();
+        musicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
+        byte[] fileArray = Files.readAllBytes(musicFile.toPath());
+        mpMusicFile1 = new MockMultipartFile("musicClip", "musicTestFile.MP3", "MP3", fileArray);
         musicPiece1 = new MusicPiece();
         musicPiece1.setArtist("Schubert");
         musicPiece1.setTitle("String Quartet No 14 in D minor Death and the Maiden");
-        musicPiece1.setMusicClip(musicFile.getBytes());
+        musicPiece1.setMusicClip(mpMusicFile1.getBytes());
     }
+
     @Test
-    public void testFileLoaded(){
-        Assert.assertNotNull(musicFile);
+    public void testFileLoaded() {
+        Assert.assertNotNull(mpMusicFile1);
     }
+
     @Test
-    public void testFileNotCorrupted() throws IOException, URISyntaxException{
-        ClassLoader classLoader = getClass().getClassLoader();
-        File originalFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
-        File tempFile = testFolder.newFile(musicFile.getOriginalFilename());
-        musicFile.transferTo(tempFile);
-        Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(originalFile));
+    public void testFileNotCorrupted() throws IOException {
+        File tempFile = testFolder.newFile(mpMusicFile1.getOriginalFilename());
+        mpMusicFile1.transferTo(tempFile);
+        Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
     }
+
     @Test
-    public void musicPiecePersistTest(){
+    public void musicPiecePersistTest() {
         musicLibraryService.addMusicPiece(musicPiece1);
     }
+
     @Test
-    public void musicPieceRetrieveTest(){
+    public void musicPieceRetrieveTest() {
         musicLibraryService.addMusicPiece(musicPiece1);
-        List<MusicPiece> musicPiece = musicLibraryService.getMusicPiece(musicPiece1.getTitle());
+        List<MusicPiece> musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPiece1.getTitle());
         Assert.assertNotNull(musicPiece);
+    }
+
+    @Test
+    public void correct_file_format_test() throws IOException {
+        musicLibraryService.addMusicPiece(musicPiece1);
+        List<MusicPiece> musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPiece1.getTitle());
+        byte[] byteArray = musicPiece.get(0).getMusicClip();
+
+        File tempFile = testFolder.newFile("tempFile");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+        Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
+
     }
 }
