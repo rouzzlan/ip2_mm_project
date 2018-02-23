@@ -2,8 +2,8 @@ package be.kdg.musicmaker.frontend;
 
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.model.User;
-import be.kdg.musicmaker.model.UserDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.UserNotFoundException;
