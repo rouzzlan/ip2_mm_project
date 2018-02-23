@@ -2,9 +2,8 @@ package be.kdg.musicmaker.frontend;
 
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
-import be.kdg.musicmaker.model.UserDTO;
+import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.UserNotFoundException;
@@ -31,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
