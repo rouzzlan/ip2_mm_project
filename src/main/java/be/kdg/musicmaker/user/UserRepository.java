@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.user;
 
-import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
