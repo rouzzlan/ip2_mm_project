@@ -2,7 +2,7 @@ package be.kdg.musicmaker.user;
 
 import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
-import be.kdg.musicmaker.model.UserDTO;
+import be.kdg.musicmaker.model.DTO.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

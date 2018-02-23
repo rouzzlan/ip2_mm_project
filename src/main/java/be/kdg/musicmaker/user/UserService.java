@@ -1,6 +1,6 @@
 package be.kdg.musicmaker.user;
 
-import be.kdg.musicmaker.model.UserDTO;
+import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.util.UserNotFoundException;
 import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;

@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.model;
+package be.kdg.musicmaker.model.DTO;
 
 import org.apache.http.message.BasicNameValuePair;
 
