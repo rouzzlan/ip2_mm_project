@@ -21,6 +21,9 @@ public class MusicPiece {
     @Lob
     @Column(name = "music_file")
     private byte[] musicClip;
+    @NotNull
+    @Column(name = "file_name")
+    private String fileName;
 
     public MusicPiece() {
     }
@@ -75,5 +78,13 @@ public class MusicPiece {
 
     public Long getId() {
         return id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

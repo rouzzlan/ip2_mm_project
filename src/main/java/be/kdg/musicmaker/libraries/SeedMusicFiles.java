@@ -32,6 +32,7 @@ public class SeedMusicFiles {
         musicPiece1.setArtist("Mozart");
         musicPiece1.setTitle("Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence");
         musicPiece1.setMusicClip(fileArray);
+        musicPiece1.setFileName("Requiem-piano-mozart-lacrymosa.mp3");
         service.addMusicPiece(musicPiece1);
     }
 

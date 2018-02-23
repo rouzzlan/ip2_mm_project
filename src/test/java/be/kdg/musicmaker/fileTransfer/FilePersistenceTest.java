@@ -45,6 +45,7 @@ public class FilePersistenceTest {
         musicPiece1.setArtist("Schubert");
         musicPiece1.setTitle("String Quartet No 14 in D minor Death and the Maiden");
         musicPiece1.setMusicClip(mpMusicFile1.getBytes());
+        musicPiece1.setFileName("musicTestFile.MP3");
     }
 
     @Test
