@@ -20,17 +20,19 @@ public class SeedMusicFiles {
             seed();
         } catch (Exception e) {
             System.out.println("seeding music files failed");
+            e.printStackTrace();
         }
     }
 
     private void seed() throws IOException, URISyntaxException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File musicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
+        File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
         byte[] fileArray = Files.readAllBytes(musicFile.toPath());
         MusicPiece musicPiece1 = new MusicPiece();
         musicPiece1.setArtist("Mozart");
         musicPiece1.setTitle("Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence");
         musicPiece1.setMusicClip(fileArray);
+        service.addMusicPiece(musicPiece1);
     }
 
 }
