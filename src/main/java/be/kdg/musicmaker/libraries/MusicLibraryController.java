@@ -1,15 +1,22 @@
 package be.kdg.musicmaker.libraries;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/music_library")
@@ -42,7 +49,7 @@ public class MusicLibraryController {
     @GetMapping(value = "/get_sample_file")
     public StreamingResponseBody getSteamingFile(HttpServletResponse response) {
         MusicPiece musicPiece = musicLibraryService.getMusicPieceById(Long.valueOf(1));
-        response.setContentType("audio/mpeg");
+        response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=" + musicPiece.getFileName());
         InputStream inputStream = new ByteArrayInputStream(musicPiece.getMusicClip());
         return outputStream -> {
@@ -53,4 +60,17 @@ public class MusicLibraryController {
             }
         };
     }
+//    @RequestMapping(value="/download-resource")
+//    public String downloadResource(HttpSession session,
+//                                   HttpServletRequest request, HttpServletResponse response,
+//                                   Model model) {
+//        MusicPiece musicPiece = musicLibraryService.getMusicPieceById(Long.valueOf(1));
+//
+//            response.setContentType("APPLICATION/OCTET-STREAM");
+//            response.addHeader("Content-Disposition", "attachment; filename="+musicPiece.getFileName());
+//        FileUtils.writeByteArrayToFile(tempFile, musicPiece.getMusicClip());
+//            Files.copy(file, response.getOutputStream());
+//
+//        return null;
+//    }
 }

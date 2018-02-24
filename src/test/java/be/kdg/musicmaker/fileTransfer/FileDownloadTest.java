@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.junit.Assert;
@@ -33,6 +34,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,21 +78,21 @@ public class FileDownloadTest {
 
         this.mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("audio/mpeg"));
+                .andExpect(content().contentType("APPLICATION/OCTET-STREAM"));
 
     }
 
     @Test
     public void testDownloadFileContent() throws Exception {
 
-        ResultActions result = mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+        MvcResult result = mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("audio/mpeg"));
-        byte[] byteArray = result.andReturn().getResponse().getContentAsByteArray();
+                .andExpect(content().contentType("APPLICATION/OCTET-STREAM")).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
         File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
 
-        Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
+        Assert.assertEquals(FileUtils.readLines(tempFile).size(), FileUtils.readLines(musicFile).size());
 
     }
 
