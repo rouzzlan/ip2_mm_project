@@ -78,23 +78,24 @@ public class FileDownloadTest {
 
         this.mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("APPLICATION/OCTET-STREAM"));
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
 
     }
 
-//    @Test
-//    public void testDownloadFileContent() throws Exception {
-//
-//        MvcResult result = mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType("APPLICATION/OCTET-STREAM")).andReturn();
-//        byte[] byteArray = result.getResponse().getContentAsByteArray();
-//        File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
-//        FileUtils.writeByteArrayToFile(tempFile, byteArray);
-//
+    @Test
+    public void testDownloadFileContent() throws Exception {
+
+        MvcResult result = mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+
+        Assert.assertEquals(tempFile.getTotalSpace(), musicFile.getTotalSpace());
 //        Assert.assertEquals(FileUtils.readLines(tempFile).size(), FileUtils.readLines(musicFile).size());
-//
-//    }
+
+    }
 
     private String obtainAccessToken(String username, String password) throws Exception {
 
