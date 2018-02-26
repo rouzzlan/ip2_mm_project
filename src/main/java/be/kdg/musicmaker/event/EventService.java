@@ -3,6 +3,7 @@ package be.kdg.musicmaker.event;
 import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.model.Band;
 import be.kdg.musicmaker.model.Event;
+import be.kdg.musicmaker.util.EventNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,21 @@ public class EventService {
     @Autowired
     private MapperFacade orikaMapperFacade;
 
+    public Event doesEventExist(String name) throws EventNotFoundException {
+        Event event = eventRepository.findByName(name);
+        if (event != null) {
+            return event;
+        } else {
+            throw new EventNotFoundException();
+        }
+    }
+
     public void createEvent(Event event) {
         eventRepository.save(event);
+    }
+
+    public void createBand(Band band) {
+        bandRepository.save(band);
     }
 
     public List<Event> getEvents() {
