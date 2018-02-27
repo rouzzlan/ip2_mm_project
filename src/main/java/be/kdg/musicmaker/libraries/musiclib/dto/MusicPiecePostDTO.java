@@ -44,7 +44,7 @@ public class MusicPiecePostDTO {
         return topic;
     }
 
-    public MultipartFile getMusicClipURL() {
+    public MultipartFile getMusicFile() {
         return musicClip;
     }
 

@@ -16,6 +16,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/music_library")
+@SessionAttributes("music_piece")
 public class MusicLibraryController {
     @Autowired
     MusicLibraryService musicLibraryService;
@@ -45,9 +46,13 @@ public class MusicLibraryController {
     }
     @PostMapping(value = "/upload/music_piece")
     public ResponseEntity<?> postMusicPiece(@ModelAttribute("music_piece") MusicPiecePostDTO musicPiecePostDTO){
-        logger.info("MusicLibraryController: postMusicPiece method accessed");
-
-        return ResponseEntity.ok("Successfulle uploaded");
+        try{
+            logger.info("MusicLibraryController: postMusicPiece method accessed");
+            musicLibraryService.addMusicPiece(musicPiecePostDTO);
+            return ResponseEntity.ok("Successfulle uploaded");
+        }catch (IOException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

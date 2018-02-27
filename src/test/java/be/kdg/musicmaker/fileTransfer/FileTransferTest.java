@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
@@ -72,7 +71,6 @@ public class FileTransferTest {
                 .addFilter(corsFilter).build();
         classLoader = getClass().getClassLoader();
         motzartMusicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
-//        byte[] fileArray = Files.readAllBytes(motzartMusicFile.toPath());
         ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
 
 
@@ -108,8 +106,6 @@ public class FileTransferTest {
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
 
         Assert.assertEquals(tempFile.getTotalSpace(), motzartMusicFile.getTotalSpace());
-//        Assert.assertEquals(FileUtils.readLines(tempFile).size(), FileUtils.readLines(motzartMusicFile).size());
-
     }
 
     @Test

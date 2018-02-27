@@ -1,7 +1,5 @@
 package be.kdg.musicmaker.model;
 
-import org.apache.http.message.BasicNameValuePair;
-
 import java.util.ArrayList;
 import java.util.List;
 
