@@ -44,6 +44,22 @@ public class MusicLibraryController {
             logger.info("MusicLibrary controller sent file (http get)");
         };
     }
+    @GetMapping(value = "/get_music_piece/{name}")
+    public StreamingResponseBody getSteamingFile(@PathVariable("name") String name, HttpServletResponse response) {
+        MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(name).get(0);
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=" + musicPiece.getFileName());
+        InputStream inputStream = new ByteArrayInputStream(musicPiece.getMusicClip());
+        return outputStream -> {
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                outputStream.write(data, 0, nRead);
+            }
+            logger.info("MusicLibrary controller sent file found by title (http get)");
+        };
+    }
+
     @PostMapping(value = "/upload/music_piece")
     public ResponseEntity<?> postMusicPiece(@ModelAttribute("music_piece") MusicPiecePostDTO musicPiecePostDTO){
         try{

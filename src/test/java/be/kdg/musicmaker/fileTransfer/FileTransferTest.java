@@ -9,6 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.assertj.core.api.FileAssert;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.contentOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -79,7 +82,7 @@ public class FileTransferTest {
         shuberMusicFileMultipartMock = new MockMultipartFile("musicClip", "musicTestFile.MP3", "MP3", fileArray);
         shubertMusicPiece = new MusicPiecePostDTO();
         shubertMusicPiece.setArtist("Schubert");
-        shubertMusicPiece.setTitle("String Quartet No 14 in D minor Death and the Maiden");
+        shubertMusicPiece.setTitle("Death_and_the_Maiden");
         shubertMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
         shubertMusicPiece.setFileName("musicTestFile.MP3");
 
@@ -112,6 +115,25 @@ public class FileTransferTest {
     public void UploadMusicPieceTest() throws Exception {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .sessionAttr("music_piece",shubertMusicPiece)).andExpect(status().isOk());
+    }
+
+    @Test
+    public void UploadMusicPieceAndVerifyTest() throws Exception {
+        this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .sessionAttr("music_piece",shubertMusicPiece)).andExpect(status().isOk());
+//todo aanpassen voor dit usecase
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/Death_and_the_Maiden")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        File tempFile = testFolder.newFile("Death_and_the_Maiden");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+
+//        Assert.assertEquals(tempFile.getTotalSpace(), shuberMusicFile.getTotalSpace());
+//        FileAssert.assertEquals(tempFile, shuberMusicFile);
+        assertThat(tempFile).hasSameContentAs(shuberMusicFile);
+
     }
 
 

@@ -21,6 +21,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.contentOf;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class FilePersistenceTest {
@@ -78,9 +81,28 @@ public class FilePersistenceTest {
         List<MusicPiece> musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPiece1.getTitle());
         byte[] byteArray = musicPiece.get(0).getMusicClip();
 
-        File tempFile = testFolder.newFile("tempFile");
+        File tempFile = testFolder.newFile(musicPiece.get(0).getFileName());
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
         Assert.assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
+//        assertThat(tempFile).hasSameContentAs(musicFile);
+
+    }
+    @Test
+    public void basic_framework_test() throws IOException {
+        File tempFile1 = testFolder.newFile("file1");
+        FileUtils.writeByteArrayToFile(tempFile1, "hello world".getBytes());
+        File tempFile2 = testFolder.newFile("file2");
+        FileUtils.writeByteArrayToFile(tempFile2, "hello world".getBytes());
+        assertThat(tempFile1).hasSameContentAs(tempFile2);
+
+    }
+    @Test(expected = AssertionError.class)
+    public void basic_framework_fail_test() throws IOException {
+        File tempFile1 = testFolder.newFile("file1");
+        FileUtils.writeByteArrayToFile(tempFile1, "hello world?".getBytes());
+        File tempFile2 = testFolder.newFile("file2");
+        FileUtils.writeByteArrayToFile(tempFile2, "hello world!".getBytes());
+        assertThat(tempFile1).hasSameContentAs(tempFile2);
 
     }
 }
