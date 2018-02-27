@@ -36,12 +36,14 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.LinkedList;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
@@ -77,6 +79,7 @@ public class FileTransferTest {
         ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
 
 
+        //schubert musicpiece
         shuberMusicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
         byte[] fileArray = Files.readAllBytes(shuberMusicFile.toPath());
         shuberMusicFileMultipartMock = new MockMultipartFile("musicClip", "musicTestFile.MP3", "MP3", fileArray);
@@ -108,7 +111,8 @@ public class FileTransferTest {
         File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
 
-        Assert.assertEquals(tempFile.getTotalSpace(), motzartMusicFile.getTotalSpace());
+//        Assert.assertEquals(tempFile.getTotalSpace(), motzartMusicFile.getTotalSpace());
+        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(motzartMusicFile));
     }
 
     @Test
@@ -121,19 +125,24 @@ public class FileTransferTest {
     public void UploadMusicPieceAndVerifyTest() throws Exception {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .sessionAttr("music_piece",shubertMusicPiece)).andExpect(status().isOk());
+
+
 //todo aanpassen voor dit usecase
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/Death_and_the_Maiden")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "attachment; filename=" + shuberMusicFile.getName()))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-        File tempFile = testFolder.newFile("Death_and_the_Maiden");
+        File tempFile = testFolder.newFile(shuberMusicFile.getName());
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
 
 //        Assert.assertEquals(tempFile.getTotalSpace(), shuberMusicFile.getTotalSpace());
 //        FileAssert.assertEquals(tempFile, shuberMusicFile);
-        assertThat(tempFile).hasSameContentAs(shuberMusicFile);
+//        assertThat(tempFile).hasSameContentAs(shuberMusicFile);
 
+        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(shuberMusicFile));
     }
 
 
