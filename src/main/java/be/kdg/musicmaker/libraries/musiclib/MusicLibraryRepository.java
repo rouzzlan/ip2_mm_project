@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.libraries;
+package be.kdg.musicmaker.libraries.musiclib;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

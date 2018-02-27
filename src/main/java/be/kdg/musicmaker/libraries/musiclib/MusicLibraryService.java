@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.libraries;
+package be.kdg.musicmaker.libraries.musiclib;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
