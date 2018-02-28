@@ -9,9 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.assertj.core.api.FileAssert;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.contentOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.LinkedList;
 
@@ -43,9 +39,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
@@ -124,7 +118,7 @@ public class FileTransferTest {
         byte[] byteArray = result.getResponse().getContentAsByteArray();
         File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
-        Assert.assertArrayEquals(byteArray, Files.readAllBytes(motzartMusicFile.toPath()));
+        Assert.assertArrayEquals(Files.readAllBytes(motzartMusicFile.toPath()), byteArray);
     }
 
 
