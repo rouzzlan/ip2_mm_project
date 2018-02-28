@@ -33,6 +33,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.LinkedList;
 
@@ -52,9 +54,10 @@ public class FileTransferTest {
     private static String ACCESS_TOKEN_Admin = "";
     private ObjectMapper objectMapper = new ObjectMapper();
     private ClassLoader classLoader;
-    private File motzartMusicFile, shuberMusicFile;
-    private MultipartFile shuberMusicFileMultipartMock;
-    private MusicPiecePostDTO shubertMusicPiece;
+    private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
+    private MultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
+    private MusicPiecePostDTO shubertMusicPiece, miniMusicPiece;
+    private String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -74,20 +77,30 @@ public class FileTransferTest {
     public void setup() throws Exception{
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
+
         classLoader = getClass().getClassLoader();
+
         motzartMusicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
+        compactMUsicFile = new File(classLoader.getResource("audio_files/audio_check.wav").toURI());
+        shuberMusicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
+
         ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
 
 
         //schubert musicpiece
-        shuberMusicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
-        byte[] fileArray = Files.readAllBytes(shuberMusicFile.toPath());
-        shuberMusicFileMultipartMock = new MockMultipartFile("musicClip", "musicTestFile.MP3", "MP3", fileArray);
+        shuberMusicFileMultipartMock = fileToMultipartFile(shuberMusicFile);
         shubertMusicPiece = new MusicPiecePostDTO();
         shubertMusicPiece.setArtist("Schubert");
         shubertMusicPiece.setTitle("Death_and_the_Maiden");
         shubertMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
         shubertMusicPiece.setFileName("musicTestFile.MP3");
+        //mini musicfile
+        miniMusicMultiPartMock = fileToMultipartFile(shuberMusicFile);
+        miniMusicPiece = new MusicPiecePostDTO();
+        miniMusicPiece.setArtist("Schubert");
+        miniMusicPiece.setTitle("Death_and_the_Maiden");
+        miniMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
+        miniMusicPiece.setFileName("musicTestFile.MP3");
 
     }
 
@@ -95,26 +108,27 @@ public class FileTransferTest {
     @Test
     public void testFileDownload() throws Exception {
 
-        this.mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+        this.mockMvc.perform(get("/music_library/get_music_piece").param("title",existingMusicPieceName)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
-
     }
 
     @Test
     public void testDownloadFileContent() throws Exception {
 
-        MvcResult result = mockMvc.perform(get("/music_library/get_sample_file").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title",existingMusicPieceName)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
         byte[] byteArray = result.getResponse().getContentAsByteArray();
         File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
-
-//        Assert.assertEquals(tempFile.getTotalSpace(), motzartMusicFile.getTotalSpace());
-        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(motzartMusicFile));
+        Assert.assertArrayEquals(byteArray, Files.readAllBytes(motzartMusicFile.toPath()));
     }
 
+
+    //TODO moeten alemaal uitgetest worden
     @Test
     public void UploadMusicPieceTest() throws Exception {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
@@ -166,5 +180,19 @@ public class FileTransferTest {
         String resultString = result.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(resultString).get("access_token").toString();
+    }
+
+    private MultipartFile fileToMultipartFile(File file){
+        String contentType = "application/octet-stream";
+        String name, originalFileName;
+        name = file.getName();
+        originalFileName = file.getName();
+        byte[] content = null;
+        try {
+            content = Files.readAllBytes(file.toPath());
+        } catch (final IOException e) {
+        }
+        MultipartFile result = new MockMultipartFile(name, originalFileName, contentType, content);
+        return result;
     }
 }

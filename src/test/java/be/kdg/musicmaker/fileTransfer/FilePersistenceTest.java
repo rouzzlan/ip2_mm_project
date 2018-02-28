@@ -61,7 +61,7 @@ public class FilePersistenceTest {
     public void testFileNotCorrupted() throws IOException {
         File tempFile = testFolder.newFile(mpMusicFile1.getOriginalFilename());
         mpMusicFile1.transferTo(tempFile);
-        assertEquals(FileUtils.readLines(tempFile), FileUtils.readLines(musicFile));
+        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(musicFile));
     }
 
     @Test

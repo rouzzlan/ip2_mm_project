@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,9 +45,11 @@ public class MusicLibraryController {
             logger.info("MusicLibrary controller sent file (http get)");
         };
     }
-    @GetMapping(value = "/get_music_piece/{name}")
-    public StreamingResponseBody getSteamingFile(@PathVariable("name") String name, HttpServletResponse response) {
-        MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(name).get(0);
+    @GetMapping(value = "/get_music_piece")
+    public StreamingResponseBody getSteamingFile(HttpServletRequest request, HttpServletResponse response) {
+        String musicPieceName = request.getParameter("title");
+        logger.info("MusicLibraryController (get) /get_music_piece/with param: " + musicPieceName);
+        MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPieceName).get(0);
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=" + musicPiece.getFileName());
         InputStream inputStream = new ByteArrayInputStream(musicPiece.getMusicClip());
