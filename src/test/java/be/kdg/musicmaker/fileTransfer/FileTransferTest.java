@@ -30,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
@@ -72,10 +74,22 @@ public class FileTransferTest {
 
         classLoader = getClass().getClassLoader();
 
-        compactMUsicFile = new File(classLoader.getResource("audio_files/audio_check.wav").toURI());
-        shuberMusicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
-        motzartMusicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
+        byte[] data;
 
+        Path path = Paths.get(classLoader.getResource("audio_files/audio_check.wav").getPath());
+        data = Files.readAllBytes(path);
+        compactMUsicFile = File.createTempFile("audio_check", ".wav");
+        FileUtils.writeByteArrayToFile(compactMUsicFile, data);
+
+        path = Paths.get(classLoader.getResource("audio_files/musicTestFile.MP3").getPath());
+        data = Files.readAllBytes(path);
+        shuberMusicFile = File.createTempFile("musicTestFile", ".MP3");
+        FileUtils.writeByteArrayToFile(shuberMusicFile, data);
+
+        path = Paths.get(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").getPath());
+        data = Files.readAllBytes(path);
+        motzartMusicFile = File.createTempFile("Requiem-piano-mozart-lacrymosa", ".mp3");
+        FileUtils.writeByteArrayToFile(motzartMusicFile, data);
 
         ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
 
