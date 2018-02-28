@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
+import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/music_library")
@@ -28,28 +30,6 @@ public class MusicLibraryController {
     MusicLibraryService musicLibraryService;
 
     private final Logger logger = LoggerFactory.getLogger(MusicLibraryController.class);
-
-    /**
-     * dit is een test request om te evalueren of files opgehaald worden.
-     * gebruikte request url: /music_library/get_sample_file
-     * @param response
-     * @return
-     */
-    @GetMapping(value = "/get_sample_file")
-    public StreamingResponseBody getSteamingFile(HttpServletResponse response) {
-        MusicPiece musicPiece = musicLibraryService.getMusicPieceById(Long.valueOf(1));
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=" + musicPiece.getFileName());
-        InputStream inputStream = new ByteArrayInputStream(musicPiece.getMusicClip());
-        return outputStream -> {
-            int nRead;
-            byte[] data = new byte[1024];
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                outputStream.write(data, 0, nRead);
-            }
-            logger.info("MusicLibrary controller sent file (http get)");
-        };
-    }
 
     /*
     goede informatie bron. toepassing: Download File via Resource
@@ -80,6 +60,10 @@ public class MusicLibraryController {
         }catch (IOException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping(value = "/musicpieces")
+    public Collection<MusicPieceGetDTO> getMusicPieces(){
+        return musicLibraryService.getMusicPieces();
     }
 
 }

@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
+import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.model.UserDTO;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -38,4 +41,16 @@ public class MusicLibraryService {
     }
 
 
+    public Collection<MusicPieceGetDTO> getMusicPieces() {
+        mapperFactory.classMap(MusicPiece.class, MusicPieceGetDTO.class).exclude("musicClip");
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+
+        List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
+        List<MusicPieceGetDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
+        for (MusicPiece musicPiece : musicPieces){
+            MusicPieceGetDTO mp = mapperFacade.map(musicPiece, MusicPieceGetDTO.class);
+            dtoMusicPieces.add(mp);
+        }
+        return dtoMusicPieces;
+    }
 }

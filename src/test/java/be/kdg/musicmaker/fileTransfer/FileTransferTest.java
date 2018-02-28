@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.libraries.musiclib.MusicLibraryController;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
@@ -13,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,6 +55,7 @@ public class FileTransferTest {
     private MultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
     private MusicPiecePostDTO shubertMusicPiece, miniMusicPiece;
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
+    private final Logger logger = LoggerFactory.getLogger(FileTransferTest.class);
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -104,10 +108,10 @@ public class FileTransferTest {
         //mini musicfile
         miniMusicMultiPartMock = fileToMultipartFile(shuberMusicFile);
         miniMusicPiece = new MusicPiecePostDTO();
-        miniMusicPiece.setArtist("Schubert");
-        miniMusicPiece.setTitle("Death_and_the_Maiden");
+        miniMusicPiece.setArtist("unknown");
+        miniMusicPiece.setTitle("unknown");
         miniMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
-        miniMusicPiece.setFileName("musicTestFile.MP3");
+        miniMusicPiece.setFileName("audio_check.wav");
 
     }
 
@@ -183,6 +187,7 @@ public class FileTransferTest {
     }
 
     private MultipartFile fileToMultipartFile(File file){
+        logger.debug("Filt to multipart file, file converted: " + file.getName());
         String contentType = "application/octet-stream";
         String name, originalFileName;
         name = file.getName();
