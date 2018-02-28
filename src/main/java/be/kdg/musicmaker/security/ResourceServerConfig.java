@@ -15,6 +15,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/private/**").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
+                .antMatchers("/getRoles").hasRole("LEERLING")
                 .antMatchers("/adduser", "/getusersJson").hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces
                                                                                                 // .hasRole("BEHEERDER")         // single auth access
                 .and()

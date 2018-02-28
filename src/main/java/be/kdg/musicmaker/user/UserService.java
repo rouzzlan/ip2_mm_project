@@ -23,7 +23,8 @@ public class UserService {
     RoleRepository roleRepository;
 
 //    @Autowired
-////    private MapperFacade orikaMapperFacade;
+//    private MapperFacade orikaMapperFacade;
+
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     public User doesUserExist(String email) throws UserNotFoundException {
@@ -91,6 +92,12 @@ public class UserService {
         }
     }
 
-
-
+    public User getUser(Long id) throws UserNotFoundException {
+        User user = userRepository.findOne(id);
+        if (user == null) {
+            throw new UserNotFoundException();
+        } else {
+            return user;
+        }
+    }
 }

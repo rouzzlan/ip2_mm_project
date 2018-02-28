@@ -12,7 +12,7 @@ public class HomeController {
 
     @GetMapping(value = "/")
     public String index(){
-        return "Hello world";
+        return "Hello world - CI test";
     }
 
     @GetMapping(value = "/private")

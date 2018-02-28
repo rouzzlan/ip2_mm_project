@@ -45,12 +45,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         enhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter,tokenEnhancer()));
         endpoints.tokenStore(tokenStore)
-                .accessTokenConverter(accessTokenConverter)
                 .tokenEnhancer(enhancerChain)
+                .accessTokenConverter(accessTokenConverter)
                 .authenticationManager(authenticationManager);
     }
-
-
 
     /**
      * Setting up the clients with a clientId, a clientSecret, a scope, the grant types and the authorities.
