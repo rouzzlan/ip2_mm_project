@@ -5,14 +5,12 @@ import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +49,7 @@ public class FileTransferTest {
     private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
     private MultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
     private MusicPiecePostDTO shubertMusicPiece, miniMusicPiece;
-    private String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
+    private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -74,9 +72,10 @@ public class FileTransferTest {
 
         classLoader = getClass().getClassLoader();
 
-        motzartMusicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
         compactMUsicFile = new File(classLoader.getResource("audio_files/audio_check.wav").toURI());
         shuberMusicFile = new File(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
+        motzartMusicFile = new File(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
+
 
         ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
 
@@ -116,13 +115,11 @@ public class FileTransferTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-        File tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
+        final File tempFile = testFolder.newFile( "Requiem-piano-mozart-lacrymosa2.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
-        Assert.assertArrayEquals(Files.readAllBytes(motzartMusicFile.toPath()), byteArray);
-    }
+        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(motzartMusicFile));
+}
 
-
-    //TODO moeten alemaal uitgetest worden
     @Test
     public void UploadMusicPieceTest() throws Exception {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
@@ -134,21 +131,16 @@ public class FileTransferTest {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .sessionAttr("music_piece",shubertMusicPiece)).andExpect(status().isOk());
 
-
-//todo aanpassen voor dit usecase
-        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/Death_and_the_Maiden")
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title",shubertMusicPiece.getTitle())
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Disposition",
-                        "attachment; filename=" + shuberMusicFile.getName()))
+                        "inline; filename=" + shubertMusicPiece.getFileName()))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
         byte[] byteArray = result.getResponse().getContentAsByteArray();
         File tempFile = testFolder.newFile(shuberMusicFile.getName());
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
-
-//        Assert.assertEquals(tempFile.getTotalSpace(), shuberMusicFile.getTotalSpace());
-//        FileAssert.assertEquals(tempFile, shuberMusicFile);
-//        assertThat(tempFile).hasSameContentAs(shuberMusicFile);
 
         assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(shuberMusicFile));
     }

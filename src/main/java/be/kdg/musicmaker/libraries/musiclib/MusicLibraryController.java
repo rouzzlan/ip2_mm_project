@@ -52,6 +52,7 @@ public class MusicLibraryController {
     }
 
     /*
+    goede informatie bron. toepassing: Download File via Resource
     https://memorynotfound.com/spring-mvc-download-file-examples/
 
      */
@@ -69,23 +70,6 @@ public class MusicLibraryController {
         response.setHeader("Content-Length", String.valueOf(file.length()));
         return new FileSystemResource(file);
     }
-//    @GetMapping(value = "/get_music_piece")
-//    public StreamingResponseBody getSteamingFile(HttpServletRequest request, HttpServletResponse response) {
-//        String musicPieceName = request.getParameter("title");
-//        logger.info("MusicLibraryController (get) /get_music_piece/with param: " + musicPieceName);
-//        MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPieceName).get(0);
-//        response.setContentType("APPLICATION/OCTET-STREAM");
-//        response.setHeader("Content-Disposition", "attachment; filename=" + musicPiece.getFileName());
-//        InputStream inputStream = new ByteArrayInputStream(musicPiece.getMusicClip());
-//        return outputStream -> {
-//            int nRead;
-//            byte[] data = new byte[1024];
-//            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-//                outputStream.write(data, 0, nRead);
-//            }
-//            logger.info("MusicLibrary controller sent file found by title (http get)");
-//        };
-//    }
 
     @PostMapping(value = "/upload/music_piece")
     public ResponseEntity<?> postMusicPiece(@ModelAttribute("music_piece") MusicPiecePostDTO musicPiecePostDTO){
