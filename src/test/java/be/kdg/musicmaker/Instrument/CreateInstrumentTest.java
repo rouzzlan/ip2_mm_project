@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class CreateInstrumentTest {
-    private InstrumentDTO instrumentDTO= new InstrumentDTO("basgitaar","SNAAR","klassiek","5 snaren");
+    private InstrumentDTO instrumentDTO= new InstrumentDTO("testgitaar","SNAAR","klassiek","5 snaren");
     private static String ACCESS_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Student = "";
     private static String ACCESS_TOKEN_Teacher = "";
@@ -87,7 +87,7 @@ public class CreateInstrumentTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        MusicInstrument instrument = instrumentService.getInstrument("basgitaar");
+        MusicInstrument instrument = instrumentService.getInstrument("testgitaar");
         assertNotNull(instrument);
     }
 
