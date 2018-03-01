@@ -45,8 +45,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
+    }
+
     public Boolean isRolesEmpty() {
-        if (roleRepository.count() == 0 ) {
+        if (roleRepository.count() == 0) {
             return true;
         } else {
             return false;
@@ -54,7 +58,7 @@ public class UserService {
     }
 
     public Boolean isUsersEmpty() {
-        if (userRepository.count() == 0 ) {
+        if (userRepository.count() == 0) {
             return true;
         } else {
             return false;

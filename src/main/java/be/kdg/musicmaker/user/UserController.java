@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.user;
 
+import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -26,5 +27,10 @@ public class UserController {
     @RequestMapping(value = "/getusersJson")
     public HttpEntity<List<User>> getUsersJson(){
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getRoles")
+    public HttpEntity<List<Role>> getRoles(){
+        return new ResponseEntity<>(userService.getRoles(), HttpStatus.OK);
     }
 }
