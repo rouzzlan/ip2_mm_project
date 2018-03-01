@@ -1,10 +1,6 @@
 package be.kdg.musicmaker.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -81,6 +77,9 @@ public class User {
     }
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     @Override

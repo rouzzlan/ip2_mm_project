@@ -15,6 +15,7 @@ public class Event {
     @ManyToOne(cascade = CascadeType.ALL)
     private Band band;
 
+<<<<<<< HEAD
     public Event() {}
 
     public Event(String name, Date dateTime, String place, Band band) {
@@ -22,11 +23,18 @@ public class Event {
         this.dateTime = dateTime;
         this.place = place;
         this.band = band;
+=======
+    Event() {}
+
+    public Event(String name) {
+        this.name = name;
+>>>>>>> release
     }
 
     public String getName() {
         return name;
     }
+<<<<<<< HEAD
 
     public void setName(String name) {
         this.name = name;
@@ -52,6 +60,26 @@ public class Event {
         return band;
     }
 
+=======
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Date getDateTime() {
+        return dateTime;
+    }
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+    public String getPlace() {
+        return place;
+    }
+    public void setPlace(String place) {
+        this.place = place;
+    }
+    public Band getBand() {
+        return band;
+    }
+>>>>>>> release
     public void setBand(Band band) {
         this.band = band;
     }
@@ -66,4 +94,8 @@ public class Event {
                 ", band=" + band +
                 '}';
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> release
