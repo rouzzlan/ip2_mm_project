@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/music_library")
@@ -34,7 +36,8 @@ public class MusicLibraryController {
     /*
     goede informatie bron. toepassing: Download File via Resource
     https://memorynotfound.com/spring-mvc-download-file-examples/
-
+    http://javasampleapproach.com/java-integration/upload-multipartfile-spring-boot
+    http://javasampleapproach.com/spring-framework/spring-boot/angular-4-uploadget-multipartfile-tofrom-spring-boot-server
      */
     @RequestMapping(value = "/get_music_piece", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -62,8 +65,9 @@ public class MusicLibraryController {
         }
     }
     @GetMapping(value = "/musicpieces")
-    public Collection<MusicPieceGetDTO> getMusicPieces(){
-        return musicLibraryService.getMusicPieces();
+    public HttpEntity<Collection<MusicPieceGetDTO>> getMusicPieces(){
+        Collection<MusicPieceGetDTO> musicpieces =  musicLibraryService.getMusicPieces();
+        return new ResponseEntity<>(musicpieces, HttpStatus.OK);
     }
 
 }
