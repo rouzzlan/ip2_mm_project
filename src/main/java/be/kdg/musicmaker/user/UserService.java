@@ -22,9 +22,9 @@ public class UserService {
     @Autowired
     RoleRepository roleRepository;
 
-//    @Autowired
-//    private MapperFacade orikaMapperFacade;
 
+    @Autowired
+    private MapperFacade orikaMapperFacade;
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     public User doesUserExist(String email) throws UserNotFoundException {
