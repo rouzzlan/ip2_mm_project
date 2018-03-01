@@ -18,14 +18,14 @@ public class InstrumentController {
     @Autowired
     InstrumentService instrumentService;
 
-    @PostMapping(value = "/addInstrument")
+    @PostMapping(value = "/addinstrument")
     public ResponseEntity<String> postInstrument(@RequestBody InstrumentDTO instrumentDTO){
         System.out.println(instrumentDTO.toString());
         instrumentService.createInstrument(instrumentDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value = "/getinstrumentsJson")
+    @GetMapping(value = "/getinstruments")
     public HttpEntity<List<MusicInstrument>> getUsersJson(){
         return new ResponseEntity<>(instrumentService.getInstruments(), HttpStatus.OK);
     }

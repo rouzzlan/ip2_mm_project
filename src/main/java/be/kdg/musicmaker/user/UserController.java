@@ -28,12 +28,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getusersJson")
+    @GetMapping(value = "/getusers")
     public HttpEntity<List<User>> getUsersJson(){
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getRoles")
+    @GetMapping(value = "/getroles")
     public HttpEntity<List<Role>> getRoles(){
         return new ResponseEntity<>(userService.getRoles(), HttpStatus.OK);
     }
