@@ -76,21 +76,10 @@ public class UserService {
     }
 
     public Boolean isRolesEmpty() {
-        if (roleRepository.count() == 0 ) {
-            return true;
-        } else {
-            return false;
-        }
+        return roleRepository.count() == 0;
     }
 
     public Boolean isUsersEmpty() {
-        if (userRepository.count() == 0 ) {
-            return true;
-        } else {
-            return false;
-        }
+        return userRepository.count() == 0;
     }
-
-
-
 }
