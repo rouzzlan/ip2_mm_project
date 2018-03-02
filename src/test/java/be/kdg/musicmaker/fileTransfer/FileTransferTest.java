@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -118,6 +119,19 @@ public class FileTransferTest {
 
     }
 
+    @After
+    public void cleanup(){
+        File f = new File("Requiem-piano-mozart-lacrymosa.mp3");
+        File f2 = new File("musicTestFile.MP3");
+
+        if(f.exists() && !f.isDirectory()) {
+            f.deleteOnExit();
+        }
+        if(f.exists() && !f.isDirectory()) {
+            f2.deleteOnExit();
+        }
+    }
+
 
     @Test
     public void testFileDownload() throws Exception {
@@ -187,6 +201,7 @@ public class FileTransferTest {
     }
 
 
+
     private String obtainAccessToken(String username, String password) throws Exception {
 
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
@@ -210,6 +225,7 @@ public class FileTransferTest {
 
     private MultipartFile fileToMultipartFile(File file) throws IOException {
         logger.debug("File to multipart file, file converted: " + file.getName());
+        System.out.println("File to multipart file, file converted: " + file.getName());
         String contentType = "application/octet-stream";
         String name, originalFileName;
         name = file.getName();
