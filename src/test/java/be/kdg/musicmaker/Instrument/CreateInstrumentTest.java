@@ -81,7 +81,7 @@ public class CreateInstrumentTest {
             e.printStackTrace();
         }
         try {
-            this.mockMvc.perform(post("/addInstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+            this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
                     .andExpect(status().isCreated());
         } catch (Exception e) {

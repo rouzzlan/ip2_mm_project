@@ -132,7 +132,7 @@ public class CreateUserTest {
 
     @Test
     public void getRoles() throws Exception {
-        ResultActions result = this.mockMvc.perform(get("/getRoles").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
+        ResultActions result = this.mockMvc.perform(get("/getroles").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
         List roles = objectMapper.readValue(result.andReturn().getResponse().getContentAsString(), List.class);

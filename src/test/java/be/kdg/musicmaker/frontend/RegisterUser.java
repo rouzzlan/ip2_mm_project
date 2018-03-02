@@ -20,10 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.UUID;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class RegisterUser {
-    private UserDTO userDTO = new UserDTO("", "", "", "olivier.b@telenet.be", "oli");
     private ObjectMapper objectMapper = new ObjectMapper();
     String jsonString;
 
@@ -57,6 +53,7 @@ public class RegisterUser {
 
     @Test
     public void register() throws UserNotFoundException {
+        UserDTO userDTO = new UserDTO("", "", "", "olivier.b@telenet.be", "oli");
         try {
             jsonString = objectMapper.writeValueAsString(userDTO);
         } catch (JsonProcessingException e) {
@@ -71,23 +68,29 @@ public class RegisterUser {
         }
         User user = userService.doesUserExist("olivier.b@telenet.be");
         assertNotNull(user);
+        assertFalse(user.isEnabled());
+        assertNotNull(user.getConfirmationToken());
     }
 
     @Test
     public void confirm() throws UserNotFoundException {
+
+        UserDTO userDTO = new UserDTO("", "", "", "olivier.b@telenet.be", "oli");
+        String token;
         try {
-            //create token
-            String token = UUID.randomUUID().toString();
-            //add user to DB
-            userDTO.setConfirmationToken(token);
-            userService.createUser(userDTO);
+            //get registrated user from DB
+            User user = userService.doesUserExist(userDTO.getEmail());
+            token = user.getConfirmationToken();
+
             //do confirm request with token
             this.mockMvc.perform(get("/confirm").param("token", token))
                     .andExpect(status().isOk());
+
+            user = userService.findByConfirmationToken(token);
+            assertTrue(user.isEnabled());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        User user = userService.doesUserExist(userDTO.getEmail());
-        assertTrue(user.isEnabled());
     }
 }

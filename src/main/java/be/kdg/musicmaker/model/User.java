@@ -14,6 +14,7 @@ public class User {
     private String password;
     private String firstname;
     private String lastname;
+    @Column(unique=true)
     private String email;
     @Column(name = "confirmation_token")
     private String confirmationToken;
