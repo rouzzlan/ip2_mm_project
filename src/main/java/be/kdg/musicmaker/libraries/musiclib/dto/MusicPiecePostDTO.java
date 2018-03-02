@@ -3,7 +3,6 @@ package be.kdg.musicmaker.libraries.musiclib.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 public class MusicPiecePostDTO {
-    private Long id;
     private String title;
     private String artist;
     private String language;
@@ -14,18 +13,13 @@ public class MusicPiecePostDTO {
     public MusicPiecePostDTO() {
     }
 
-    public MusicPiecePostDTO(Long id, String title, String artist, String language, String topic, MultipartFile musicClip, String fileName) {
-        this.id = id;
+    public MusicPiecePostDTO(String title, String artist, String language, String topic, MultipartFile musicClip, String fileName) {
         this.title = title;
         this.artist = artist;
         this.language = language;
         this.topic = topic;
         this.musicClip = musicClip;
         this.fileName = fileName;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getTitle() {
@@ -50,10 +44,6 @@ public class MusicPiecePostDTO {
 
     public String getFileName() {
         return fileName;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setTitle(String title) {
