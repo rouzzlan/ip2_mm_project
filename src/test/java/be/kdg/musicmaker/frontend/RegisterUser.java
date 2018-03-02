@@ -4,10 +4,12 @@ import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.security.CorsFilter;
+import be.kdg.musicmaker.user.UserRepository;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +40,9 @@ public class RegisterUser {
     UserService userService;
 
     @Autowired
+    UserRepository repository;
+
+    @Autowired
     private WebApplicationContext wac;
 
     @Autowired
@@ -49,6 +54,11 @@ public class RegisterUser {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
+    }
+    @After
+    public void cleanup(){
+        User user = repository.findByEmail("olivier.b@telenet.be");
+        repository.delete(user);
     }
 
     @Test
