@@ -92,4 +92,12 @@ public class UserService {
             return user;
         }
     }
+
+    public User findByConfirmationToken(String confirmationToken) throws UserNotFoundException {
+        User user = userRepository.findByConfirmationToken(confirmationToken);
+        if (user != null) {
+            return user;
+        } else throw new UserNotFoundException();
+    }
+
 }

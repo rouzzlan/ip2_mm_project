@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
@@ -31,7 +30,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
-import sun.jvm.hotspot.utilities.Assert;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +37,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -85,17 +83,17 @@ public class FileTransferTest {
 
         byte[] data;
 
-        Path path = Paths.get(classLoader.getResource("audio_files/audio_check.wav").getPath());
+        Path path = Paths.get(classLoader.getResource("audio_files/audio_check.wav").toURI());
         data = Files.readAllBytes(path);
-        compactMUsicFile = testFolder.newFile("udio_check.wav");
+        compactMUsicFile = testFolder.newFile("audio_check.wav");
         FileUtils.writeByteArrayToFile(compactMUsicFile, data);
 
-        path = Paths.get(classLoader.getResource("audio_files/musicTestFile.MP3").getPath());
+        path = Paths.get(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
         data = Files.readAllBytes(path);
         shuberMusicFile = testFolder.newFile("musicTestFileOriginal.MP3");
         FileUtils.writeByteArrayToFile(shuberMusicFile, data);
 
-        path = Paths.get(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").getPath());
+        path = Paths.get(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
         data = Files.readAllBytes(path);
         motzartMusicFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(motzartMusicFile, data);
@@ -185,7 +183,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
         MusicPieceGetDTO[] musicPieceGetDTOS = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceGetDTO[].class);
         MusicPieceGetDTO musicPieceGetDTO = musicPieceGetDTOS[0];
-        Assert.that(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName), "music piece tilte match");
+        assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
     }
 
 
