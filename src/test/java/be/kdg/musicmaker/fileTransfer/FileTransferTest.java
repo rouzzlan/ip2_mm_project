@@ -45,6 +45,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -158,7 +159,7 @@ public class FileTransferTest {
     @Test
     public void UploadMusicPieceTest() throws Exception {
         this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .sessionAttr("music_piece", shubertMusicPiece)).andExpect(status().isOk());
+                .sessionAttr("music_piece", shubertMusicPiece)).andExpect(status().isOk()).andDo(print());
     }
 
     @Test
