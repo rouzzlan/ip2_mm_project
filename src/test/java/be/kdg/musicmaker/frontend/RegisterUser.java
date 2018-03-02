@@ -33,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class RegisterUser {
+
+    UserDTO userDTO = new UserDTO("", "", "", "musicmakersapp@gmail.com", "mmapp");
     private ObjectMapper objectMapper = new ObjectMapper();
     String jsonString;
 
@@ -55,15 +57,9 @@ public class RegisterUser {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
     }
-    @After
-    public void cleanup(){
-        User user = repository.findByEmail("olivier.b@telenet.be");
-        repository.delete(user);
-    }
 
     @Test
     public void register() throws UserNotFoundException {
-        UserDTO userDTO = new UserDTO("", "", "", "olivier.b@telenet.be", "oli");
         try {
             jsonString = objectMapper.writeValueAsString(userDTO);
         } catch (JsonProcessingException e) {
@@ -76,7 +72,7 @@ public class RegisterUser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        User user = userService.doesUserExist("olivier.b@telenet.be");
+        User user = userService.doesUserExist("musicmakersapp@gmail.com");
         assertNotNull(user);
         assertFalse(user.isEnabled());
         assertNotNull(user.getConfirmationToken());
@@ -84,8 +80,6 @@ public class RegisterUser {
 
     @Test
     public void confirm() throws UserNotFoundException {
-
-        UserDTO userDTO = new UserDTO("", "", "", "olivier.b@telenet.be", "oli");
         String token;
         try {
             //get registrated user from DB
