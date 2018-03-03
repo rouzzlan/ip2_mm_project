@@ -9,18 +9,21 @@ public class Band {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private User teacher;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="students_band",
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "teacher_band",
             joinColumns = {@JoinColumn(name = "band_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")})
+            inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    private User teacher;
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "students_band",
+            joinColumns = {@JoinColumn(name = "band_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
     private List<User> students;
 
     public Band() {
+
     }
 
     public Band(String name, User teacher, List<User> students) {
@@ -32,18 +35,23 @@ public class Band {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public User getTeacher() {
         return teacher;
     }
+
     public void setTeacher(User teacher) {
         this.teacher = teacher;
     }
+
     public List<User> getStudents() {
         return students;
     }
+
     public void setStudents(List<User> students) {
         this.students = students;
     }
