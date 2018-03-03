@@ -76,10 +76,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<Role> getRoles() {
-        return roleRepository.findAll();
-    }
-
     public Boolean isRolesEmpty() {
         return roleRepository.count() == 0;
     }

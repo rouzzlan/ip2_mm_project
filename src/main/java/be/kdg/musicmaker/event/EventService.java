@@ -2,9 +2,12 @@ package be.kdg.musicmaker.event;
 
 import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.model.Band;
+import be.kdg.musicmaker.model.DTO.EventDTO;
 import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.util.EventNotFoundException;
 import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +22,7 @@ public class EventService {
     @Autowired
     BandRepository bandRepository;
 
-    @Autowired
-    private MapperFacade orikaMapperFacade;
+    private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     public Event doesEventExist(String name) throws EventNotFoundException {
         Event event = eventRepository.findByName(name);
@@ -29,6 +31,17 @@ public class EventService {
         } else {
             throw new EventNotFoundException();
         }
+    }
+
+    public void createEvent(EventDTO eventDTO) {
+        Event event = dtoToEvent(eventDTO);
+        eventRepository.save(event);
+    }
+
+    public Event dtoToEvent(EventDTO eventDTO) {
+        mapperFactory.classMap(EventDTO.class, Event.class);
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        return mapperFacade.map(eventDTO, Event.class);
     }
 
     public void createEvent(Event event) {
@@ -41,6 +54,15 @@ public class EventService {
 
     public List<Event> getEvents() {
         return eventRepository.findAll();
+    }
+
+    public Event getEvent(Long id) throws EventNotFoundException {
+        Event event = eventRepository.findOne(id);
+        if (event == null) {
+            throw new EventNotFoundException();
+        } else {
+            return event;
+        }
     }
 
     public Band getBand(String bandName) {
