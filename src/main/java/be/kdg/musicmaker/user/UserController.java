@@ -28,6 +28,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/userByEmail/{email}")
+    public HttpEntity<User> getUser(@PathVariable String email) throws UserNotFoundException {
+        return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/getusers")
     public HttpEntity<List<User>> getUsersJson(){
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
