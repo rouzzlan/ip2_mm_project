@@ -14,6 +14,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/register").permitAll()
+                .antMatchers("/confirm").permitAll()
                 .antMatchers("/private/**").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
                 .antMatchers("/getRoles").hasRole("LEERLING")
                 .antMatchers("/adduser", "/getusersJson").hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces

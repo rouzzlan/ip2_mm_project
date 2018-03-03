@@ -14,13 +14,20 @@ public class User {
     private String password;
     private String firstname;
     private String lastname;
+    @Column(unique=true)
     private String email;
+    @Column(name = "confirmation_token")
+    private String confirmationToken;
+    private boolean enabled;
+
     @ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinTable(name="users_roles",
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
     )
     private List<Role> roles;
+
+
 
     public User() {
     }
@@ -31,6 +38,7 @@ public class User {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.confirmationToken = null;
     }
 
     public User(String username, String password, String firstname, String lastname, String email, List<Role> roles) {
@@ -80,6 +88,18 @@ public class User {
     }
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

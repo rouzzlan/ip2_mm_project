@@ -85,7 +85,7 @@ public class CreateUserTest {
         }
         try {
             this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
+                    .contentType(MediaType.APPLICATION_JSON).content(jsonString))
                     .andExpect(status().isCreated());
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class CreateUserTest {
         }
         try {
             this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
+                    .contentType(MediaType.APPLICATION_JSON).content(jsonString))
                     .andExpect(status().isForbidden());
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class CreateUserTest {
 
     @Test
     public void getRoles() throws Exception {
-        ResultActions result = this.mockMvc.perform(get("/getRoles").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
+        ResultActions result = this.mockMvc.perform(get("/getroles").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
         List roles = objectMapper.readValue(result.andReturn().getResponse().getContentAsString(), List.class);

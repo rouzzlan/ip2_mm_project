@@ -10,4 +10,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.email = ?1")
     User findByEmail(String email);
+
+    @Query("delete from User u where u.email = ?1")
+    User deleteUserByEmail(String email);
+
+    User findByConfirmationToken(String confirmationToken);
+
 }

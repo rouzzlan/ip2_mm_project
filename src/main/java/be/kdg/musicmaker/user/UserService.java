@@ -51,6 +51,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public void deleteUserByEmail(String email) { userRepository.deleteUserByEmail(email); }
+
     public void createRole(Role role) {
         roleRepository.save(role);
     }
@@ -93,6 +99,16 @@ public class UserService {
             return user;
         }
     }
+
+    public User findByConfirmationToken(String confirmationToken) throws UserNotFoundException {
+        User user = userRepository.findByConfirmationToken(confirmationToken);
+        if (user != null) {
+            return user;
+        } else throw new UserNotFoundException();
+    }
+
+
+
 
     public User getUserByEmail(String email) throws UserNotFoundException {
         System.out.println(email);
