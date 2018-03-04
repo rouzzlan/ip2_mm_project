@@ -1,10 +1,12 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -28,6 +30,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 
+import static java.text.MessageFormat.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -199,6 +203,54 @@ public class FileTransferTest {
         MusicPieceGetDTO[] musicPieceGetDTOS = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceGetDTO[].class);
         MusicPieceGetDTO musicPieceGetDTO = musicPieceGetDTOS[0];
         assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
+    }
+
+
+    @Test
+    public void postMusicFileV2Test() throws Exception {
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(musicPieceDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        this.mockMvc.perform(post("/music_library/musicpiece/submit").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON).content(jsonString))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("MusicPiece", musicPieceDTO.getTitle()));
+    }
+
+    @Test
+    public void postMusicFileFullPost() throws Exception {
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(musicPieceDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        MvcResult result = this.mockMvc.perform(post("/music_library/musicpiece/submit").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON).content(jsonString))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("MusicPiece", musicPieceDTO.getTitle())).andReturn();
+
+        Long id = Long.parseLong( result.getResponse().getHeader("musicPieceId"));
+
+        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/musicpiece/submit/file/" + id)
+                .file(file)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .header("filename", file.getOriginalFilename()))
+                .andExpect(status().isOk());
     }
 
 
