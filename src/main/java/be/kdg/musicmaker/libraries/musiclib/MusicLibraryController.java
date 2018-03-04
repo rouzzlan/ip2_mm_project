@@ -4,7 +4,10 @@ import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
 import be.kdg.musicmaker.model.DTO.UserDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,8 @@ public class MusicLibraryController {
     http://javasampleapproach.com/spring-framework/spring-boot/angular-4-uploadget-multipartfile-tofrom-spring-boot-server
      */
     @RequestMapping(value = "/get_music_piece", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public @ResponseBody Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public @ResponseBody
+    Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String musicPieceName = request.getParameter("title");
         logger.info("MusicLibraryController (get) /get_music_piece/with param: " + musicPieceName);
         MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPieceName).get(0);
@@ -55,32 +59,37 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    public ResponseEntity<?> postMusicPiece(@ModelAttribute("music_piece") MusicPiecePostDTO musicPiecePostDTO){
-        logger.warn("File upload requested");
-        try{
-            logger.info("MusicLibraryController: postMusicPiece method accessed");
+    public ResponseEntity<?> postMusicPiece(@RequestParam( value="musicpiece_info",required = true) String info, @RequestParam("file") MultipartFile file) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            MusicPiecePostDTO musicPiecePostDTO = mapper.readValue(info, MusicPiecePostDTO.class);
+            musicPiecePostDTO.setMusicClip(file);
+            musicPiecePostDTO.setFileName(file.getOriginalFilename());
+
             musicLibraryService.addMusicPiece(musicPiecePostDTO);
-            return ResponseEntity.ok("Successfulle uploaded");
-        }catch (IOException e){
+            return ResponseEntity.ok("created");
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping(value = "/musicpieces")
-    public HttpEntity<Collection<MusicPieceGetDTO>> getMusicPieces(){
-        Collection<MusicPieceGetDTO> musicpieces =  musicLibraryService.getMusicPieces();
+    public HttpEntity<Collection<MusicPieceGetDTO>> getMusicPieces() {
+        Collection<MusicPieceGetDTO> musicpieces = musicLibraryService.getMusicPieces();
         return new ResponseEntity<>(musicpieces, HttpStatus.OK);
     }
 
     @PostMapping(value = "/musicpiece/submit")
-    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO){
+    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
         Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("musicPieceId", id.toString());
         responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
     }
+
     @PostMapping(value = "/musicpiece/submit/file/{id}")
-    public ResponseEntity<?> addFileToMusicPiece(@PathVariable("id") Long id , @RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> addFileToMusicPiece(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
         try {
             musicLibraryService.addMusicPieceFile(id, file);
         } catch (IOException e) {

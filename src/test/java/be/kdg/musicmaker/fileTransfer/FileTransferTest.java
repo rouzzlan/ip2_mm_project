@@ -12,10 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -162,27 +159,47 @@ public class FileTransferTest {
 
     @Test
     public void UploadMusicPieceTest() throws Exception {
-        this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .sessionAttr("music_piece", shubertMusicPiece)).andExpect(status().isOk()).andDo(print());
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
+                .file(file)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
     }
 
     @Test
     public void UploadMusicPieceAndVerifyTest() throws Exception {
-        this.mockMvc.perform(post("/music_library/upload/music_piece").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .sessionAttr("music_piece", shubertMusicPiece)).andExpect(status().isOk());
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
 
-        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", shubertMusicPiece.getTitle())
+        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
+                .file(file)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Disposition",
-                        "inline; filename=" + shubertMusicPiece.getFileName()))
+                        "inline; filename=" + file.getOriginalFilename()))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
 
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-        tempFile = testFolder.newFile("musicTestFile.MP3");
+        tempFile = testFolder.newFile(file.getOriginalFilename());
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
+        Assert.assertArrayEquals( file.getBytes(), byteArray );
 
-        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(shuberMusicFile));
+        //origineel manier om bestanden te vergelijken
+//        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(file));
     }
 
 
@@ -248,8 +265,7 @@ public class FileTransferTest {
         MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/musicpiece/submit/file/" + id)
                 .file(file)
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .header("filename", file.getOriginalFilename()))
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
 
