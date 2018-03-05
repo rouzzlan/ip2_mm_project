@@ -42,6 +42,7 @@ public class MusicLibraryController {
     http://javasampleapproach.com/java-integration/upload-multipartfile-spring-boot
     http://javasampleapproach.com/spring-framework/spring-boot/angular-4-uploadget-multipartfile-tofrom-spring-boot-server
      */
+    //TODO niet met files werken maar met bytestreams
     @RequestMapping(value = "/get_music_piece", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,6 +52,8 @@ public class MusicLibraryController {
 
         File file = new File(musicPiece.getFileName());
         FileUtils.writeByteArrayToFile(file, musicPiece.getMusicClip());
+        file.deleteOnExit();
+
 
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
@@ -59,7 +62,7 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    public ResponseEntity<?> postMusicPiece(@RequestParam( value="musicpiece_info",required = true) String info, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> postMusicPiece(@RequestParam(value = "musicpiece_info", required = true) String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPiecePostDTO musicPiecePostDTO = mapper.readValue(info, MusicPiecePostDTO.class);

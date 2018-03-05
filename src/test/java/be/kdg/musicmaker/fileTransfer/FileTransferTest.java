@@ -121,19 +121,6 @@ public class FileTransferTest {
 
     }
 
-    @After
-    public void cleanup(){
-        File f = new File("Requiem-piano-mozart-lacrymosa.mp3");
-        File f2 = new File("musicTestFile.MP3");
-
-        if(f.exists() && !f.isDirectory()) {
-            f.deleteOnExit();
-        }
-        if(f.exists() && !f.isDirectory()) {
-            f2.deleteOnExit();
-        }
-    }
-
 
     @Test
     public void testFileDownload() throws Exception {
@@ -175,11 +162,11 @@ public class FileTransferTest {
     @Test
     public void UploadMusicPieceAndVerifyTest() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-        musicPieceDTO.setArtist("Test2");
-        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setArtist("Test3");
+        musicPieceDTO.setTitle("Test 2 Music piece");
         musicPieceDTO.setLanguage("English");
 
-        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "hello2.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
                 .file(file)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
@@ -194,8 +181,8 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
 
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-        tempFile = testFolder.newFile(file.getOriginalFilename());
-        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+//        tempFile = testFolder.newFile(file.getOriginalFilename());
+//        FileUtils.writeByteArrayToFile(tempFile, byteArray);
         Assert.assertArrayEquals( file.getBytes(), byteArray );
 
         //origineel manier om bestanden te vergelijken
