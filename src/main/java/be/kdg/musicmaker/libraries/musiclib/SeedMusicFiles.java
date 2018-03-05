@@ -6,8 +6,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 @Component
@@ -24,7 +22,7 @@ public class SeedMusicFiles {
         }
     }
 
-    private void seed() throws IOException, URISyntaxException {
+    private void seed() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
         byte[] fileArray = Files.readAllBytes(musicFile.toPath());

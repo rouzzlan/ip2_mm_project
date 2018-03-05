@@ -61,4 +61,28 @@ public class InstrumentService {
     public boolean isInstrumentsEmpty() {
         return instrumentRepository.count() == 0;
     }
+
+    public void updateInstrument(InstrumentDTO instrumentDTO, Long id) {
+        MusicInstrument musicInstrument = instrumentRepository.findOne(id);
+        if (musicInstrument != null){
+            musicInstrument.setName(instrumentDTO.getName());
+            musicInstrument.setSort(getSort(instrumentDTO.getSort()));
+            musicInstrument.setType(instrumentDTO.getType());
+            musicInstrument.setVersion(instrumentDTO.getVersion());
+        }
+        instrumentRepository.save(musicInstrument);
+    }
+
+    public MusicInstrument getInstrument(Long id) throws InstrumentNotFoundException {
+        MusicInstrument instrument = instrumentRepository.findOne(id);
+        if (instrument == null){
+            throw new InstrumentNotFoundException();
+        }else {
+            return instrument;
+        }
+    }
+
+    public void deleteInstrument(Long id) {
+        instrumentRepository.delete(id);
+    }
 }
