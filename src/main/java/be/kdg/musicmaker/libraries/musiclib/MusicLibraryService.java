@@ -70,4 +70,12 @@ public class MusicLibraryService {
         mp.setMusicClip(file.getBytes());
         mp.setFileName(file.getOriginalFilename());
     }
+
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException{
+        if (musicLibraryRepository.exists(id)){
+            musicLibraryRepository.delete(id);
+        }else {
+            throw new ResouceNotFoundException("Music piece does not exist");
+        }
+    }
 }

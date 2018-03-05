@@ -101,4 +101,13 @@ public class MusicLibraryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @DeleteMapping(value = "/musicpiece/submit/file/{id}")
+    public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id){
+        try{
+            musicLibraryService.deleteMusicPiece(id);
+        }catch (ResouceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
