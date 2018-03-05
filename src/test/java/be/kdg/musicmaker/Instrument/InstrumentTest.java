@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.Instrument;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.DTO.InstrumentDTO;
 import be.kdg.musicmaker.model.MusicInstrument;
 import be.kdg.musicmaker.security.CorsFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;

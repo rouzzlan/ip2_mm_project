@@ -1,8 +1,6 @@
 package be.kdg.musicmaker.Instrument;
 
-import be.kdg.musicmaker.model.DTO.InstrumentDTO;
 import be.kdg.musicmaker.model.MusicInstrument;
-import be.kdg.musicmaker.util.InstrumentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
