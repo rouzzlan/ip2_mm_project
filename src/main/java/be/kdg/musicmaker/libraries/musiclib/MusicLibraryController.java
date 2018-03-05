@@ -3,11 +3,8 @@ package be.kdg.musicmaker.libraries.musiclib;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
-import be.kdg.musicmaker.model.DTO.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +13,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/music_library")
@@ -62,7 +55,7 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    public ResponseEntity<?> postMusicPiece(@RequestParam(value = "musicpiece_info", required = true) String info, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPiecePostDTO musicPiecePostDTO = mapper.readValue(info, MusicPiecePostDTO.class);

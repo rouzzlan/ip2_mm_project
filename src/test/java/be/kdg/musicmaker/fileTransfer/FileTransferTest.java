@@ -12,7 +12,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -38,15 +41,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
+import java.util.Objects;
 
-import static java.text.MessageFormat.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -86,17 +88,17 @@ public class FileTransferTest {
 
         byte[] data;
 
-        Path path = Paths.get(classLoader.getResource("audio_files/audio_check.wav").toURI());
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/audio_check.wav")).toURI());
         data = Files.readAllBytes(path);
         compactMUsicFile = testFolder.newFile("audio_check.wav");
         FileUtils.writeByteArrayToFile(compactMUsicFile, data);
 
-        path = Paths.get(classLoader.getResource("audio_files/musicTestFile.MP3").toURI());
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
         data = Files.readAllBytes(path);
         shuberMusicFile = testFolder.newFile("musicTestFileOriginal.MP3");
         FileUtils.writeByteArrayToFile(shuberMusicFile, data);
 
-        path = Paths.get(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3").toURI());
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3")).toURI());
         data = Files.readAllBytes(path);
         motzartMusicFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(motzartMusicFile, data);
