@@ -11,9 +11,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -49,7 +50,10 @@ public class SeedEvent {
             eventService.createBand(band);
 
             if (eventService.isEventEmpty()) {
-                Event event = new Event("SportPladijsje", new Date(), "Sportpaleis", band);
+                String string = "January 2, 2010";
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+                LocalDate date = LocalDate.parse(string, formatter);
+                Event event = new Event("SportPladijsje", date, "Sportpaleis", band);
                 eventService.createEvent(event);
 
                 LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));

@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -9,7 +10,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Date dateTime;
+    private LocalDate dateTime;
     private String place;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -18,7 +19,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String name, Date dateTime, String place, Band band) {
+    public Event(String name, LocalDate dateTime, String place, Band band) {
         this.name = name;
         this.dateTime = dateTime;
         this.place = place;
@@ -38,11 +39,11 @@ public class Event {
         this.name = name;
     }
 
-    public Date getDateTime() {
+    public LocalDate getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDate dateTime) {
         this.dateTime = dateTime;
     }
 
