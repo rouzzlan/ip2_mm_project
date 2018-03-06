@@ -7,6 +7,7 @@ import be.kdg.musicmaker.model.User;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -111,5 +112,17 @@ public class UserService {
         if (user != null) {
             return user;
         } else throw new UserNotFoundException();
+    }
+
+    public User getUserByEmail(String email) throws UserNotFoundException {
+        System.out.println(email);
+        email = email.concat(".com");
+        System.out.println(email);
+        User user = userRepository.findByEmail(email);
+        if (user == null){
+            throw new UserNotFoundException();
+        }else {
+            return user;
+        }
     }
 }
