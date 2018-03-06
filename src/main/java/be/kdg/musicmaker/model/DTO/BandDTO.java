@@ -1,18 +1,16 @@
 package be.kdg.musicmaker.model.DTO;
 
-import be.kdg.musicmaker.model.User;
-
 import java.util.List;
 
 public class BandDTO {
     private String name;
-    private User teacher;
-    private List<User> students;
+    private String teacher;
+    private List<String> students;
 
     public BandDTO() {
     }
 
-    public BandDTO(String name, User teacher, List<User> students) {
+    public BandDTO(String name, String teacher, List<String> students) {
         this.name = name;
         this.teacher = teacher;
         this.students = students;
@@ -26,19 +24,19 @@ public class BandDTO {
         this.name = name;
     }
 
-    public User getTeacher() {
+    public String getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(User teacher) {
+    public void setTeacher(String teacher) {
         this.teacher = teacher;
     }
 
-    public List<User> getStudents() {
+    public List<String> getStudents() {
         return students;
     }
 
-    public void setStudents(List<User> students) {
+    public void setStudents(List<String> students) {
         this.students = students;
     }
 
@@ -47,7 +45,7 @@ public class BandDTO {
         return "BandDTO{" +
                 "name='" + name + '\'' +
                 ", teacher=" + teacher +
-                ", students=" + students +
+                ", students=" + students.toString() +
                 '}';
     }
 }

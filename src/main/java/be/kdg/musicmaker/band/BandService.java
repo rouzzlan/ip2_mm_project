@@ -24,9 +24,18 @@ public class BandService {
 
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
+    public Band doesBandExist(String name) throws BandNotFoundException {
+        Band band = bandRepository.findByName(name);
+        if (band != null) {
+            return band;
+        } else {
+            throw new BandNotFoundException();
+        }
+    }
+
     public Band getBand(String name) throws BandNotFoundException {
         Band band = bandRepository.findByName(name);
-        if( band != null){
+        if (band != null) {
             return band;
         } else {
             throw new BandNotFoundException();
@@ -35,21 +44,22 @@ public class BandService {
 
     public void createBand(BandDTO bandDTO) {
         Band band = dtoToBand(bandDTO);
+        band.setTeacher(getTeacher(bandDTO.getTeacher()));
         band.setStudents(getStudents(bandDTO.getStudents()));
         bandRepository.save(band);
     }
 
     private Band dtoToBand(BandDTO bandDTO) {
-        mapperFactory.classMap(BandDTO.class, Band.class).exclude("user");
+        mapperFactory.classMap(BandDTO.class, Band.class).exclude("teacher").exclude("students");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(bandDTO, Band.class);
     }
 
-    public void createBand(Band band){
+    public void createBand(Band band) {
         bandRepository.save(band);
     }
 
-    public List<Band> getBands(){
+    public List<Band> getBands() {
         List<Band> bands = bandRepository.findAll();
         for (Band ba : bands) {
             System.out.println(ba.toString());
@@ -57,16 +67,22 @@ public class BandService {
         return bands;
     }
 
-    public List<User> getStudents(List<User> students) {
+    public List<User> getStudents(List<String> students) {
         List<User> studentsToGet = new ArrayList<>();
-        for (User student : students) {
-            User u = userRepository.findByEmail(student.getEmail());
+        for (String student : students) {
+            User u = userRepository.findByEmail(student);
             studentsToGet.add(u);
         }
         return studentsToGet;
     }
 
-    public boolean isBandEmpty(){
+    public User getTeacher(String teacherMail) {
+        User teacherToFind = userRepository.findByEmail(teacherMail);
+        return teacherToFind;
+
+    }
+
+    public boolean isBandEmpty() {
         return bandRepository.count() == 0;
     }
 }

@@ -1,19 +1,15 @@
 package be.kdg.musicmaker.model.DTO;
 
-import be.kdg.musicmaker.model.Band;
-
-import java.util.Date;
-
 public class EventDTO {
     private String name;
-    private Date dateTime;
+    private String dateTime;
     private String place;
-    private Band band;
+    private String band;
 
     public EventDTO() {
     }
 
-    public EventDTO(String name, Date dateTime, String place, Band band) {
+    public EventDTO(String name, String dateTime, String place, String band) {
         this.name = name;
         this.dateTime = dateTime;
         this.place = place;
@@ -36,19 +32,19 @@ public class EventDTO {
         this.place = place;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
-    public Band getBand() {
+    public String getBand() {
         return band;
     }
 
-    public void setBand(Band band) {
+    public void setBand(String band) {
         this.band = band;
     }
 
