@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class RegisterController {
     private EmailService emailService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> register(@RequestBody String jsonString, HttpServletRequest request) throws UserNotFoundException {
+    public ResponseEntity<String> register(@RequestBody String jsonString, HttpServletRequest request) throws UserNotFoundException, JSONException {
         JSONObject jsonObj;
         UserDTO user = new UserDTO();
         try {
@@ -54,8 +53,6 @@ public class RegisterController {
             emailService.sendEmail(registrationEmail);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         //The request could not be completed due to a conflict with the current state of the resource.
         return ResponseEntity.status(HttpStatus.valueOf(409)).build();

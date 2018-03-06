@@ -46,6 +46,9 @@ public class SeedData {
                 user.setRoles(Arrays.asList(leerling));
                 user2.setRoles(Arrays.asList(leerling,lesgever));
                 user3.setRoles(Arrays.asList(leerling,lesgever,beheerder));
+                user.setEnabled(true);
+                user2.setEnabled(true);
+                user3.setEnabled(true);
                 userService.createUser(user);
                 userService.createUser(user2);
                 userService.createUser(user3);
