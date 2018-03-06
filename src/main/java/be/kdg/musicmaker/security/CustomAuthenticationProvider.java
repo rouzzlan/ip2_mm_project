@@ -4,9 +4,7 @@ import be.kdg.musicmaker.util.UserNotFoundException;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +39,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 
         final UserDetails principal = new CustomUserDetails(user);
+
+		if (!principal.isEnabled()) {
+			throw new DisabledException("Account is nog niet geactiveerd");
+		}
 		return new UsernamePasswordAuthenticationToken(principal, password, principal.getAuthorities());
 	}
 	

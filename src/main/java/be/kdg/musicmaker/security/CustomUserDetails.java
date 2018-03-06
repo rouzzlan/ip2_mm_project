@@ -17,11 +17,13 @@ public class CustomUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private String password;
     private String username;
+    private Boolean enabled;
 
     public CustomUserDetails(User user) {
         this.username = user.getEmail();
         this.password = user.getPassword();
         this.authorities = translate(user.getRoles());
+        this.enabled = user.isEnabled();
     }
 
     /**
@@ -73,7 +75,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
 }

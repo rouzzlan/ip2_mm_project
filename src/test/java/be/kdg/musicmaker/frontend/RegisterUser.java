@@ -9,7 +9,7 @@ import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
+import net.minidev.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +61,10 @@ public class RegisterUser {
     @Test
     public void register() throws UserNotFoundException {
         try {
-            jsonString = objectMapper.writeValueAsString(userDTO);
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("email", userDTO.getEmail());
+            jsonObj.put("password", userDTO.getPassword());
+            jsonString = objectMapper.writeValueAsString(jsonObj);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -79,7 +82,7 @@ public class RegisterUser {
     }
 
     @Test
-    public void confirm() throws UserNotFoundException {
+    public void confirm() throws Exception {
         String token;
         try {
             //get registrated user from DB

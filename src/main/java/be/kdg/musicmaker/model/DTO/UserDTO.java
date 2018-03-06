@@ -16,11 +16,13 @@ public class UserDTO {
     private List<String> roles;
 
     public UserDTO() {
+        this.roles = new ArrayList<>();
     }
 
     public UserDTO(String username,String password) {
         this.username = username;
         this.password = password;
+        this.roles = new ArrayList<>();
     }
 
     public UserDTO(String username, String firstname, String lastname, String email, String password) {
@@ -39,6 +41,7 @@ public class UserDTO {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.roles = new ArrayList<>();
     }
 
     public String getUsername() {

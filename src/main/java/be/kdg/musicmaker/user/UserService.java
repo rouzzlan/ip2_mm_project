@@ -34,6 +34,13 @@ public class UserService {
         } else throw new UserNotFoundException();
     }
 
+    public User findByEmail(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return user;
+        } else throw new UserNotFoundException();
+    }
+
     public void createUser(UserDTO userDTO) {
         User user = dtoToUser(userDTO);
         user.setRoles(getRoles(userDTO.getRoles()));
@@ -105,7 +112,4 @@ public class UserService {
             return user;
         } else throw new UserNotFoundException();
     }
-
-
-
 }

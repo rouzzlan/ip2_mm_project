@@ -3,6 +3,8 @@ package be.kdg.musicmaker.user;
 import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.util.UserNotFoundException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,13 @@ public class RegisterController {
     private EmailService emailService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> register(@RequestBody UserDTO user, HttpServletRequest request) throws UserNotFoundException {
+    public ResponseEntity<String> register(@RequestBody String jsonString, HttpServletRequest request) throws UserNotFoundException {
+        JSONObject jsonObj;
+        UserDTO user = new UserDTO();
         try {
+            jsonObj = new JSONObject(jsonString);
+            user.setEmail(jsonObj.getString("email"));
+            user.setPassword(jsonObj.getString("password"));
             userService.doesUserExist(user.getEmail());
         } catch (UserNotFoundException e) {
 
@@ -47,6 +54,8 @@ public class RegisterController {
             emailService.sendEmail(registrationEmail);
 
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         //The request could not be completed due to a conflict with the current state of the resource.
         return ResponseEntity.status(HttpStatus.valueOf(409)).build();
@@ -57,8 +66,12 @@ public class RegisterController {
     public ResponseEntity<String> confirm(@RequestParam("token") String token) throws UserNotFoundException  {
         try {
             User user = userService.findByConfirmationToken(token);
-            user.setEnabled(true);
-            //update said user
+            if (user.isEnabled() == true){
+                return ResponseEntity.status(HttpStatus.valueOf(409)).build();
+            } else {
+                user.setEnabled(true);
+            }
+            //update user
             userService.createUser(user);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (UserNotFoundException e) {
