@@ -134,7 +134,7 @@ public class CreateEventTest {
 
     private String obtainAccessToken(String username, String password) throws Exception {
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
-        componentList.add(new BasicNameValuePair("grant type", "password"));
+        componentList.add(new BasicNameValuePair("grant_type", "password"));
         componentList.add(new BasicNameValuePair("username", username));
         componentList.add(new BasicNameValuePair("password", password));
 
@@ -148,6 +148,6 @@ public class CreateEventTest {
 
         String resultString = result.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("acces token").toString();
+        return jsonParser.parseMap(resultString).get("acces_token").toString();
     }
 }

@@ -2,9 +2,12 @@ package be.kdg.musicmaker.band;
 
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.model.DTO.BandDTO;
+import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.security.CorsFilter;
+import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.BandNotFoundException;
+import be.kdg.musicmaker.util.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -38,9 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class CreateBandTest {
-    private User student1 = new User("user1", "user1", "user", "1", "user1@kdg.be");
-    private User student2 = new User("user2", "user2", "user", "2", "user2@kdg.be");
-    private BandDTO bandDTO = new BandDTO("The X-Nuts", new User("user3", "user3", "user", "3", "user3@kdg.be"), Arrays.asList(student1, student2));
+    private String member1;
+    private String member2;
+    private String owner;
+    private BandDTO bandDTO;
     private static String ACCES_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Student = "";
     private static String ACCESS_TOKEN_Teacher = "";
@@ -48,6 +52,9 @@ public class CreateBandTest {
 
     @Autowired
     BandService bandService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -64,16 +71,20 @@ public class CreateBandTest {
         try {
             ACCES_TOKEN_Admin = obtainAccesToken("user3@user.com", "user3");
             ACCESS_TOKEN_Student = obtainAccesToken("user@user.com", "user");
-            ACCESS_TOKEN_Teacher = obtainAccesToken("user2@student.com", "user2");
+            ACCESS_TOKEN_Teacher = obtainAccesToken("user2@user.com", "user2");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void createBandByAdmin() throws BandNotFoundException {
+    public void createBandByAdmin() throws BandNotFoundException, UserNotFoundException {
         String jsonString = "";
         try {
+            member1 = "user@user.com";
+            member2 = "user2@user.com";
+            owner = "user3@user.com";
+            bandDTO = new BandDTO("The X-Nuts", owner, Arrays.asList(member1, member2));
             jsonString = objectMapper.writeValueAsString(bandDTO);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -91,9 +102,9 @@ public class CreateBandTest {
 
     private String obtainAccesToken(String username, String password) throws Exception {
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
-        componentList.add(new BasicNameValuePair("grant type", "password"));
         componentList.add(new BasicNameValuePair("username", username));
         componentList.add(new BasicNameValuePair("password", password));
+        componentList.add(new BasicNameValuePair("grant_type", "password"));
 
         ResultActions result
                 = mockMvc.perform(post("/oauth/token")
