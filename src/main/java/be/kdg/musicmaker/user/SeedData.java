@@ -1,5 +1,7 @@
 package be.kdg.musicmaker.user;
 
+import be.kdg.musicmaker.lesson.LessonService;
+import be.kdg.musicmaker.lesson.LessonTypeDTO;
 import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import java.util.Arrays;
 
 @Component
 public class SeedData {
+    @Autowired
+    LessonService lessonService;
 
     @Autowired
     UserRepository userRepository;
@@ -27,6 +31,9 @@ public class SeedData {
     }
 
     private void seed() {
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
         if (userService.isRolesEmpty()) {
             Role leerling = new Role("ROLE_LEERLING");
             Role lesgever = new Role("ROLE_LESGEVER");
