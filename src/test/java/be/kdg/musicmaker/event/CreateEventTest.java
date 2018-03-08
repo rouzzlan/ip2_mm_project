@@ -109,45 +109,6 @@ public class CreateEventTest {
         assertNotNull(event);
     }
 
-//    @Test
-//    public void createEventByTeacher() throws EventNotFoundException {
-//        String jsonString = "";
-//        try {
-//            jsonString = objectMapper.writeValueAsString(eventDTO);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            this.mockMvc.perform(post("/adduser").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-//                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-//                    .andExpect(status().isForbidden());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        Event event = eventService.doesEventExist("testEvent");
-//        assertNotNull(event);
-//    }
-//
-//    @Test
-//    public void createEventByStudent() throws Exception {
-//        String jsonString = "";
-//        try {
-//            jsonString = objectMapper.writeValueAsString(eventDTO);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            this.mockMvc.perform(post("/addEvent").header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
-//                    .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-//                    .andExpect(status().isForbidden());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private String obtainAccesToken(String username, String password) throws Exception {
         LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
         componentList.add(new BasicNameValuePair("username", username));

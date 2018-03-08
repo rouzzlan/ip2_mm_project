@@ -1,16 +1,17 @@
 package be.kdg.musicmaker.user;
 
-import be.kdg.musicmaker.instrument.InstrumentRepository;
-import be.kdg.musicmaker.instrument.InstrumentService;
+import be.kdg.musicmaker.band.BandNotFoundException;
 import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.band.BandService;
+import be.kdg.musicmaker.event.EventNotFoundException;
 import be.kdg.musicmaker.event.EventRepository;
 import be.kdg.musicmaker.event.EventService;
+import be.kdg.musicmaker.instrument.InstrumentRepository;
+import be.kdg.musicmaker.instrument.InstrumentService;
+import be.kdg.musicmaker.lesson.LessonService;
+import be.kdg.musicmaker.lesson.LessonTypeDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
-import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.model.*;
-import be.kdg.musicmaker.band.BandNotFoundException;
-import be.kdg.musicmaker.event.EventNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,8 @@ public class SeedData {
     Band band = new Band("The X-Nuts");
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
-
+    @Autowired
+    LessonService lessonService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -73,6 +75,7 @@ public class SeedData {
         seedMuziekstukken();
         seedBands();
         seedEvents();
+        seedLessonTypes();
     }
 
     private void seedRoles() {
@@ -85,7 +88,6 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED ", lesgever.getName()));
             LOG.info(String.format("%-6s ADDED ", beheerder.getName()));
         }
-
     }
     private void seedUsers() {
         if (userService.isUsersEmpty()) {
@@ -159,5 +161,13 @@ public class SeedData {
             Event testEvent = eventService.getEvent(new Long(1));
             System.out.println(testEvent.toString());
         }
+    }
+    private void seedLessonTypes() {
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
+        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
+        LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 1"));
+        LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 2"));
+        LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 3"));
     }
 }
