@@ -16,7 +16,6 @@ public class InstrumentController {
 
     @PostMapping(value = "/addinstrument")
     public ResponseEntity<String> postInstrument(@RequestBody InstrumentDTO instrumentDTO){
-        System.out.println(instrumentDTO.toString());
         instrumentService.createInstrument(instrumentDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -34,8 +33,7 @@ public class InstrumentController {
 
     @GetMapping(value = "/getinstrument/{id}")
     public HttpEntity<MusicInstrument> getInstrument(@PathVariable Long id) throws InstrumentNotFoundException{
-        ResponseEntity<MusicInstrument> test = new ResponseEntity(instrumentService.getInstrument(id), HttpStatus.OK);
-        return test;
+        return new ResponseEntity(instrumentService.getInstrument(id), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/deleteinstrument/{id}")

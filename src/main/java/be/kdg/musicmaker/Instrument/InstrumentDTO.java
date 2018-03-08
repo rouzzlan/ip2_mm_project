@@ -1,8 +1,6 @@
 package be.kdg.musicmaker.Instrument;
 
 public class InstrumentDTO {
-
-
     private Long id;
     private String name;
     private String sort;

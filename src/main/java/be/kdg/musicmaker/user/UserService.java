@@ -1,18 +1,18 @@
 package be.kdg.musicmaker.user;
 
 import be.kdg.musicmaker.model.DTO.UserDTO;
-import be.kdg.musicmaker.util.UserNotFoundException;
 import be.kdg.musicmaker.model.Role;
 import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.util.UserNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -120,5 +120,13 @@ public class UserService {
         }else {
             return user;
         }
+    }
+
+    public List<User> getStudents() {
+        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LEERLING"))).collect(Collectors.toList());
+    }
+
+    public List<User> getTeachers() {
+        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LESGEVER"))).collect(Collectors.toList());
     }
 }

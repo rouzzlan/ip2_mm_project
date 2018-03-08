@@ -43,4 +43,14 @@ public class UserController {
     public HttpEntity<List<Role>> getRoles(){
         return new ResponseEntity<>(userService.getRoles(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/getstudents")
+    public HttpEntity<List<User>> getStudents(){
+        return new ResponseEntity<>(userService.getStudents(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getteachers")
+    public HttpEntity<List<User>> getTeachers(){
+        return new ResponseEntity<>(userService.getTeachers(), HttpStatus.OK);
+    }
 }
