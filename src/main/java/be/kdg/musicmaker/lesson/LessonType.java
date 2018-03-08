@@ -58,4 +58,10 @@ public class LessonType {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("type met id: %d, naam %s, beschrijving: %s, instrument: %s, en prijs: %f",
+                getId(), getName(), getDescription(), getId(), getPrice());
+    }
 }

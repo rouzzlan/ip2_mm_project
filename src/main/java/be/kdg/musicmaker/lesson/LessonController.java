@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +20,15 @@ public class LessonController {
     }
 
     @PostMapping(value = "/types/add")
-    public ResponseEntity<String> addLessonType() {
-//        instrumentService.createInstrument(instrumentDTO);
+    public ResponseEntity<String> addLessonType(@RequestBody LessonTypeDTO lessonTypeDTO) {
+        lessonService.addLessonType(lessonTypeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @RequestMapping(value = "/types/update", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateLessonType(@RequestBody LessonTypeDTO lessonTypeDTO, @RequestParam String id) {
+        long idLong = Long.parseLong(id);
+        lessonService.updateLessonType(lessonTypeDTO, idLong);
+        return ResponseEntity.status(HttpStatus.CONTINUE).build();
     }
 }

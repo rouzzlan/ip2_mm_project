@@ -10,6 +10,9 @@ public class LessonTypeDTO {
     private String description;
     private String name;
 
+    public LessonTypeDTO() {
+    }
+
     public LessonTypeDTO(double price, String instrument, String description, String name) {
         this.price = price;
         this.instrument = instrument;

@@ -19,4 +19,13 @@ public class LessonService {
         LessonType lessonType = new LessonType(lessonTypeDTO);
         lessonTypeRepository.save(lessonType);
     }
+
+    public void updateLessonType(LessonTypeDTO lessonTypeDTO, long idLong) {
+        LessonType lessonType = lessonTypeRepository.findOne(idLong);
+        lessonType.setDescription(lessonTypeDTO.getDescription());
+        lessonType.setInstrument(lessonTypeDTO.getInstrument());
+        lessonType.setName(lessonTypeDTO.getName());
+        lessonType.setPrice(lessonTypeDTO.getPrice());
+        lessonTypeRepository.save(lessonType);
+    }
 }
