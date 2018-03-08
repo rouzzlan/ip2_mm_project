@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.Instrument;
+package be.kdg.musicmaker.instrument;
 
 import be.kdg.musicmaker.model.MusicInstrument;
 import org.springframework.data.jpa.repository.JpaRepository;

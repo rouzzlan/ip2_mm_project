@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.util;
+package be.kdg.musicmaker.user;
 
 public class UserNotFoundException extends Exception{
 

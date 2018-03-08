@@ -1,13 +1,8 @@
 package be.kdg.musicmaker.band;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.DTO.BandDTO;
-import be.kdg.musicmaker.model.DTO.UserDTO;
-import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.security.CorsFilter;
-import be.kdg.musicmaker.user.UserService;
-import be.kdg.musicmaker.util.BandNotFoundException;
-import be.kdg.musicmaker.util.UserNotFoundException;
+import be.kdg.musicmaker.user.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -54,9 +49,6 @@ public class CreateBandTest {
     BandService bandService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private WebApplicationContext webApplicationContext;
 
     @Autowired
@@ -69,9 +61,9 @@ public class CreateBandTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).apply(springSecurity())
                 .addFilter(corsFilter).build();
         try {
-            ACCES_TOKEN_Admin = obtainAccesToken("user3@user.com", "user3");
             ACCESS_TOKEN_Student = obtainAccesToken("user@user.com", "user");
             ACCESS_TOKEN_Teacher = obtainAccesToken("user2@user.com", "user2");
+            ACCES_TOKEN_Admin = obtainAccesToken("user3@user.com", "user3");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,14 +76,14 @@ public class CreateBandTest {
             member1 = "user@user.com";
             member2 = "user2@user.com";
             owner = "user3@user.com";
-            bandDTO = new BandDTO("The X-Nuts", owner, Arrays.asList(member1, member2));
+            bandDTO = new BandDTO("The Y-Nuts", owner, Arrays.asList(member1, member2));
             jsonString = objectMapper.writeValueAsString(bandDTO);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
         try {
-            this.mockMvc.perform(post("/addBand").header("Authorization", "Bearer " + ACCES_TOKEN_Admin)
+            this.mockMvc.perform(post("/addband").header("Authorization", "Bearer " + ACCES_TOKEN_Admin)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString))
                     .andDo(print())
                     .andExpect(status().isCreated());

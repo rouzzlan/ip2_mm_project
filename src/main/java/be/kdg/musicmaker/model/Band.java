@@ -11,12 +11,12 @@ public class Band {
     private Long id;
 
     private String name;
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "teacher_band",
             joinColumns = {@JoinColumn(name = "band_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
     private User teacher;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "students_band",
             joinColumns = {@JoinColumn(name = "band_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
@@ -30,6 +30,10 @@ public class Band {
         this.name = name;
         this.teacher = teacher;
         this.students = students;
+    }
+
+    public Band(String name) {
+        this.name = name;
     }
 
     public String getName() {

@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.model.DTO;
+package be.kdg.musicmaker.band;
 
 import java.util.List;
 

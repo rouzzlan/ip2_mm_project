@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.event;
 
-import be.kdg.musicmaker.model.DTO.EventDTO;
 import be.kdg.musicmaker.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -15,13 +14,13 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-    @PostMapping(value = "/addEvent")
+    @PostMapping(value = "/addevent")
     public ResponseEntity<String> postEvent(@RequestBody EventDTO eventDTO){
         eventService.createEvent(eventDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value= "/getEvents")
+    @GetMapping(value= "/getevents")
     public HttpEntity<List<Event>> getEvents(){
         return new ResponseEntity<>(eventService.getEvents(), HttpStatus.OK);
     }

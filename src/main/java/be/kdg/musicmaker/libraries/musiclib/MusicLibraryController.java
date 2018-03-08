@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
+import be.kdg.musicmaker.model.MusicPiece;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/music_library")

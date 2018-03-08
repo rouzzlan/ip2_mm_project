@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,9 +21,7 @@ public class TestUserController {
     private MockMvc mockMvc;
 
     @Test
-    public void getUsersJsonAnonymous() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/getusersJson")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+    public void getUsersAnonymous() throws Exception {
+        this.mockMvc.perform(get("/getusers")).andExpect(status().isUnauthorized());
     }
 }

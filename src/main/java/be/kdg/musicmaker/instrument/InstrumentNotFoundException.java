@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.util;
+package be.kdg.musicmaker.instrument;
 
 public class InstrumentNotFoundException extends Exception {
 

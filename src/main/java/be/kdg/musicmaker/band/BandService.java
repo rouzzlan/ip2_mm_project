@@ -1,10 +1,8 @@
 package be.kdg.musicmaker.band;
 
 import be.kdg.musicmaker.model.Band;
-import be.kdg.musicmaker.model.DTO.BandDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserRepository;
-import be.kdg.musicmaker.util.BandNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

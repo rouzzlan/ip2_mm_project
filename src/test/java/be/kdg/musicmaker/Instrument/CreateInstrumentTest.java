@@ -1,11 +1,8 @@
-package be.kdg.musicmaker.Instrument;
+package be.kdg.musicmaker.instrument;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.DTO.InstrumentDTO;
 import be.kdg.musicmaker.model.MusicInstrument;
 import be.kdg.musicmaker.security.CorsFilter;
-import be.kdg.musicmaker.util.InstrumentNotFoundException;
-import be.kdg.musicmaker.util.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -30,7 +27,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.sound.midi.Instrument;
 import java.util.LinkedList;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;

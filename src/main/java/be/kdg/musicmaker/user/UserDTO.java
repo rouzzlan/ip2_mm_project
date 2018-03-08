@@ -1,5 +1,5 @@
 
-package be.kdg.musicmaker.model.DTO;
+package be.kdg.musicmaker.user;
 
 
 import java.util.ArrayList;

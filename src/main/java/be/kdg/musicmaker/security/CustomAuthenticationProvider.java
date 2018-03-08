@@ -1,6 +1,6 @@
 package be.kdg.musicmaker.security;
 
-import be.kdg.musicmaker.util.UserNotFoundException;
+import be.kdg.musicmaker.user.UserNotFoundException;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

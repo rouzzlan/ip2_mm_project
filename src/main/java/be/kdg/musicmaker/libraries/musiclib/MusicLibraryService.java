@@ -1,9 +1,6 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
-import be.kdg.musicmaker.model.User;
-import be.kdg.musicmaker.model.DTO.UserDTO;
+import be.kdg.musicmaker.model.MusicPiece;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -52,5 +49,9 @@ public class MusicLibraryService {
             dtoMusicPieces.add(mp);
         }
         return dtoMusicPieces;
+    }
+
+    public boolean isMusicLibEmpty() {
+        return musicLibraryRepository.count() == 0;
     }
 }

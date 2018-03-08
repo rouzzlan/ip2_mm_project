@@ -1,8 +1,8 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceGetDTO;
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPiecePostDTO;
+import be.kdg.musicmaker.libraries.musiclib.MusicPieceGetDTO;
+import be.kdg.musicmaker.libraries.musiclib.MusicPiecePostDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;

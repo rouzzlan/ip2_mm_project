@@ -1,7 +1,7 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
-import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.MusicPiece;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;

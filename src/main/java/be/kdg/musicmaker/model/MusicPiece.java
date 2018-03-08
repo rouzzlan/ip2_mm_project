@@ -1,34 +1,39 @@
-package be.kdg.musicmaker.libraries.musiclib.dto;
+package be.kdg.musicmaker.model;
 
-public class MusicPieceGetDTO {
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "Music_Piece")
+public class MusicPiece {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Column(name = "music_title")
     private String title;
+    @NotNull
     private String artist;
+    @Column(name = "music_language")
     private String language;
     private String topic;
-    private String musicClipURL;
+    @NotNull
+    @Lob
+    @Column(name = "music_file")
+    private byte[] musicClip;
+    @NotNull
+    @Column(name = "file_name")
     private String fileName;
 
-    public MusicPieceGetDTO(Long id, String title, String artist, String language, String topic, String musicClipURL, String fileName) {
-        this.id = id;
+    public MusicPiece() {
+    }
+
+    public MusicPiece(String title, String artist, String language, String topic, byte[] musicClip) {
         this.title = title;
         this.artist = artist;
         this.language = language;
         this.topic = topic;
-        this.musicClipURL = musicClipURL;
-        this.fileName = fileName;
-    }
-
-    public MusicPieceGetDTO() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.musicClip = musicClip;
     }
 
     public String getTitle() {
@@ -63,12 +68,16 @@ public class MusicPieceGetDTO {
         this.topic = topic;
     }
 
-    public String getMusicClipURL() {
-        return musicClipURL;
+    public byte[] getMusicClip() {
+        return musicClip;
     }
 
-    public void setMusicClipURL(String musicClipURL) {
-        this.musicClipURL = musicClipURL;
+    public void setMusicClip(byte[] musicClip) {
+        this.musicClip = musicClip;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFileName() {

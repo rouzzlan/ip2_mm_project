@@ -1,6 +1,5 @@
-package be.kdg.musicmaker.Instrument;
+package be.kdg.musicmaker.instrument;
 
-import be.kdg.musicmaker.model.DTO.InstrumentDTO;
 import be.kdg.musicmaker.model.MusicInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

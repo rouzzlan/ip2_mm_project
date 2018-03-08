@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.model.DTO;
+package be.kdg.musicmaker.instrument;
 
 public class InstrumentDTO {
     private String name;

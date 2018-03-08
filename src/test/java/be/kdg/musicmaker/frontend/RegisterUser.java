@@ -1,12 +1,12 @@
 package be.kdg.musicmaker.frontend;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.model.DTO.UserDTO;
+import be.kdg.musicmaker.user.UserDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserRepository;
 import be.kdg.musicmaker.user.UserService;
-import be.kdg.musicmaker.util.UserNotFoundException;
+import be.kdg.musicmaker.user.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;

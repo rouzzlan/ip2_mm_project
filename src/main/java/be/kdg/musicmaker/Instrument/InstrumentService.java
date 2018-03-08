@@ -1,9 +1,7 @@
-package be.kdg.musicmaker.Instrument;
+package be.kdg.musicmaker.instrument;
 
-import be.kdg.musicmaker.model.DTO.InstrumentDTO;
 import be.kdg.musicmaker.model.InstrumentSort;
 import be.kdg.musicmaker.model.MusicInstrument;
-import be.kdg.musicmaker.util.InstrumentNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

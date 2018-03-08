@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -21,8 +22,6 @@ public class TestBandController {
 
     @Test
     public void getBandsAnonymous() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/getBands")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+        this.mockMvc.perform(get("/getbands")).andExpect(status().isOk());
     }
 }

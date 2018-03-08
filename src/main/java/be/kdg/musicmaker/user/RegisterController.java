@@ -1,8 +1,6 @@
 package be.kdg.musicmaker.user;
 
-import be.kdg.musicmaker.model.DTO.UserDTO;
 import be.kdg.musicmaker.model.User;
-import be.kdg.musicmaker.util.UserNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

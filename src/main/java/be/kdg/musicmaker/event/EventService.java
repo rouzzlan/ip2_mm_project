@@ -2,20 +2,13 @@ package be.kdg.musicmaker.event;
 
 import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.model.Band;
-import be.kdg.musicmaker.model.DTO.EventDTO;
 import be.kdg.musicmaker.model.Event;
-import be.kdg.musicmaker.util.EventNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 @Service

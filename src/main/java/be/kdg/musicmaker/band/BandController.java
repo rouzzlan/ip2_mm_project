@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.band;
 
 import be.kdg.musicmaker.model.Band;
-import be.kdg.musicmaker.model.DTO.BandDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,13 @@ public class BandController {
     @Autowired
     BandService bandService;
 
-    @PostMapping(value = "/addBand")
+    @PostMapping(value = "/addband")
     public ResponseEntity<String> postEvent(@RequestBody BandDTO band){
         bandService.createBand(band);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value= "/getBands")
+    @GetMapping(value= "/getbands")
     public HttpEntity<List<Band>> getBands(){
         return new ResponseEntity<>(bandService.getBands(), HttpStatus.OK);
     }
