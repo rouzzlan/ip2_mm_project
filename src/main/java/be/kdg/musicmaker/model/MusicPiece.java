@@ -17,11 +17,11 @@ public class MusicPiece {
     @Column(name = "music_language")
     private String language;
     private String topic;
-    @NotNull
+//    @NotNull
     @Lob
     @Column(name = "music_file")
     private byte[] musicClip;
-    @NotNull
+//    @NotNull
     @Column(name = "file_name")
     private String fileName;
 

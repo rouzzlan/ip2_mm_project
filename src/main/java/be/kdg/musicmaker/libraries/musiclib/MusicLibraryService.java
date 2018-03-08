@@ -1,11 +1,13 @@
 package be.kdg.musicmaker.libraries.musiclib;
-
 import be.kdg.musicmaker.model.MusicPiece;
+import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
+
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,5 +55,27 @@ public class MusicLibraryService {
 
     public boolean isMusicLibEmpty() {
         return musicLibraryRepository.count() == 0;
+    }
+    public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
+        mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class);
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        MusicPiece mp = mapperFacade.map(musicPieceDTO, MusicPiece.class);
+        return musicLibraryRepository.save(mp).getId();
+
+
+    }
+
+    public void addMusicPieceFile(Long id, MultipartFile file) throws IOException {
+        MusicPiece mp = musicLibraryRepository.findOne(id);
+        mp.setMusicClip(file.getBytes());
+        mp.setFileName(file.getOriginalFilename());
+    }
+
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException{
+        if (musicLibraryRepository.exists(id)){
+            musicLibraryRepository.delete(id);
+        }else {
+            throw new ResouceNotFoundException("Music piece does not exist");
+        }
     }
 }
