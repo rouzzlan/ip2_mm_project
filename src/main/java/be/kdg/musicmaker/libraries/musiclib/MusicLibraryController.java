@@ -55,7 +55,8 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    public ResponseEntity<?> postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
+    @ResponseStatus(HttpStatus.OK)
+    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPiecePostDTO musicPiecePostDTO = mapper.readValue(info, MusicPiecePostDTO.class);
@@ -63,9 +64,9 @@ public class MusicLibraryController {
             musicPiecePostDTO.setFileName(file.getOriginalFilename());
 
             musicLibraryService.addMusicPiece(musicPiecePostDTO);
-            return ResponseEntity.ok("created");
+            return HttpStatus.OK;
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return HttpStatus.BAD_REQUEST;
         }
     }
 
