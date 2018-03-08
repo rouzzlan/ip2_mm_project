@@ -15,5 +15,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User deleteUserByEmail(String email);
 
     User findByConfirmationToken(String confirmationToken);
-
 }

@@ -20,6 +20,10 @@ public class MusicInstrument {
         this.version = version;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public MusicInstrument() {
     }
 
@@ -74,5 +78,9 @@ public class MusicInstrument {
 
     public void setSort(InstrumentSort sort) {
         this.sort = sort;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
