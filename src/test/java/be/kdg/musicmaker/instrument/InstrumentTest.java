@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.Instrument;
+package be.kdg.musicmaker.instrument;
 
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.model.MusicInstrument;

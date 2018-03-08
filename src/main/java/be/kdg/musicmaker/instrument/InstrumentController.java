@@ -32,7 +32,7 @@ public class InstrumentController {
     }
 
     @GetMapping(value = "/getinstrument/{id}")
-    public HttpEntity<MusicInstrument> getInstrument(@PathVariable Long id) throws InstrumentNotFoundException{
+    public HttpEntity<MusicInstrument> getInstrument(@PathVariable Long id) throws InstrumentNotFoundException {
         return new ResponseEntity(instrumentService.getInstrument(id), HttpStatus.OK);
     }
 
