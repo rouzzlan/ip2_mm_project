@@ -23,11 +23,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
@@ -153,18 +151,36 @@ public class TestLessonTypes {
                 )))
                 .andDo(print())
                 .andExpect(status().isContinue());
+//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
 
         lessonTypes = lessonService.getLessonTypes();
         lessonType = lessonTypes.get(0);
-//        assertEquals(15.5, lessonType.getPrice(), 0); // todo: dit moet het worden
         assertEquals(20, lessonType.getPrice(), 0);
     }
 
     @Test
-    public void deleteLessonTypeAsAdmin() {
+    public void deleteLessonTypeAsAdmin() throws Exception {
+        List<LessonType> lessonTypes = lessonService.getLessonTypes();
+        LessonType lessonType = lessonTypes.get(0);
+
+        mockMvc.perform(delete("/lesson/types/delete")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("id", lessonType.getId().toString()))
+                .andExpect(status().isOk());
+
+        List<LessonType> lessonTypesWithDeletedItem = lessonService.getLessonTypes();
+        assertEquals("there must be just 2 lesson types", 1, lessonTypes.size() - lessonTypesWithDeletedItem.size());
     }
 
     @Test
-    public void deleteLessonTypeAsTeacher() {
+    public void deleteLessonTypeAsTeacher() throws Exception {
+        List<LessonType> lessonTypes = lessonService.getLessonTypes();
+        LessonType lessonType = lessonTypes.get(0);
+
+        mockMvc.perform(delete("/lesson/types/delete")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+                .param("id", lessonType.getId().toString()))
+                .andExpect(status().isOk());
+//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
     }
 }

@@ -31,4 +31,11 @@ public class LessonController {
         lessonService.updateLessonType(lessonTypeDTO, idLong);
         return ResponseEntity.status(HttpStatus.CONTINUE).build();
     }
+
+    @RequestMapping(value = "/types/delete", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteLessonType(@RequestParam String id) {
+        long idLong = Long.parseLong(id);
+        lessonService.deleteLessonType(idLong);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

@@ -28,4 +28,8 @@ public class LessonService {
         lessonType.setPrice(lessonTypeDTO.getPrice());
         lessonTypeRepository.save(lessonType);
     }
+
+    public void deleteLessonType(long id) {
+        lessonTypeRepository.delete(id);
+    }
 }
