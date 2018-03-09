@@ -14,23 +14,23 @@ public class Lesson {
     private double price;
     private String state;
 
-    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-    private Playlist playlist;
-    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-    private LessonType lessonType;
-    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-    private ClassMoment classMoment;
-    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-    private SeriesOfLessons seriesOfLessons;
+//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
+//    private Playlist playlist;
+//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
+//    private LessonType lessonType;
+//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
+//    private ClassMoment classMoment;
+//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
+//    private SeriesOfLessons seriesOfLessons;
 
     public Lesson(int time, double price, String state, Playlist playlist, LessonType lessonType, ClassMoment classMoment, SeriesOfLessons seriesOfLessons) {
         this.time = time;
         this.price = price;
         this.state = state;
-        this.playlist = playlist;
-        this.lessonType = lessonType;
-        this.classMoment = classMoment;
-        this.seriesOfLessons = seriesOfLessons;
+//        this.playlist = playlist;
+//        this.lessonType = lessonType;
+//        this.classMoment = classMoment;
+//        this.seriesOfLessons = seriesOfLessons;
     }
 
     public Lesson() {
@@ -63,36 +63,36 @@ public class Lesson {
     public void setState(String state) {
         this.state = state;
     }
-
-    public Playlist getPlaylist() {
-        return playlist;
-    }
-
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-    }
-
-    public LessonType getLessonType() {
-        return lessonType;
-    }
-
-    public void setLessonType(LessonType lessonType) {
-        this.lessonType = lessonType;
-    }
-
-    public ClassMoment getClassMoment() {
-        return classMoment;
-    }
-
-    public void setClassMoment(ClassMoment classMoment) {
-        this.classMoment = classMoment;
-    }
-
-    public SeriesOfLessons getSeriesOfLessons() {
-        return seriesOfLessons;
-    }
-
-    public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
-        this.seriesOfLessons = seriesOfLessons;
-    }
+//
+//    public Playlist getPlaylist() {
+//        return playlist;
+//    }
+//
+//    public void setPlaylist(Playlist playlist) {
+//        this.playlist = playlist;
+//    }
+//
+//    public LessonType getLessonType() {
+//        return lessonType;
+//    }
+//
+//    public void setLessonType(LessonType lessonType) {
+//        this.lessonType = lessonType;
+//    }
+//
+//    public ClassMoment getClassMoment() {
+//        return classMoment;
+//    }
+//
+//    public void setClassMoment(ClassMoment classMoment) {
+//        this.classMoment = classMoment;
+//    }
+//
+//    public SeriesOfLessons getSeriesOfLessons() {
+//        return seriesOfLessons;
+//    }
+//
+//    public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
+//        this.seriesOfLessons = seriesOfLessons;
+//    }
 }
