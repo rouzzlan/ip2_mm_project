@@ -54,6 +54,7 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
+
     @PostMapping(value = "/upload/music_piece")
     @ResponseStatus(HttpStatus.OK)
     public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
@@ -76,6 +77,12 @@ public class MusicLibraryController {
         return new ResponseEntity<>(musicpieces, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/musicpiece/{id}")
+    public HttpEntity<MusicPieceGetDTO> getMusicPiece(@PathVariable("id") Long id) {
+        MusicPieceGetDTO musicPiece = musicLibraryService.getMusicPieceDTOById(id);
+        return new ResponseEntity<MusicPieceGetDTO>(musicPiece, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/musicpiece/submit")
     public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
         Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
@@ -95,13 +102,20 @@ public class MusicLibraryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @DeleteMapping(value = "/musicpiece/submit/file/{id}")
-    public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id){
-        try{
+    public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id) {
+        try {
             musicLibraryService.deleteMusicPiece(id);
-        }catch (ResouceNotFoundException e){
+        } catch (ResouceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/update/musicpiece/{id}")
+    public ResponseEntity<?> partialUpdateName(@RequestBody MusicPieceDTO musicPieceDTO, @PathVariable("id") Long id) {
+        musicLibraryService.update(musicPieceDTO, id);
+        return ResponseEntity.ok("resource address updated");
     }
 }

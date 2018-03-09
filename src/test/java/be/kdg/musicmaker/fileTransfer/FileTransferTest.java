@@ -1,14 +1,19 @@
 package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.libraries.musiclib.MusicPieceGetDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiecePostDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,8 +43,7 @@ import java.util.Objects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -55,16 +59,16 @@ public class FileTransferTest {
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
     private File tempFile;
     private TokenGetter tokenGetter;
+    private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
-
+    @Autowired
+    MusicLibraryService service;
     @Autowired
     UserService userService;
-
     @Autowired
     private WebApplicationContext wac;
-
     @Autowired
     private CorsFilter corsFilter;
 
@@ -81,8 +85,6 @@ public class FileTransferTest {
         classLoader = getClass().getClassLoader();
 
         byte[] data;
-
-
         Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/audio_check.wav")).toURI());
         data = Files.readAllBytes(path);
         compactMUsicFile = testFolder.newFile("audio_check.wav");
@@ -246,6 +248,29 @@ public class FileTransferTest {
                 .file(file)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateMusicPieceTest() throws Exception {
+        final long musicPieceId = 1;
+        MvcResult result = this.mockMvc.perform(get("/music_library/musicpiece/"+musicPieceId)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
+        MusicPieceGetDTO musicPieceDTO = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceGetDTO.class);
+        musicPieceDTO.setArtist("Michael Jackson");
+
+        mapperFactory.classMap(MusicPieceGetDTO.class, MusicPieceDTO.class);
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        MusicPieceDTO mp = mapperFacade.map(musicPieceDTO, MusicPieceDTO.class);
+        //Object terug posten
+        this.mockMvc.perform(patch("/music_library/update/musicpiece/"+musicPieceId)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(mp)))
+                .andExpect(status().isOk());
+        MusicPiece musicPiece = service.getMusicPiecesById(musicPieceId);
+        String artist = musicPiece.getArtist();
+        Assert.assertTrue("Michael Jackson".equalsIgnoreCase(artist));
     }
 
     private MockMultipartFile fileToMultipartFile(File file) throws IOException {

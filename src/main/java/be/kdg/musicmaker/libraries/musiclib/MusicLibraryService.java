@@ -35,7 +35,17 @@ public class MusicLibraryService {
         return musicLibraryRepository.findByTitle(title);
     }
 
-    public MusicPiece getMusicPieceById(Long id) {
+    public MusicPieceGetDTO getMusicPieceDTOById(Long id) {
+
+        MusicPiece musicPiece = musicLibraryRepository.findOne(id);
+
+        mapperFactory.classMap(MusicPiece.class, MusicPieceGetDTO.class);
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        MusicPieceGetDTO mp = mapperFacade.map(musicPiece, MusicPieceGetDTO.class);
+        return mp;
+    }
+
+    public MusicPiece getMusicPiecesById(Long id){
         return musicLibraryRepository.findOne(id);
     }
 
@@ -77,5 +87,14 @@ public class MusicLibraryService {
         }else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
+    }
+//todo update object met orika mapper?
+    public void update(MusicPieceDTO musicPieceDTO, Long id) {
+        MusicPiece musicPiece = musicLibraryRepository.getOne(id);
+        musicPiece.setTitle(musicPieceDTO.getTitle());
+        musicPiece.setArtist(musicPieceDTO.getArtist());
+        musicPiece.setLanguage(musicPieceDTO.getLanguage());
+        musicPiece.setTopic(musicPieceDTO.getTopic());
+        musicLibraryRepository.save(musicPiece);
     }
 }
