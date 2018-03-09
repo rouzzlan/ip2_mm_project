@@ -70,9 +70,9 @@ public class SeedData {
     @EventListener
     public void seed(ContextRefreshedEvent event) throws IOException, URISyntaxException, BandNotFoundException, EventNotFoundException {
         seedRoles();
-        seedUsers();
         seedInstruments();
         seedMuziekstukken();
+        seedUsers();
         seedBands();
         seedEvents();
         seedLessonTypes();
