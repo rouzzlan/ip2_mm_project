@@ -1,17 +1,11 @@
 package be.kdg.musicmaker.libraries.musiclib.dto;
 
 public class MusicPieceDTO {
+    private Long id;
     private String title;
     private String artist;
     private String language;
     private String topic;
-
-    public MusicPieceDTO(String title, String artist, String language, String topic) {
-        this.title = title;
-        this.artist = artist;
-        this.language = language;
-        this.topic = topic;
-    }
 
     public MusicPieceDTO() {
     }
@@ -46,5 +40,13 @@ public class MusicPieceDTO {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

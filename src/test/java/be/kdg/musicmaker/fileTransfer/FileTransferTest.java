@@ -2,8 +2,6 @@ package be.kdg.musicmaker.fileTransfer;
 
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
-import be.kdg.musicmaker.libraries.musiclib.MusicPieceGetDTO;
-import be.kdg.musicmaker.libraries.musiclib.MusicPiecePostDTO;
 import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.security.CorsFilter;
@@ -55,7 +53,7 @@ public class FileTransferTest {
     private ClassLoader classLoader;
     private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
     private MockMultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
-    private MusicPiecePostDTO shubertMusicPiece, miniMusicPiece;
+    private MusicPieceDTO shubertMusicPiece, miniMusicPiece;
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
     private File tempFile;
     private TokenGetter tokenGetter;
@@ -102,18 +100,14 @@ public class FileTransferTest {
 
         //schubert musicpiece
         shuberMusicFileMultipartMock = fileToMultipartFile(shuberMusicFile);
-        shubertMusicPiece = new MusicPiecePostDTO();
+        shubertMusicPiece = new MusicPieceDTO();
         shubertMusicPiece.setArtist("Schubert");
         shubertMusicPiece.setTitle("Death_and_the_Maiden");
-        shubertMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
-        shubertMusicPiece.setFileName("musicTestFile.MP3");
         //mini musicfile
         miniMusicMultiPartMock = fileToMultipartFile(compactMUsicFile);
-        miniMusicPiece = new MusicPiecePostDTO();
+        miniMusicPiece = new MusicPieceDTO();
         miniMusicPiece.setArtist("unknown");
         miniMusicPiece.setTitle("unknown");
-        miniMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
-        miniMusicPiece.setFileName("audio_check.wav");
     }
 
 
@@ -128,7 +122,6 @@ public class FileTransferTest {
 
     @Test
     public void testDownloadFileContent() throws Exception {
-
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
@@ -175,12 +168,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
 
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-//        tempFile = testFolder.newFile(file.getOriginalFilename());
-//        FileUtils.writeByteArrayToFile(tempFile, byteArray);
         Assert.assertArrayEquals( miniMusicMultiPartMock.getBytes(), byteArray );
-
-        //origineel manier om bestanden te vergelijken
-//        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(file));
     }
 
 
@@ -198,8 +186,8 @@ public class FileTransferTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
-        MusicPieceGetDTO[] musicPieceGetDTOS = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceGetDTO[].class);
-        MusicPieceGetDTO musicPieceGetDTO = musicPieceGetDTOS[0];
+        MusicPieceDTO[] musicPieceGetDTOS = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceDTO[].class);
+        MusicPieceDTO musicPieceGetDTO = musicPieceGetDTOS[0];
         assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
     }
 
@@ -257,10 +245,10 @@ public class FileTransferTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
-        MusicPieceGetDTO musicPieceDTO = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceGetDTO.class);
+        MusicPieceDTO musicPieceDTO = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceDTO.class);
         musicPieceDTO.setArtist("Michael Jackson");
 
-        mapperFactory.classMap(MusicPieceGetDTO.class, MusicPieceDTO.class);
+        mapperFactory.classMap(MusicPieceDTO.class, MusicPieceDTO.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         MusicPieceDTO mp = mapperFacade.map(musicPieceDTO, MusicPieceDTO.class);
         //Object terug posten

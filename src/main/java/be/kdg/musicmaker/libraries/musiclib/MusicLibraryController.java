@@ -40,7 +40,6 @@ public class MusicLibraryController {
     public @ResponseBody
     Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String musicPieceName = request.getParameter("title");
-        logger.info("MusicLibraryController (get) /get_music_piece/with param: " + musicPieceName);
         MusicPiece musicPiece = musicLibraryService.getMusicPiecesByTitle(musicPieceName).get(0);
 
         File file = new File(musicPiece.getFileName());
@@ -60,11 +59,8 @@ public class MusicLibraryController {
     public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            MusicPiecePostDTO musicPiecePostDTO = mapper.readValue(info, MusicPiecePostDTO.class);
-            musicPiecePostDTO.setMusicClip(file);
-            musicPiecePostDTO.setFileName(file.getOriginalFilename());
-
-            musicLibraryService.addMusicPiece(musicPiecePostDTO);
+            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
+            musicLibraryService.addMusicPiece(musicPiecePostDTO, file);
             return HttpStatus.OK;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;
@@ -72,15 +68,15 @@ public class MusicLibraryController {
     }
 
     @GetMapping(value = "/musicpieces")
-    public HttpEntity<Collection<MusicPieceGetDTO>> getMusicPieces() {
-        Collection<MusicPieceGetDTO> musicpieces = musicLibraryService.getMusicPieces();
+    public HttpEntity<Collection<MusicPieceDTO>> getMusicPieces() {
+        Collection<MusicPieceDTO> musicpieces = musicLibraryService.getMusicPieces();
         return new ResponseEntity<>(musicpieces, HttpStatus.OK);
     }
 
     @GetMapping(value = "/musicpiece/{id}")
-    public HttpEntity<MusicPieceGetDTO> getMusicPiece(@PathVariable("id") Long id) {
-        MusicPieceGetDTO musicPiece = musicLibraryService.getMusicPieceDTOById(id);
-        return new ResponseEntity<MusicPieceGetDTO>(musicPiece, HttpStatus.OK);
+    public HttpEntity<MusicPieceDTO> getMusicPiece(@PathVariable("id") Long id) {
+        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceDTOById(id);
+        return new ResponseEntity<MusicPieceDTO>(musicPiece, HttpStatus.OK);
     }
 
     @PostMapping(value = "/musicpiece/submit")

@@ -23,11 +23,12 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
-    public void addMusicPiece(MusicPiecePostDTO musicPiece) throws IOException {
-        mapperFactory.classMap(MusicPiecePostDTO.class, MusicPiece.class).exclude("musicClip");
+    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
+        mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         MusicPiece mp = mapperFacade.map(musicPiece, MusicPiece.class);
-        mp.setMusicClip(musicPiece.getMusicFile().getBytes());
+        mp.setMusicClip(file.getBytes());
+        mp.setFileName(file.getOriginalFilename());
         musicLibraryRepository.save(mp);
     }
 
@@ -35,13 +36,13 @@ public class MusicLibraryService {
         return musicLibraryRepository.findByTitle(title);
     }
 
-    public MusicPieceGetDTO getMusicPieceDTOById(Long id) {
+    public MusicPieceDTO getMusicPieceDTOById(Long id) {
 
         MusicPiece musicPiece = musicLibraryRepository.findOne(id);
 
-        mapperFactory.classMap(MusicPiece.class, MusicPieceGetDTO.class);
+        mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
-        MusicPieceGetDTO mp = mapperFacade.map(musicPiece, MusicPieceGetDTO.class);
+        MusicPieceDTO mp = mapperFacade.map(musicPiece, MusicPieceDTO.class);
         return mp;
     }
 
@@ -50,14 +51,14 @@ public class MusicLibraryService {
     }
 
 
-    public Collection<MusicPieceGetDTO> getMusicPieces() {
-        mapperFactory.classMap(MusicPiece.class, MusicPieceGetDTO.class).exclude("musicClip");
+    public Collection<MusicPieceDTO> getMusicPieces() {
+        mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).exclude("musicClip");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
 
         List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
-        List<MusicPieceGetDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
+        List<MusicPieceDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
         for (MusicPiece musicPiece : musicPieces){
-            MusicPieceGetDTO mp = mapperFacade.map(musicPiece, MusicPieceGetDTO.class);
+            MusicPieceDTO mp = mapperFacade.map(musicPiece, MusicPieceDTO.class);
             dtoMusicPieces.add(mp);
         }
         return dtoMusicPieces;
