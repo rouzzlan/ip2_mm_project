@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class TestLesson {
-    private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     private static String ACCESS_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Student = "";
     private static String ACCESS_TOKEN_Teacher = "";
@@ -57,9 +56,6 @@ public class TestLesson {
         ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
         ACCESS_TOKEN_Student = tokenGetter.obtainAccessToken("user@user.com", "user");
         ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
-        LOG.info("the student's access token is: " + ACCESS_TOKEN_Student);
-        LOG.info("the teacher's access token is: " + ACCESS_TOKEN_Teacher);
-        LOG.info("the admin's access token is: " + ACCESS_TOKEN_Admin);
     }
 
     @Test
