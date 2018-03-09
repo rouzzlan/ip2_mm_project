@@ -6,22 +6,17 @@ import be.kdg.musicmaker.libraries.musiclib.MusicPiecePostDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicPieceDTO;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
+import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -29,23 +24,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,11 +50,11 @@ public class FileTransferTest {
     private ObjectMapper objectMapper = new ObjectMapper();
     private ClassLoader classLoader;
     private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
-    private MultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
+    private MockMultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
     private MusicPiecePostDTO shubertMusicPiece, miniMusicPiece;
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
-    private final Logger logger = LoggerFactory.getLogger(FileTransferTest.class);
     private File tempFile;
+    private TokenGetter tokenGetter;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -84,9 +75,13 @@ public class FileTransferTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
                 .addFilter(corsFilter).build();
 
+        tokenGetter = new TokenGetter(mockMvc);
+        ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
+
         classLoader = getClass().getClassLoader();
 
         byte[] data;
+
 
         Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/audio_check.wav")).toURI());
         data = Files.readAllBytes(path);
@@ -103,9 +98,6 @@ public class FileTransferTest {
         motzartMusicFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(motzartMusicFile, data);
 
-        ACCESS_TOKEN_Admin = obtainAccessToken("user3@user.com", "user3");
-
-
         //schubert musicpiece
         shuberMusicFileMultipartMock = fileToMultipartFile(shuberMusicFile);
         shubertMusicPiece = new MusicPiecePostDTO();
@@ -120,7 +112,6 @@ public class FileTransferTest {
         miniMusicPiece.setTitle("unknown");
         miniMusicPiece.setMusicClip(shuberMusicFileMultipartMock);
         miniMusicPiece.setFileName("audio_check.wav");
-
     }
 
 
@@ -168,9 +159,8 @@ public class FileTransferTest {
         musicPieceDTO.setTitle("Test 2 Music piece");
         musicPieceDTO.setLanguage("English");
 
-        MockMultipartFile file = new MockMultipartFile("file", "hello2.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
-                .file(file)
+                .file(miniMusicMultiPartMock)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
                 .andExpect(status().isOk());
@@ -179,13 +169,13 @@ public class FileTransferTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Disposition",
-                        "inline; filename=" + file.getOriginalFilename()))
+                        "inline; filename=" + miniMusicMultiPartMock.getOriginalFilename()))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
 
         byte[] byteArray = result.getResponse().getContentAsByteArray();
 //        tempFile = testFolder.newFile(file.getOriginalFilename());
 //        FileUtils.writeByteArrayToFile(tempFile, byteArray);
-        Assert.assertArrayEquals( file.getBytes(), byteArray );
+        Assert.assertArrayEquals( miniMusicMultiPartMock.getBytes(), byteArray );
 
         //origineel manier om bestanden te vergelijken
 //        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(file));
@@ -213,7 +203,7 @@ public class FileTransferTest {
 
 
     @Test
-    public void postMusicFileV2Test() throws Exception {
+    public void muisPiecePostInfo() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
         musicPieceDTO.setArtist("Test");
         musicPieceDTO.setTitle("Test Music piece");
@@ -232,7 +222,7 @@ public class FileTransferTest {
     }
 
     @Test
-    public void postMusicFileFullPost() throws Exception {
+    public void muiscFileUploadInSteps() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
         musicPieceDTO.setArtist("Test2");
         musicPieceDTO.setTitle("Test Music piece");
@@ -258,42 +248,16 @@ public class FileTransferTest {
                 .andExpect(status().isOk());
     }
 
-
-
-    private String obtainAccessToken(String username, String password) throws Exception {
-
-        LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
-        componentList.add(new BasicNameValuePair("grant_type", "password"));
-        componentList.add(new BasicNameValuePair("username", username));
-        componentList.add(new BasicNameValuePair("password", password));
-
-
-        ResultActions result
-                = mockMvc.perform(post("/oauth/token")
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .with(httpBasic("mmapp", "mmapp")))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-
-        String resultString = result.andReturn().getResponse().getContentAsString();
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("access_token").toString();
-    }
-
-    private MultipartFile fileToMultipartFile(File file) throws IOException {
-        logger.debug("File to multipart file, file converted: " + file.getName());
-        System.out.println("File to multipart file, file converted: " + file.getName());
+    private MockMultipartFile fileToMultipartFile(File file) throws IOException {
         String contentType = "application/octet-stream";
         String name, originalFileName;
-        name = file.getName();
+        name = "file";
         originalFileName = file.getName();
         byte[] content = null;
         try {
             content = Files.readAllBytes(file.toPath());
         } catch (final IOException e) {
         }
-        MultipartFile result = new MockMultipartFile(name, originalFileName, contentType, content);
-        return result;
+        return new MockMultipartFile(name, originalFileName, contentType, content);
     }
 }
