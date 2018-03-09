@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
 import be.kdg.musicmaker.model.MusicPiece;
-import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
