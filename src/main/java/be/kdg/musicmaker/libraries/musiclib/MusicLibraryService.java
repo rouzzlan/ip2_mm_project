@@ -89,10 +89,9 @@ public class MusicLibraryService {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
     }
-//todo orika mapper gebruken om dat van een object naar andere over te brengen
+//todo update object met orika mapper?
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
-
         musicPiece.setTitle(musicPieceDTO.getTitle());
         musicPiece.setArtist(musicPieceDTO.getArtist());
         musicPiece.setLanguage(musicPieceDTO.getLanguage());
