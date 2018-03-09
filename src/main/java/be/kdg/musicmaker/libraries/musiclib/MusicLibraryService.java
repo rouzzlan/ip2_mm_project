@@ -5,6 +5,7 @@ import be.kdg.musicmaker.libraries.musiclib.dto.MusicPieceDTO;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ma.glasnost.orika.metadata.ScoringClassMapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,8 +43,7 @@ public class MusicLibraryService {
 
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
-        MusicPieceDTO mp = mapperFacade.map(musicPiece, MusicPieceDTO.class);
-        return mp;
+        return mapperFacade.map(musicPiece, MusicPieceDTO.class);
     }
 
     public MusicPiece getMusicPiecesById(Long id){
@@ -89,9 +89,10 @@ public class MusicLibraryService {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
     }
-//todo update object met orika mapper?
+//todo orika mapper gebruken om dat van een object naar andere over te brengen
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
+
         musicPiece.setTitle(musicPieceDTO.getTitle());
         musicPiece.setArtist(musicPieceDTO.getArtist());
         musicPiece.setLanguage(musicPieceDTO.getLanguage());
