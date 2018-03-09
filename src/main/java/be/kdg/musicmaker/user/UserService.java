@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -121,5 +122,13 @@ public class UserService {
         }else {
             return user;
         }
+    }
+
+    public List<User> getStudents() {
+        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LEERLING"))).collect(Collectors.toList());
+    }
+
+    public List<User> getTeachers() {
+        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LESGEVER"))).collect(Collectors.toList());
     }
 }

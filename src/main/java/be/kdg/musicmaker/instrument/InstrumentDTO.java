@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.instrument;
 
 public class InstrumentDTO {
+    private Long id;
     private String name;
     private String sort;
     private String type;
@@ -10,6 +11,13 @@ public class InstrumentDTO {
     }
 
     public InstrumentDTO(String name, String sort, String type, String version) {
+        this.name = name;
+        this.sort = sort;
+        this.type = type;
+        this.version = version;
+    }
+    public InstrumentDTO(Long id, String name, String sort, String type, String version) {
+        this.id = id;
         this.name = name;
         this.sort = sort;
         this.type = type;
@@ -56,5 +64,13 @@ public class InstrumentDTO {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
