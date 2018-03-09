@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.libraries.musiclib.dto;
+package be.kdg.musicmaker.libraries.musiclib;
 
 public class MusicPieceDTO {
     private String title;
