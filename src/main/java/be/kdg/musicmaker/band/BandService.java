@@ -5,6 +5,7 @@ import be.kdg.musicmaker.model.DTO.BandDTO;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserRepository;
 import be.kdg.musicmaker.util.BandNotFoundException;
+import be.kdg.musicmaker.util.UserNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -55,16 +56,33 @@ public class BandService {
         return mapperFacade.map(bandDTO, Band.class);
     }
 
+    private BandDTO bandToDto(Band band) {
+        mapperFactory.classMap(Band.class, BandDTO.class).exclude("teacher").exclude("students");
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        return mapperFacade.map(band, BandDTO.class);
+    }
+
     public void createBand(Band band) {
         bandRepository.save(band);
     }
 
-    public List<Band> getBands() {
+    public List<BandDTO> getBands() {
         List<Band> bands = bandRepository.findAll();
-        for (Band ba : bands) {
-            System.out.println(ba.toString());
+//        for (Band ba : bands) {
+//            System.out.println(ba.toString());
+//        }
+        List<BandDTO> bandDTOs = new ArrayList<>();
+        List<String> studentsEmail = new ArrayList<>();
+        for (Band band : bands) {
+            BandDTO bandDto = bandToDto(band);
+            bandDto.setTeacher(band.getTeacher().getEmail());
+            for (User student : band.getStudents()) {
+                studentsEmail.add(student.getEmail());
+            }
+            bandDto.setStudents(studentsEmail);
+            bandDTOs.add(bandDto);
         }
-        return bands;
+        return bandDTOs;
     }
 
     public List<User> getStudents(List<String> students) {
@@ -77,12 +95,25 @@ public class BandService {
     }
 
     public User getTeacher(String teacherMail) {
-        User teacherToFind = userRepository.findByEmail(teacherMail);
-        return teacherToFind;
+        return userRepository.findByEmail(teacherMail);
 
     }
 
     public boolean isBandEmpty() {
         return bandRepository.count() == 0;
+    }
+
+    public List<Band> getBandsByUserMail(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if(user == null){
+            throw new UserNotFoundException();
+        }else {
+            List<Band> band = bandRepository.findByUser(user);
+            return band;
+        }
+    }
+
+    public void deleteBand(Band band) {
+        bandRepository.delete(band);
     }
 }

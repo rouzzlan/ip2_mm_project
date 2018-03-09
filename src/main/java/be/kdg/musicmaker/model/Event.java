@@ -1,8 +1,9 @@
 package be.kdg.musicmaker.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Event {
@@ -10,7 +11,8 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private LocalDate dateTime;
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime dateTime;
     private String place;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -19,7 +21,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String name, LocalDate dateTime, String place, Band band) {
+    public Event(String name, LocalDateTime dateTime, String place, Band band) {
         this.name = name;
         this.dateTime = dateTime;
         this.place = place;
@@ -39,11 +41,11 @@ public class Event {
         this.name = name;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
