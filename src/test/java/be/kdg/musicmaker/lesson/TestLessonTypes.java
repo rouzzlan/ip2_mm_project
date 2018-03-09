@@ -151,14 +151,10 @@ public class TestLessonTypes {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("id", lessonType.getId().toString())
                 .content(objectMapper.writeValueAsString(
-                        new LessonTypeDTO(20, "viool", "samenspel gitaar voor gevorderden", "gitaar 4")
+                        new LessonTypeDTO(20, "viool", "samenspel gitaar voor ampetanterikken", "gitaar 4")
                 )))
                 .andDo(print())
                 .andExpect(status().isForbidden());
-
-        lessonTypes = lessonService.getLessonTypes();
-        lessonType = lessonTypes.get(0);
-        assertEquals(20, lessonType.getPrice(), 0);
     }
 
     @Test
