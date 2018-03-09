@@ -66,54 +66,57 @@ public class TestLessonTypes {
 
     @Test
     public void getLessonTypesAsAdmin() throws Exception {
-        mockMvc.perform(get("/lesson/types/").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+        mockMvc.perform(get("/lesson/types").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getLessonTypesAsTeacher() throws Exception {
-        mockMvc.perform(get("/lesson/types/").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
+        mockMvc.perform(get("/lesson/types").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getLessonTypesAsStudent() throws Exception {
-        mockMvc.perform(get("/lesson/types/").header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/lesson/types").header("Authorization", ACCESS_TOKEN_Student))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void createLessonTypeAsAdmin() throws Exception {
-        String jsonString = objectMapper.writeValueAsString(new LessonTypeDTO(15.50, "gitaar", "samenspel gitaar vor gevorderden", "gitaar 4"));
-        mockMvc.perform(post("/lesson/types/add/").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        String jsonString = objectMapper.writeValueAsString(new LessonTypeDTO(15.50, "gitaar", "samenspel gitaar voor gevorderden", "gitaar 4"));
+
+        List<LessonType> lessonTypes = lessonService.getLessonTypes();
+
+        mockMvc.perform(post("/lesson/types/add").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonString))
                 .andDo(print())
                 .andExpect(status().isCreated());
+
+        List<LessonType> newLessonTypes = lessonService.getLessonTypes();
+        assertEquals("there must be a type added", lessonTypes.size() + 1, newLessonTypes.size());
     }
 
     @Test
     public void createLessonTypesAsTeacher() throws Exception {
-        mockMvc.perform(post("/lesson/types/add/").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+        mockMvc.perform(post("/lesson/types/add").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(
                         new LessonTypeDTO(15.50, "gitaar", "samenspel gitaar vor gevorderden", "gitaar 4")
                 )))
-                .andExpect(status().isCreated());
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
+                .andExpect(status().isForbidden());
     }
 
     @Test
     public void createLessonTypeAsStudent() throws Exception {
-        mockMvc.perform(post("/lesson/types/add/")
+        mockMvc.perform(post("/lesson/types/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(
                         new LessonTypeDTO(15.50, "gitaar", "samenspel gitaar voor gevorderden", "gitaar 4")
                 )))
-                .andExpect(status().isCreated());
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -151,8 +154,7 @@ public class TestLessonTypes {
                         new LessonTypeDTO(20, "viool", "samenspel gitaar voor gevorderden", "gitaar 4")
                 )))
                 .andDo(print())
-                .andExpect(status().isContinue());
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
+                .andExpect(status().isForbidden());
 
         lessonTypes = lessonService.getLessonTypes();
         lessonType = lessonTypes.get(0);
@@ -181,7 +183,8 @@ public class TestLessonTypes {
         mockMvc.perform(delete("/lesson/types/delete")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .param("id", lessonType.getId().toString()))
-                .andExpect(status().isOk());
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
+                .andExpect(status().isForbidden());
+
+        List<LessonType> newLessonTypes = lessonService.getLessonTypes();
     }
 }
