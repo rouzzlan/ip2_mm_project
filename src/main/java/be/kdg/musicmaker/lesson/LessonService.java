@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.lesson;
 
+import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import java.util.List;
 public class LessonService {
     @Autowired
     LessonTypeRepository lessonTypeRepository;
+    @Autowired
+    LessonRepository lessonRepository;
 
     public List<LessonType> getLessonTypes() {
         List<LessonType> lessonTypes = lessonTypeRepository.findAll();
@@ -32,5 +35,9 @@ public class LessonService {
 
     public void deleteLessonType(long id) {
         lessonTypeRepository.delete(id);
+    }
+
+    public List<Lesson> getLessons() {
+        return lessonRepository.findAll();
     }
 }

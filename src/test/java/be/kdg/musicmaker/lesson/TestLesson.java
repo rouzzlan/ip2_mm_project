@@ -59,8 +59,44 @@ public class TestLesson {
     }
 
     @Test
-    public void getLessonTypesAsAdmin() throws Exception {
-        mockMvc.perform(get("/lesson/types/").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+    public void getLessonAsAdmin() throws Exception {
+        mockMvc.perform(get("/lesson").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getLessonAsTeacher() throws Exception {
+        mockMvc.perform(get("/lesson").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getLessonAsStudent() throws Exception {
+        mockMvc.perform(get("/lesson").header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void getMyLessonAsAdmin() throws Exception {
+        mockMvc.perform(get("/lesson/mine").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getMyLessonAsTeacher() throws Exception {
+        mockMvc.perform(get("/lesson/mine").header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getMyLessonAsStudent() throws Exception {
+        mockMvc.perform(get("/lesson/mine").header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getMyLessonAsAnonymous() throws Exception {
+        mockMvc.perform(get("/lesson/mine"))
+                .andExpect(status().isUnauthorized());
     }
 }

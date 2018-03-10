@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.lesson;
 
+import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -15,6 +16,37 @@ public class LessonController {
     @Autowired
     LessonService lessonService;
 
+    @RequestMapping(method = RequestMethod.GET, value = "")
+    public HttpEntity<List<Lesson>> getLesson() {
+        return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/mine")
+    public HttpEntity<List<Lesson>> getMyLesson() {
+        return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
+    }
+
+//    @PostMapping(value = "/add")
+//    public ResponseEntity<String> addLesson(@RequestBody LessonDTO lessonDTO) {
+//        lessonService.addLessonType(lessonDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
+
+//    @RequestMapping(value = "/types/update", method = RequestMethod.PUT)
+//    public ResponseEntity<String> updateLessonType(@RequestBody LessonTypeDTO lessonTypeDTO, @RequestParam String id) {
+//        long idLong = Long.parseLong(id);
+//        lessonService.updateLessonType(lessonTypeDTO, idLong);
+//        return ResponseEntity.status(HttpStatus.CONTINUE).build();
+//    }
+//
+//    @RequestMapping(value = "/types/delete", method = RequestMethod.DELETE)
+//    public ResponseEntity<String> deleteLessonType(@RequestParam String id) {
+//        long idLong = Long.parseLong(id);
+//        lessonService.deleteLessonType(idLong);
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
+
+    //region types
     @RequestMapping(method = RequestMethod.GET, value = "/types")
     public HttpEntity<List<LessonType>> getLessonTypes() {
         return new ResponseEntity<>(lessonService.getLessonTypes(), HttpStatus.OK);
@@ -39,4 +71,5 @@ public class LessonController {
         lessonService.deleteLessonType(idLong);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    // endregion
 }

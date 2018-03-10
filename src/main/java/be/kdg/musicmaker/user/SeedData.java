@@ -76,6 +76,7 @@ public class SeedData {
         seedBands();
         seedEvents();
         seedLessonTypes();
+        seedLessons();
     }
 
     private void seedRoles() {
@@ -169,5 +170,20 @@ public class SeedData {
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 1"));
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 2"));
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 3"));
+    }
+
+    private void seedLessons() {
+        lessonService.addLesson();
+        lessonService.addLesson();
+        lessonService.addLesson();
+        lessonService.addLesson();
+        lessonService.addLesson();
+        lessonService.addLesson();
+        LOG.info(String.format("%-6s ADDED ", "WESSON 1 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "WESSON 2 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "WESSON 3 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "WESSON 4 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "WESSON 5 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "WESSON 6 ADDED"));
     }
 }

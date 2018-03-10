@@ -16,10 +16,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/confirm").permitAll()
-                .antMatchers("/private/**").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
+                .antMatchers("/private/**", "/lesson").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
                 .antMatchers("/getRoles").hasRole("LEERLING")
                 .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}").hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces
-                                                                                                // .hasRole("BEHEERDER")         // single auth access
+                // .hasRole("BEHEERDER")         // single auth access
+                .antMatchers("/lesson/mine").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())
                 .and()
