@@ -5,6 +5,7 @@ import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,10 +27,12 @@ public class LessonService {
 
     public void updateLessonType(LessonTypeDTO lessonTypeDTO, long idLong) {
         LessonType lessonType = lessonTypeRepository.findOne(idLong);
+
         lessonType.setDescription(lessonTypeDTO.getDescription());
         lessonType.setInstrument(lessonTypeDTO.getInstrument());
         lessonType.setName(lessonTypeDTO.getName());
         lessonType.setPrice(lessonTypeDTO.getPrice());
+
         lessonTypeRepository.save(lessonType);
     }
 
@@ -37,7 +40,34 @@ public class LessonService {
         lessonTypeRepository.delete(id);
     }
 
+    public void addLesson(LessonDTO lessonDTO) {
+        Lesson lesson = new Lesson(lessonDTO);
+        lessonRepository.save(lesson);
+    }
+
     public List<Lesson> getLessons() {
         return lessonRepository.findAll();
+    }
+
+    public List<Lesson> getLessonsFromUser(long id) {
+        return Collections.emptyList();
+    }
+
+    public void updateLesson(LessonDTO lessonDTO, long idLong) {
+        Lesson lesson = lessonRepository.findOne(idLong);
+
+        lesson.setClassMoment(lessonDTO.getClassMoment());
+        lesson.setLessonType(lessonDTO.getLessonType());
+        lesson.setPlaylist(lessonDTO.getPlaylist());
+        lesson.setPrice(lessonDTO.getPrice());
+        lesson.setSeriesOfLessons(lessonDTO.getSeriesOfLessons());
+        lesson.setState(lessonDTO.getState());
+        lesson.setTime(lessonDTO.getTime());
+
+        lessonRepository.save(lesson);
+    }
+
+    public void deleteLesson(long idLong) {
+        lessonRepository.delete(idLong);
     }
 }

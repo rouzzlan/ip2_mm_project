@@ -1,41 +1,33 @@
-package be.kdg.musicmaker.model;
+package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.lesson.LessonDTO;
+import be.kdg.musicmaker.model.ClassMoment;
+import be.kdg.musicmaker.model.LessonType;
+import be.kdg.musicmaker.model.Playlist;
+import be.kdg.musicmaker.model.SeriesOfLessons;
 
 import javax.persistence.*;
-import java.util.Date;
 
-@Entity
-@Table(name = "Lesson")
-public class Lesson {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class LessonDTO {
+    private long id;
     private int time; // duurtijd
     private double price;
     private String state;
-
-    @ManyToOne(cascade = CascadeType.ALL)
     private Playlist playlist;
-    @ManyToOne(cascade = CascadeType.ALL)
     private LessonType lessonType;
-    @ManyToOne(cascade = CascadeType.ALL)
     private ClassMoment classMoment;
-    @ManyToOne(cascade = CascadeType.ALL)
     private SeriesOfLessons seriesOfLessons;
 
-    public Lesson(LessonDTO lessonDTO) {
-        this.time = lessonDTO.getTime();
-        this.price = lessonDTO.getPrice();
-        this.state = lessonDTO.getState();
-        this.playlist = lessonDTO.getPlaylist();
-        this.lessonType = lessonDTO.getLessonType();
-        this.classMoment = lessonDTO.getClassMoment();
-        this.seriesOfLessons = lessonDTO.getSeriesOfLessons();
+    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, ClassMoment classMoment, SeriesOfLessons seriesOfLessons) {
+        this.time = time;
+        this.price = price;
+        this.state = state;
+        this.playlist = playlist;
+        this.lessonType = lessonType;
+        this.classMoment = classMoment;
+        this.seriesOfLessons = seriesOfLessons;
     }
 
-    public Lesson() {
+    public LessonDTO() {
     }
 
     public Long getId() {

@@ -8,6 +8,7 @@ import be.kdg.musicmaker.event.EventRepository;
 import be.kdg.musicmaker.event.EventService;
 import be.kdg.musicmaker.instrument.InstrumentRepository;
 import be.kdg.musicmaker.instrument.InstrumentService;
+import be.kdg.musicmaker.lesson.LessonDTO;
 import be.kdg.musicmaker.lesson.LessonService;
 import be.kdg.musicmaker.lesson.LessonTypeDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
@@ -173,17 +174,35 @@ public class SeedData {
     }
 
     private void seedLessons() {
-        lessonService.addLesson();
-        lessonService.addLesson();
-        lessonService.addLesson();
-        lessonService.addLesson();
-        lessonService.addLesson();
-        lessonService.addLesson();
-        LOG.info(String.format("%-6s ADDED ", "WESSON 1 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "WESSON 2 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "WESSON 3 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "WESSON 4 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "WESSON 5 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "WESSON 6 ADDED"));
+        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
+                new Playlist(),
+                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                new ClassMoment(),
+                new SeriesOfLessons()));
+        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
+                new Playlist(),
+                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                new ClassMoment(),
+                new SeriesOfLessons()));
+        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
+                new Playlist(),
+                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                new ClassMoment(),
+                new SeriesOfLessons()));
+        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
+                new Playlist(),
+                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                new ClassMoment(),
+                new SeriesOfLessons()));
+        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
+                new Playlist(),
+                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                new ClassMoment(),
+                new SeriesOfLessons()));
+        LOG.info(String.format("%-6s ADDED ", "LESSON 1 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "LESSON 2 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "LESSON 3 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "LESSON 4 ADDED"));
+        LOG.info(String.format("%-6s ADDED ", "LESSON 5 ADDED"));
     }
 }

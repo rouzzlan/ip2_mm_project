@@ -115,7 +115,7 @@ public class TestLessonTypes {
     }
 
     @Test
-    public void testUpdateLessonTypeAsAdmin() throws Exception {
+    public void updateLessonTypeAsAdmin() throws Exception {
         List<LessonType> lessonTypes = lessonService.getLessonTypes();
         LessonType lessonType = lessonTypes.get(0);
         assertEquals(15.5, lessonType.getPrice(), 0);
@@ -136,9 +136,9 @@ public class TestLessonTypes {
     }
 
     @Test
-    public void testUpdateLessonTypeAsTeacher() throws Exception {
+    public void updateLessonTypeAsTeacher() throws Exception {
         List<LessonType> lessonTypes = lessonService.getLessonTypes();
-        LessonType lessonType = lessonTypes.get(0);
+        LessonType lessonType = lessonTypes.get(1);
         assertEquals(15.5, lessonType.getPrice(), 0);
 
         mockMvc.perform(put("/lesson/types/update")
@@ -179,7 +179,6 @@ public class TestLessonTypes {
         mockMvc.perform(delete("/lesson/types/delete")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .param("id", lessonType.getId().toString()))
-                .andExpect(status().isOk());
-//                .andExpect(status().isUnauthorized()); // todo: dit moet het worden
+                .andExpect(status().isForbidden());
     }
 }
