@@ -4,6 +4,7 @@ import be.kdg.musicmaker.model.MusicPiece;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ma.glasnost.orika.metadata.ScoringClassMapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +23,12 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
-    public void addMusicPiece(MusicPiecePostDTO musicPiece) throws IOException {
-        mapperFactory.classMap(MusicPiecePostDTO.class, MusicPiece.class).exclude("musicClip");
+    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
+        mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         MusicPiece mp = mapperFacade.map(musicPiece, MusicPiece.class);
-        mp.setMusicClip(musicPiece.getMusicFile().getBytes());
+        mp.setMusicClip(file.getBytes());
+        mp.setFileName(file.getOriginalFilename());
         musicLibraryRepository.save(mp);
     }
 
@@ -34,19 +36,28 @@ public class MusicLibraryService {
         return musicLibraryRepository.findByTitle(title);
     }
 
-    public MusicPiece getMusicPieceById(Long id) {
+    public MusicPieceDTO getMusicPieceDTOById(Long id) {
+
+        MusicPiece musicPiece = musicLibraryRepository.findOne(id);
+
+        mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class);
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        return mapperFacade.map(musicPiece, MusicPieceDTO.class);
+    }
+
+    public MusicPiece getMusicPiecesById(Long id){
         return musicLibraryRepository.findOne(id);
     }
 
 
-    public Collection<MusicPieceGetDTO> getMusicPieces() {
-        mapperFactory.classMap(MusicPiece.class, MusicPieceGetDTO.class).exclude("musicClip");
+    public Collection<MusicPieceDTO> getMusicPieces() {
+        mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).exclude("musicClip");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
 
         List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
-        List<MusicPieceGetDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
+        List<MusicPieceDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
         for (MusicPiece musicPiece : musicPieces){
-            MusicPieceGetDTO mp = mapperFacade.map(musicPiece, MusicPieceGetDTO.class);
+            MusicPieceDTO mp = mapperFacade.map(musicPiece, MusicPieceDTO.class);
             dtoMusicPieces.add(mp);
         }
         return dtoMusicPieces;
@@ -76,5 +87,14 @@ public class MusicLibraryService {
         }else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
+    }
+//todo update object met orika mapper?
+    public void update(MusicPieceDTO musicPieceDTO, Long id) {
+        MusicPiece musicPiece = musicLibraryRepository.getOne(id);
+        musicPiece.setTitle(musicPieceDTO.getTitle());
+        musicPiece.setArtist(musicPieceDTO.getArtist());
+        musicPiece.setLanguage(musicPieceDTO.getLanguage());
+        musicPiece.setTopic(musicPieceDTO.getTopic());
+        musicLibraryRepository.save(musicPiece);
     }
 }
