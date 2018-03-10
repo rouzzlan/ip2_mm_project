@@ -4,9 +4,8 @@ import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.model.Band;
 import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.user.UserNotFoundException;
 import be.kdg.musicmaker.user.UserRepository;
-import be.kdg.musicmaker.util.EventNotFoundException;
-import be.kdg.musicmaker.util.UserNotFoundException;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -46,7 +45,6 @@ public class EventService {
 
     public void createEvent(EventDTO eventDTO) {
         LocalDateTime ldt = getDateTime(eventDTO.getDateTime());
-        System.out.println(ldt.toString() + " here");
         Event event = dtoToEvent(eventDTO);
         event.setBand(getBand(eventDTO.getBand()));
         event.setDateTime(ldt);
@@ -87,7 +85,16 @@ public class EventService {
         return eventDTOs;
     }
 
-    public EventDTO getEvent(Long id) throws EventNotFoundException {
+    public Event getEvent(Long id) throws EventNotFoundException {
+        Event event = eventRepository.findOne(id);
+        if (event == null) {
+            throw new EventNotFoundException();
+        }
+
+        return event;
+    }
+
+    public EventDTO getEventDTO(Long id) throws EventNotFoundException {
         Event event = eventRepository.findOne(id);
         if (event == null) {
             throw new EventNotFoundException();
@@ -101,7 +108,7 @@ public class EventService {
     }
 
     public LocalDateTime getDateTime(String dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return LocalDateTime.parse(dateTime, formatter);
     }
 
