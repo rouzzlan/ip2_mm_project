@@ -1,10 +1,7 @@
 package be.kdg.musicmaker.lesson;
 
-/**
- * @author sam
- * @version 1.0.0, file initially created on 3/6/18.
- */
 public class LessonTypeDTO {
+    private long id;
     private double price;
     private String instrument;
     private String description;

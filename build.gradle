@@ -60,6 +60,7 @@ dependencies {
 	//###################
 
 	runtime('mysql:mysql-connector-java')
+	testCompile('mysql:mysql-connector-java')
 	testCompile("com.h2database:h2")
 	compile("com.h2database:h2")
 
