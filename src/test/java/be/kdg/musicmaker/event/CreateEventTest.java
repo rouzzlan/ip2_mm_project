@@ -77,7 +77,7 @@ public class CreateEventTest {
 
             //TODO re-add dateTime
 
-            eventDTO = new EventDTO("testEvent", localDateTime, "KdG", "The X-Nuts");
+            eventDTO = new EventDTO("testEvent", localDateTime.toString(), "KdG", "The X-Nuts");
             ACCESS_TOKEN_Admin = obtainAccesToken("user3@user.com", "user3");
             ACCESS_TOKEN_Student = obtainAccesToken("user@user.com", "user");
             ACCESS_TOKEN_Teacher = obtainAccesToken("user2@user.com", "user2");

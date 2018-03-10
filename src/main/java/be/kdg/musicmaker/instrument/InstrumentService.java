@@ -26,11 +26,8 @@ public class InstrumentService {
 
     public void createInstrument(InstrumentDTO instrumentDTO) {
         MusicInstrument instrument = dtoToInstrument(instrumentDTO);
-        System.out.println(instrument.toString());
         instrument.setSort(getSort(instrumentDTO.getSort()));
         instrumentRepository.save(instrument);
-        System.out.println(instrument.toString());
-
     }
 
     private MusicInstrument dtoToInstrument(InstrumentDTO instrumentDTO) {
