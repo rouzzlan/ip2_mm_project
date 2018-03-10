@@ -11,6 +11,7 @@ import be.kdg.musicmaker.instrument.InstrumentService;
 import be.kdg.musicmaker.lesson.LessonService;
 import be.kdg.musicmaker.lesson.LessonTypeDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
+import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
