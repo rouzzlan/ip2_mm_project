@@ -16,16 +16,7 @@ import java.util.List;
 public class MusicLibraryService {
     @Autowired
     MusicLibraryRepository musicLibraryRepository;
-    private MapperFactory mapperFactory;
 
-    public MusicLibraryService() {
-        this.mapperFactory = new DefaultMapperFactory.Builder().build();
-        this.mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
-                mapNulls(false).
-                mapNullsInReverse(false).
-                byDefault().
-                register();
-    }
 
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
@@ -65,9 +56,7 @@ public class MusicLibraryService {
         return musicLibraryRepository.count() == 0;
     }
     public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
-        mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class);
-        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
-        MusicPiece mp = mapperFacade.map(musicPieceDTO, MusicPiece.class);
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
         return musicLibraryRepository.save(mp).getId();
 
 
@@ -77,6 +66,7 @@ public class MusicLibraryService {
         MusicPiece mp = musicLibraryRepository.findOne(id);
         mp.setMusicClip(file.getBytes());
         mp.setFileName(file.getOriginalFilename());
+        musicLibraryRepository.save(mp);
     }
 
     public void deleteMusicPiece(Long id) throws ResouceNotFoundException{
@@ -92,7 +82,7 @@ public class MusicLibraryService {
         musicLibraryRepository.save(musicPiece);
     }
     private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object){
-        mapperFactory = new DefaultMapperFactory.Builder().build();
+        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).
                 mapNulls(false)
                 .exclude("id").
@@ -101,6 +91,12 @@ public class MusicLibraryService {
         mapperFactory.getMapperFacade().map(dtoObject, object);
     }
     private <S, D> D map(S s, Class<D> type) {
-        return this.mapperFactory.getMapperFacade().map(s, type);
+        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+        mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
+                mapNulls(false).
+                mapNullsInReverse(false).
+                byDefault().
+                register();
+        return mapperFactory.getMapperFacade().map(s, type);
     }
 }
