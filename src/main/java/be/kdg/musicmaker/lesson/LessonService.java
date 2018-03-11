@@ -56,7 +56,7 @@ public class LessonService {
     public void updateLesson(LessonDTO lessonDTO, long idLong) {
         Lesson lesson = lessonRepository.findOne(idLong);
 
-        lesson.setClassMoment(lessonDTO.getClassMoment());
+        lesson.setAttendant(lessonDTO.getAttendant());
         lesson.setLessonType(lessonDTO.getLessonType());
         lesson.setPlaylist(lessonDTO.getPlaylist());
         lesson.setPrice(lessonDTO.getPrice());

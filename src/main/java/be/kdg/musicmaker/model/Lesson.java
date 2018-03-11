@@ -3,7 +3,6 @@ package be.kdg.musicmaker.model;
 import be.kdg.musicmaker.lesson.LessonDTO;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "Lesson")
@@ -21,8 +20,6 @@ public class Lesson {
     @ManyToOne(cascade = CascadeType.ALL)
     private LessonType lessonType;
     @ManyToOne(cascade = CascadeType.ALL)
-    private ClassMoment classMoment;
-    @ManyToOne(cascade = CascadeType.ALL)
     private SeriesOfLessons seriesOfLessons;
 
     public Lesson(LessonDTO lessonDTO) {
@@ -31,7 +28,6 @@ public class Lesson {
         this.state = lessonDTO.getState();
         this.playlist = lessonDTO.getPlaylist();
         this.lessonType = lessonDTO.getLessonType();
-        this.classMoment = lessonDTO.getClassMoment();
         this.seriesOfLessons = lessonDTO.getSeriesOfLessons();
     }
 
@@ -80,14 +76,6 @@ public class Lesson {
 
     public void setLessonType(LessonType lessonType) {
         this.lessonType = lessonType;
-    }
-
-    public ClassMoment getClassMoment() {
-        return classMoment;
-    }
-
-    public void setClassMoment(ClassMoment classMoment) {
-        this.classMoment = classMoment;
     }
 
     public SeriesOfLessons getSeriesOfLessons() {

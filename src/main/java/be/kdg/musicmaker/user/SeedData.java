@@ -177,27 +177,27 @@ public class SeedData {
         lessonService.addLesson(new LessonDTO(50, 25.0, "open",
                 new Playlist(),
                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new ClassMoment(),
+                new Attendant(),
                 new SeriesOfLessons()));
         lessonService.addLesson(new LessonDTO(50, 25.0, "open",
                 new Playlist(),
                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new ClassMoment(),
+                new Attendant(),
                 new SeriesOfLessons()));
         lessonService.addLesson(new LessonDTO(50, 25.0, "open",
                 new Playlist(),
                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new ClassMoment(),
+                new Attendant(),
                 new SeriesOfLessons()));
         lessonService.addLesson(new LessonDTO(50, 25.0, "open",
                 new Playlist(),
                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new ClassMoment(),
+                new Attendant(),
                 new SeriesOfLessons()));
         lessonService.addLesson(new LessonDTO(50, 25.0, "open",
                 new Playlist(),
                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new ClassMoment(),
+                new Attendant(),
                 new SeriesOfLessons()));
         LOG.info(String.format("%-6s ADDED ", "LESSON 1 ADDED"));
         LOG.info(String.format("%-6s ADDED ", "LESSON 2 ADDED"));

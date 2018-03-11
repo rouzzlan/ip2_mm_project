@@ -3,14 +3,11 @@ package be.kdg.musicmaker.lesson;
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.security.CorsFilter;
-import be.kdg.musicmaker.user.SeedData;
 import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -119,7 +116,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new ClassMoment(),
+                                new Attendant(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -133,7 +130,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new ClassMoment(),
+                                new Attendant(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -147,7 +144,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new ClassMoment(),
+                                new Attendant(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isForbidden());
     }
@@ -165,7 +162,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                        new ClassMoment(),
+                        new Attendant(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -189,7 +186,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(35.0, "viool", "", "viool 1")),
-                        new ClassMoment(),
+                        new Attendant(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -213,7 +210,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                        new ClassMoment(),
+                        new Attendant(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())

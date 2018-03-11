@@ -1,11 +1,9 @@
 package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.model.ClassMoment;
+import be.kdg.musicmaker.model.Attendant;
 import be.kdg.musicmaker.model.LessonType;
 import be.kdg.musicmaker.model.Playlist;
 import be.kdg.musicmaker.model.SeriesOfLessons;
-
-import javax.persistence.*;
 
 public class LessonDTO {
     private long id;
@@ -14,16 +12,14 @@ public class LessonDTO {
     private String state;
     private Playlist playlist;
     private LessonType lessonType;
-    private ClassMoment classMoment;
     private SeriesOfLessons seriesOfLessons;
 
-    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, ClassMoment classMoment, SeriesOfLessons seriesOfLessons) {
+    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, SeriesOfLessons seriesOfLessons) {
         this.time = time;
         this.price = price;
         this.state = state;
         this.playlist = playlist;
         this.lessonType = lessonType;
-        this.classMoment = classMoment;
         this.seriesOfLessons = seriesOfLessons;
     }
 
@@ -72,14 +68,6 @@ public class LessonDTO {
 
     public void setLessonType(LessonType lessonType) {
         this.lessonType = lessonType;
-    }
-
-    public ClassMoment getClassMoment() {
-        return classMoment;
-    }
-
-    public void setClassMoment(ClassMoment classMoment) {
-        this.classMoment = classMoment;
     }
 
     public SeriesOfLessons getSeriesOfLessons() {
