@@ -115,7 +115,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
-                                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                                null,
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -128,7 +128,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
-                                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                                null,
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -141,7 +141,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
-                                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                                null,
                                 new SeriesOfLessons()
                         )))).andExpect(status().isForbidden());
     }
@@ -150,7 +150,7 @@ public class TestLesson {
     public void updateLessonAsAdmin() throws Exception {
         List<Lesson> lessons = lessonService.getLessons();
         Lesson lesson = lessons.get(0);
-        assertEquals(25.0, lesson.getPrice(), 0);
+        assertEquals(90, lesson.getPrice(), 0);
 
         mockMvc.perform(put("/lesson/update")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
@@ -158,7 +158,7 @@ public class TestLesson {
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
-                        new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                        null,
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -173,7 +173,7 @@ public class TestLesson {
     public void updateLessonAsTeacher() throws Exception {
         List<Lesson> lessons = lessonService.getLessons();
         Lesson lesson = lessons.get(1);
-        assertEquals(25.0, lesson.getPrice(), 0);
+        assertEquals(90, lesson.getPrice(), 0);
 
         mockMvc.perform(put("/lesson/update")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
@@ -181,7 +181,7 @@ public class TestLesson {
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
-                        new LessonType(new LessonTypeDTO(35.0, "viool", "", "viool 1")),
+                        null,
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -196,7 +196,7 @@ public class TestLesson {
     public void updateLessonAsStudent() throws Exception {
         List<Lesson> lessons = lessonService.getLessons();
         Lesson lesson = lessons.get(2);
-        assertEquals(25.0, lesson.getPrice(), 0);
+        assertEquals(90, lesson.getPrice(), 0);
 
         mockMvc.perform(put("/lesson/update")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
@@ -204,7 +204,7 @@ public class TestLesson {
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
-                        new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
+                        null,
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -241,7 +241,6 @@ public class TestLesson {
     public void deleteLessonAsStudent() throws Exception {
         List<Lesson> lessons = lessonService.getLessons();
         Lesson lesson = lessons.get(2);
-        assertEquals(25.0, lesson.getPrice(), 0);
 
         mockMvc.perform(delete("/lesson/delete")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
