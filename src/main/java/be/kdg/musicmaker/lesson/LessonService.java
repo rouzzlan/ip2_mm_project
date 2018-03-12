@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.lesson;
 
+import be.kdg.musicmaker.model.Attender;
 import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,10 @@ public class LessonService {
         lessonRepository.save(lesson);
     }
 
+    public void addLesson(Lesson lesson) {
+        lessonRepository.save(lesson);
+    }
+
     public List<Lesson> getLessons() {
         return lessonRepository.findAll();
     }
@@ -78,5 +83,9 @@ public class LessonService {
 
     public void deleteLesson(long idLong) {
         lessonRepository.delete(idLong);
+    }
+
+    public void addStudentToLesson(Attender attender) {
+        attenderRepository.save(attender);
     }
 }

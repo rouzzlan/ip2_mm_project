@@ -116,7 +116,6 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new Attender(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -130,7 +129,6 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new Attender(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isCreated());
     }
@@ -144,7 +142,6 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                                new Attender(),
                                 new SeriesOfLessons()
                         )))).andExpect(status().isForbidden());
     }
@@ -162,7 +159,6 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                        new Attender(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -186,7 +182,6 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(35.0, "viool", "", "viool 1")),
-                        new Attender(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())
@@ -210,7 +205,6 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                        new Attender(),
                         new SeriesOfLessons()
                 ))))
                 .andDo(print())

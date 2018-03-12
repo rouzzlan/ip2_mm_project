@@ -52,14 +52,14 @@ public class SeedData {
     LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
 
     //LESSONS
-    LessonDTO lesson1 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson2 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson3 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson4 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson5 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson6 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson7 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
-//    LessonDTO lesson8 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+    Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons()));
+    Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons()));
+    Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons()));
+    Lesson lesson4 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons()));
+    Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons()));
+    Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons()));
+    Lesson lesson7 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons()));
+    Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons()));
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     @Autowired
@@ -197,15 +197,57 @@ public class SeedData {
 
     private void seedLessons() {
         lessonService.addLesson(lesson1);
-//        lessonService.addLesson(lesson2);
-//        lessonService.addLesson(lesson3);
-//        lessonService.addLesson(lesson4);
-//        lessonService.addLesson(lesson5);
-//        lessonService.addLesson(lesson6);
-//        lessonService.addLesson(lesson7);
-//        lessonService.addLesson(lesson8);
+        lessonService.addLesson(lesson2);
+        lessonService.addLesson(lesson3);
+        lessonService.addLesson(lesson4);
+        lessonService.addLesson(lesson5);
+        lessonService.addLesson(lesson6);
+        lessonService.addLesson(lesson7);
+        lessonService.addLesson(lesson8);
+        LOG.info(String.format("%-6s ADDED ", "LES 1"));
+        LOG.info(String.format("%-6s ADDED ", "LES 2"));
+        LOG.info(String.format("%-6s ADDED ", "LES 3"));
+        LOG.info(String.format("%-6s ADDED ", "LES 4"));
+        LOG.info(String.format("%-6s ADDED ", "LES 5"));
+        LOG.info(String.format("%-6s ADDED ", "LES 6"));
+        LOG.info(String.format("%-6s ADDED ", "LES 7"));
+        LOG.info(String.format("%-6s ADDED ", "LES 8"));
     }
 
     private void addStudentsoLessons() {
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson1));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson2));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson4));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson5));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson6));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson8));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson1));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson2));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson4));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson5));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson6));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson8));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson1));
+        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user, lesson8));
+        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
+
+        LOG.info(String.format("%-6s ADDED TO LESSONS", "STUDENTS"));
+
+
+        lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson1));
+        lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson2));
+        lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson3));
+        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson4));
+        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson5));
+        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson6));
+        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson7));
+        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson8));
+
+        LOG.info(String.format("%-6s ADDED TO LESSONS", "TEACHERS"));
     }
 }
