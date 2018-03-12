@@ -17,7 +17,7 @@ public class Lesson {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Playlist playlist;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private LessonType lessonType;
     @ManyToOne(cascade = CascadeType.ALL)
     private SeriesOfLessons seriesOfLessons;

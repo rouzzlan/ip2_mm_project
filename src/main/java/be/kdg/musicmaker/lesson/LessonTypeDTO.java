@@ -1,7 +1,7 @@
 package be.kdg.musicmaker.lesson;
 
 public class LessonTypeDTO {
-    private long id;
+    private Long id;
     private double price;
     private String instrument;
     private String description;
@@ -15,6 +15,10 @@ public class LessonTypeDTO {
         this.instrument = instrument;
         this.description = description;
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public double getPrice() {

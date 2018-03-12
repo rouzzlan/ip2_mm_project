@@ -5,7 +5,7 @@ import be.kdg.musicmaker.model.Playlist;
 import be.kdg.musicmaker.model.SeriesOfLessons;
 
 public class LessonDTO {
-    private long id;
+    private Long id;
     private int time; // duurtijd
     private double price;
     private String state;

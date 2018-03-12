@@ -52,7 +52,7 @@ public class SeedData {
     LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
 
     //LESSONS
-    LessonDTO lesson1 = new LessonDTO(60, 90.0, "", new Playlist(), new LessonType(), new SeriesOfLessons());
+    LessonDTO lesson1 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
 //    LessonDTO lesson2 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
 //    LessonDTO lesson3 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
 //    LessonDTO lesson4 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
