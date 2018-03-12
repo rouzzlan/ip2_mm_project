@@ -35,7 +35,7 @@ public class LessonController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateLessonType(@RequestBody LessonDTO lessonDTO, @RequestParam String id) {
+    public ResponseEntity<String> updateLesson(@RequestBody LessonDTO lessonDTO, @RequestParam String id) {
         long idLong = Long.parseLong(id);
         lessonService.updateLesson(lessonDTO, idLong);
         return ResponseEntity.status(HttpStatus.CONTINUE).build();
@@ -47,6 +47,20 @@ public class LessonController {
         lessonService.deleteLesson(idLong);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
+    public ResponseEntity<String> addStudentToLesson(@RequestParam String userid) {
+        // todo verder uitwerken
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+//    @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
+//    public ResponseEntity<String> addStudentsToLesson(@RequestParam List<String> userids) {
+//        // todo verder uitwerken
+//
+//        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+//    }
 
     //region types
     @RequestMapping(method = RequestMethod.GET, value = "/types")

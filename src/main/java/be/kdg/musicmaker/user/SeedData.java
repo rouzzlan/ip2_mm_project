@@ -36,7 +36,7 @@ public class SeedData {
     Role beheerder = new Role("ROLE_BEHEERDER");
 
     //USERS
-    User user = new User("user","user","user","user","user@user.com");
+    User user = new User("user", "user", "user", "user", "user@user.com");
     User user2 = new User("user2", "user2", "user2", "user2", "user2@user.com");
     User user3 = new User("user3", "user3", "user3", "user3", "user3@user.com");
 
@@ -45,6 +45,21 @@ public class SeedData {
 
     //BANDS
     Band band = new Band("The X-Nuts");
+
+    //LESSONTYPES
+    LessonType lessonType1 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
+    LessonType lessonType2 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
+    LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
+
+    //LESSONS
+    LessonDTO lesson1 = new LessonDTO(60, 90.0, "", new Playlist(), new LessonType(), new SeriesOfLessons());
+//    LessonDTO lesson2 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson3 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson4 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson5 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson6 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson7 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
+//    LessonDTO lesson8 = new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons());
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     @Autowired
@@ -78,6 +93,7 @@ public class SeedData {
         seedEvents();
         seedLessonTypes();
         seedLessons();
+        addStudentsoLessons();
     }
 
     private void seedRoles() {
@@ -91,6 +107,7 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED ", beheerder.getName()));
         }
     }
+
     private void seedUsers() {
         if (userService.isUsersEmpty()) {
             //CREATE USERS
@@ -100,8 +117,8 @@ public class SeedData {
 
             //SET ROLES AND ENABLE
             user.setRoles(Arrays.asList(leerling));
-            user2.setRoles(Arrays.asList(leerling,lesgever));
-            user3.setRoles(Arrays.asList(leerling,lesgever,beheerder));
+            user2.setRoles(Arrays.asList(leerling, lesgever));
+            user3.setRoles(Arrays.asList(leerling, lesgever, beheerder));
             user.setEnabled(true);
             user2.setEnabled(true);
             user3.setEnabled(true);
@@ -114,24 +131,27 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user3.getUsername().toUpperCase(), user3.getEmail(), user3.getPassword()));
         }
     }
+
     private void seedBands() {
         if (bandService.isBandEmpty()) {
             //CREATE BAND
             bandService.createBand(band);
             //SET TEACHER AND USERS
             band.setTeacher(user2);
-            band.setStudents(Arrays.asList(user,user3));
+            band.setStudents(Arrays.asList(user, user3));
             bandService.createBand(band);
 
             LOG.info(String.format("%-6s ADDED || teacher: %-15s || students: %s", band.getName().toUpperCase(), band.getTeacher(), band.getStudents().toString()));
         }
     }
+
     private void seedInstruments() {
         if (instrumentService.isInstrumentsEmpty()) {
             instrumentService.createInstrument(instrument);
             LOG.info(String.format("%-6s ADDED ", instrument.getName()));
         }
     }
+
     private void seedMuziekstukken() throws URISyntaxException, IOException {
         if (musicLibService.isMusicLibEmpty()) {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -147,6 +167,7 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
         }
     }
+
     private void seedEvents() throws BandNotFoundException, EventNotFoundException {
         if (eventService.isEventEmpty()) {
             band = bandService.doesBandExist("The X-Nuts");
@@ -155,7 +176,7 @@ public class SeedData {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
 
-            Event event = new Event("SportPladijsje", dateTime , "Sportpaleis", band);
+            Event event = new Event("SportPladijsje", dateTime, "Sportpaleis", band);
             eventService.createEvent(event);
 
             LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));
@@ -164,45 +185,27 @@ public class SeedData {
             System.out.println(testEvent.toString());
         }
     }
+
     private void seedLessonTypes() {
-        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
-        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
-        lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
+        lessonService.addLessonType(lessonType1);
+        lessonService.addLessonType(lessonType2);
+        lessonService.addLessonType(lessonType3);
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 1"));
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 2"));
         LOG.info(String.format("%-6s ADDED ", "LESTYPE: GITAAR 3"));
     }
 
     private void seedLessons() {
-        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
-                new Playlist(),
-                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new Attendant(),
-                new SeriesOfLessons()));
-        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
-                new Playlist(),
-                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new Attendant(),
-                new SeriesOfLessons()));
-        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
-                new Playlist(),
-                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new Attendant(),
-                new SeriesOfLessons()));
-        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
-                new Playlist(),
-                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new Attendant(),
-                new SeriesOfLessons()));
-        lessonService.addLesson(new LessonDTO(50, 25.0, "open",
-                new Playlist(),
-                new LessonType(new LessonTypeDTO(15.5, "viool", "", "viool 1")),
-                new Attendant(),
-                new SeriesOfLessons()));
-        LOG.info(String.format("%-6s ADDED ", "LESSON 1 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "LESSON 2 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "LESSON 3 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "LESSON 4 ADDED"));
-        LOG.info(String.format("%-6s ADDED ", "LESSON 5 ADDED"));
+        lessonService.addLesson(lesson1);
+//        lessonService.addLesson(lesson2);
+//        lessonService.addLesson(lesson3);
+//        lessonService.addLesson(lesson4);
+//        lessonService.addLesson(lesson5);
+//        lessonService.addLesson(lesson6);
+//        lessonService.addLesson(lesson7);
+//        lessonService.addLesson(lesson8);
+    }
+
+    private void addStudentsoLessons() {
     }
 }

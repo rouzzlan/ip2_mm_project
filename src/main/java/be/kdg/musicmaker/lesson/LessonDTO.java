@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.model.Attendant;
 import be.kdg.musicmaker.model.LessonType;
 import be.kdg.musicmaker.model.Playlist;
 import be.kdg.musicmaker.model.SeriesOfLessons;

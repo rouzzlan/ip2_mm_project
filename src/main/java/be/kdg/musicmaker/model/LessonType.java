@@ -9,7 +9,8 @@ import javax.persistence.*;
 public class LessonType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+
     private double price;
     private String instrument;
     private String description;

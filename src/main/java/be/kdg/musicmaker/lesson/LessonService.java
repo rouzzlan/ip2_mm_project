@@ -14,6 +14,8 @@ public class LessonService {
     LessonTypeRepository lessonTypeRepository;
     @Autowired
     LessonRepository lessonRepository;
+    @Autowired
+    AttenderRepository attenderRepository;
 
     public List<LessonType> getLessonTypes() {
         List<LessonType> lessonTypes = lessonTypeRepository.findAll();
@@ -22,6 +24,10 @@ public class LessonService {
 
     public void addLessonType(LessonTypeDTO lessonTypeDTO) {
         LessonType lessonType = new LessonType(lessonTypeDTO);
+        lessonTypeRepository.save(lessonType);
+    }
+
+    public void addLessonType(LessonType lessonType) {
         lessonTypeRepository.save(lessonType);
     }
 
@@ -50,13 +56,16 @@ public class LessonService {
     }
 
     public List<Lesson> getLessonsFromUser(long id) {
-        return Collections.emptyList();
+//        List<Lesson> lessons = attenderRepository.getLessomsFromUser(id);
+//        if (lessons == null) {
+            return Collections.emptyList();
+//        }
+//        return lessons;
     }
 
     public void updateLesson(LessonDTO lessonDTO, long idLong) {
         Lesson lesson = lessonRepository.findOne(idLong);
 
-        lesson.setAttendant(lessonDTO.getAttendant());
         lesson.setLessonType(lessonDTO.getLessonType());
         lesson.setPlaylist(lessonDTO.getPlaylist());
         lesson.setPrice(lessonDTO.getPrice());
