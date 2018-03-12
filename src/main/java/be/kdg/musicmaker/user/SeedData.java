@@ -47,6 +47,7 @@ public class SeedData {
     Band band = new Band("The X-Nuts");
 
     //LESSONTYPES
+    LessonType lessonType = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
     LessonType lessonType1 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
     LessonType lessonType2 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
     LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
@@ -187,6 +188,7 @@ public class SeedData {
     }
 
     private void seedLessonTypes() {
+        lessonService.addLessonType(lessonType);
         lessonService.addLessonType(lessonType1);
         lessonService.addLessonType(lessonType2);
         lessonService.addLessonType(lessonType3);
