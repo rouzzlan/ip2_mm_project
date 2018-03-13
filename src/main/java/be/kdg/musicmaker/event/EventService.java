@@ -44,10 +44,7 @@ public class EventService {
     }
 
     public void createEvent(EventDTO eventDTO) {
-        LocalDateTime ldt = getDateTime(eventDTO.getDateTime());
-        Event event = dtoToEvent(eventDTO);
-        event.setBand(getBand(eventDTO.getBand()));
-        event.setDateTime(ldt);
+        Event event = new Event(eventDTO);
         eventRepository.save(event);
     }
 

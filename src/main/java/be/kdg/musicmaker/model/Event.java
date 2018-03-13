@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.model;
 
+import be.kdg.musicmaker.event.EventDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,7 +12,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dateTime;
     private String place;
 
@@ -19,6 +19,12 @@ public class Event {
     private Band band;
 
     public Event() {
+    }
+
+    public Event(EventDTO eventDTO) {
+        this.name =eventDTO.getName();
+        this.place = eventDTO.getPlace();
+        this.dateTime = LocalDateTime.parse(eventDTO.getDateTime());
     }
 
     public Event(String name, LocalDateTime dateTime, String place, Band band) {
