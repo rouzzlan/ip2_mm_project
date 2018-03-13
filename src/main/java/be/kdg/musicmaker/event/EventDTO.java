@@ -1,17 +1,24 @@
 package be.kdg.musicmaker.event;
 
-import java.time.LocalDateTime;
-
 public class EventDTO {
+    private Long id;
     private String name;
-    private LocalDateTime dateTime;
+    private String dateTime;
     private String place;
     private String band;
 
     public EventDTO() {
     }
 
-    public EventDTO(String name, LocalDateTime dateTime, String place, String band) {
+    public EventDTO(String name, String dateTime, String place, String band) {
+        this.name = name;
+        this.dateTime = dateTime;
+        this.place = place;
+        this.band = band;
+    }
+
+    public EventDTO(Long id, String name, String dateTime, String place, String band) {
+        this.id = id;
         this.name = name;
         this.dateTime = dateTime;
         this.place = place;
@@ -34,11 +41,11 @@ public class EventDTO {
         this.place = place;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -58,5 +65,13 @@ public class EventDTO {
                 ", place='" + place + '\'' +
                 ", band=" + band +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

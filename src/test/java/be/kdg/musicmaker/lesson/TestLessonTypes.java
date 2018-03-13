@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -33,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class TestLessonTypes {
-    private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     private static String ACCESS_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Student = "";
     private static String ACCESS_TOKEN_Teacher = "";
@@ -59,9 +60,6 @@ public class TestLessonTypes {
         ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
         ACCESS_TOKEN_Student = tokenGetter.obtainAccessToken("user@user.com", "user");
         ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
-        LOG.info("the student's access token is: " + ACCESS_TOKEN_Student);
-        LOG.info("the teacher's access token is: " + ACCESS_TOKEN_Teacher);
-        LOG.info("the admin's access token is: " + ACCESS_TOKEN_Admin);
     }
 
     @Test
@@ -120,7 +118,7 @@ public class TestLessonTypes {
     }
 
     @Test
-    public void testUpdateLessonTypeAsAdmin() throws Exception {
+    public void updateLessonTypeAsAdmin() throws Exception {
         List<LessonType> lessonTypes = lessonService.getLessonTypes();
         LessonType lessonType = lessonTypes.get(0);
         assertEquals(15.5, lessonType.getPrice(), 0);
@@ -141,9 +139,9 @@ public class TestLessonTypes {
     }
 
     @Test
-    public void testUpdateLessonTypeAsTeacher() throws Exception {
+    public void updateLessonTypeAsTeacher() throws Exception {
         List<LessonType> lessonTypes = lessonService.getLessonTypes();
-        LessonType lessonType = lessonTypes.get(0);
+        LessonType lessonType = lessonTypes.get(1);
         assertEquals(15.5, lessonType.getPrice(), 0);
 
         mockMvc.perform(put("/lesson/types/update")
@@ -180,7 +178,5 @@ public class TestLessonTypes {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .param("id", lessonType.getId().toString()))
                 .andExpect(status().isForbidden());
-
-        List<LessonType> newLessonTypes = lessonService.getLessonTypes();
     }
 }

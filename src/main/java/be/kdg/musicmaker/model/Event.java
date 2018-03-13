@@ -1,14 +1,19 @@
 package be.kdg.musicmaker.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 public class Event {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dateTime;
     private String place;
 
@@ -30,6 +35,18 @@ public class Event {
         this.name = name;
     }
 
+    public Event(String name, String place) {
+        this.name = name;
+        this.place = place;
+    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }

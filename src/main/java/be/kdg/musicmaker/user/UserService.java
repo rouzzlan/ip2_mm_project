@@ -124,11 +124,21 @@ public class UserService {
         }
     }
 
-    public List<User> getStudents() {
-        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LEERLING"))).collect(Collectors.toList());
+    public List<String> getStudents() {
+        List<User> students = getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LEERLING"))).collect(Collectors.toList());
+        List<String> studentMails = new ArrayList<>();
+        for (User student : students) {
+            studentMails.add(student.getEmail());
+        }
+        return studentMails;
     }
 
-    public List<User> getTeachers() {
-        return getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LESGEVER"))).collect(Collectors.toList());
+    public List<String> getTeachers() {
+        List<User> teachers = getUsers().stream().filter(user -> user.getRoles().contains(getRole("ROLE_LESGEVER"))).collect(Collectors.toList());
+        List<String> teacherMails = new ArrayList<>();
+        for (User teacher : teachers) {
+            teacherMails.add(teacher.getEmail());
+        }
+        return teacherMails;
     }
 }
