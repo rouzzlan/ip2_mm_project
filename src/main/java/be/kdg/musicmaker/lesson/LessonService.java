@@ -87,7 +87,9 @@ public class LessonService {
     }
 
     public void deleteLesson(long idLong) {
-//        attenderRepository.deleteAttendersFromLessom(idLong);
+        Lesson lesson = lessonRepository.findOne(idLong);
+
+        attenderRepository.deleteAttendersFromLessom(lesson);
         lessonRepository.delete(idLong);
     }
 
