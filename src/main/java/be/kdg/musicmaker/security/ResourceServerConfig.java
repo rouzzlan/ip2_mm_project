@@ -16,7 +16,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/confirm").permitAll()
-                .antMatchers("/private/**", "/lesson/*", "/lesson").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
+                .antMatchers("/private/**", "/lesson/add", "/lesson/update", "/lesson/delete", "/lesson").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
                 .antMatchers("/getRoles").hasRole("LEERLING")
                 .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}"
                         ,"/lesson/types/add", "/lesson/types/update", "/lesson/types/delete")

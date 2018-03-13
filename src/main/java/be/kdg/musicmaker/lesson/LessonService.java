@@ -3,10 +3,11 @@ package be.kdg.musicmaker.lesson;
 import be.kdg.musicmaker.model.Attender;
 import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
+import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class LessonService {
     LessonRepository lessonRepository;
     @Autowired
     AttenderRepository attenderRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public List<LessonType> getLessonTypes() {
         List<LessonType> lessonTypes = lessonTypeRepository.findAll();
@@ -62,11 +65,12 @@ public class LessonService {
     }
 
     public List<Lesson> getLessonsFromUser(long id) {
-//        List<Lesson> lessons = attenderRepository.getLessomsFromUser(id);
-//        if (lessons == null) {
+        User user = userRepository.findOne(id);
+        List<Lesson> lessons = attenderRepository.getLessonidsFor(user);
+        if (lessons == null) {
             return Collections.emptyList();
-//        }
-//        return lessons;
+        }
+        return lessons;
     }
 
     public void updateLesson(LessonDTO lessonDTO, long idLong) {
