@@ -6,6 +6,7 @@ import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,6 +83,7 @@ public class LessonService {
     }
 
     public void deleteLesson(long idLong) {
+//        attenderRepository.deleteAttendersFromLessom(idLong);
         lessonRepository.delete(idLong);
     }
 

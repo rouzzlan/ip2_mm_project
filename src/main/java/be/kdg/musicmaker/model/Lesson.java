@@ -3,6 +3,7 @@ package be.kdg.musicmaker.model;
 import be.kdg.musicmaker.lesson.LessonDTO;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Lesson")

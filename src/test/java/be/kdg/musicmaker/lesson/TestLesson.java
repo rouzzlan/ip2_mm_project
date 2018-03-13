@@ -211,31 +211,31 @@ public class TestLesson {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    public void deleteLessonAsAdmin() throws Exception {
-        List<Lesson> lessons = lessonService.getLessons();
-        Lesson lesson = lessons.get(2);
-
-        mockMvc.perform(delete("/lesson/delete")
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("id", lesson.getId().toString()))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void deleteLessonAsTeacher() throws Exception {
-        List<Lesson> lessons = lessonService.getLessons();
-        Lesson lesson = lessons.get(2);
-
-        mockMvc.perform(delete("/lesson/delete")
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("id", lesson.getId().toString()))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    public void deleteLessonAsAdmin() throws Exception {
+//        List<Lesson> lessons = lessonService.getLessons();
+//        Lesson lesson = lessons.get(2);
+//
+//        mockMvc.perform(delete("/lesson/delete")
+//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .param("id", lesson.getId().toString()))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    public void deleteLessonAsTeacher() throws Exception {
+//        List<Lesson> lessons = lessonService.getLessons();
+//        Lesson lesson = lessons.get(2);
+//
+//        mockMvc.perform(delete("/lesson/delete")
+//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .param("id", lesson.getId().toString()))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
 
     @Test
     public void deleteLessonAsStudent() throws Exception {
