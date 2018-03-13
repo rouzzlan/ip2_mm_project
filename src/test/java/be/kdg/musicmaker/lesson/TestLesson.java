@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -116,7 +117,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 null,
-                                new SeriesOfLessons()
+                                new SeriesOfLessons(), LocalDateTime.now().toString()
                         )))).andExpect(status().isCreated());
     }
 
@@ -129,7 +130,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 null,
-                                new SeriesOfLessons()
+                                new SeriesOfLessons(), LocalDateTime.now().toString()
                         )))).andExpect(status().isCreated());
     }
 
@@ -142,7 +143,7 @@ public class TestLesson {
                         new LessonDTO(50, 25.0, "open",
                                 new Playlist(),
                                 null,
-                                new SeriesOfLessons()
+                                new SeriesOfLessons(), LocalDateTime.now().toString()
                         )))).andExpect(status().isForbidden());
     }
 
@@ -159,7 +160,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         null,
-                        new SeriesOfLessons()
+                        new SeriesOfLessons(), LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isContinue());
@@ -182,7 +183,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         null,
-                        new SeriesOfLessons()
+                        new SeriesOfLessons(), LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isContinue());
@@ -205,7 +206,7 @@ public class TestLesson {
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
                         new Playlist(),
                         null,
-                        new SeriesOfLessons()
+                        new SeriesOfLessons(), LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isForbidden());

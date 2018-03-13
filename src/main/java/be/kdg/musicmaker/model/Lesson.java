@@ -3,6 +3,7 @@ package be.kdg.musicmaker.model;
 import be.kdg.musicmaker.lesson.LessonDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,7 @@ public class Lesson {
     private int time; // duurtijd
     private double price;
     private String state;
+    private LocalDateTime date;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Playlist playlist;
@@ -24,6 +26,7 @@ public class Lesson {
     private SeriesOfLessons seriesOfLessons;
 
     public Lesson(LessonDTO lessonDTO) {
+        this.date = LocalDateTime.parse(lessonDTO.getDate());
         this.time = lessonDTO.getTime();
         this.price = lessonDTO.getPrice();
         this.state = lessonDTO.getState();

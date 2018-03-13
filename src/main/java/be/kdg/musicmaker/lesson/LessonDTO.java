@@ -4,6 +4,8 @@ import be.kdg.musicmaker.model.LessonType;
 import be.kdg.musicmaker.model.Playlist;
 import be.kdg.musicmaker.model.SeriesOfLessons;
 
+import java.time.LocalDateTime;
+
 public class LessonDTO {
     private Long id;
     private int time; // duurtijd
@@ -12,14 +14,16 @@ public class LessonDTO {
     private Playlist playlist;
     private LessonType lessonType;
     private SeriesOfLessons seriesOfLessons;
+    private String date;
 
-    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, SeriesOfLessons seriesOfLessons) {
+    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, SeriesOfLessons seriesOfLessons, String date) {
         this.time = time;
         this.price = price;
         this.state = state;
         this.playlist = playlist;
         this.lessonType = lessonType;
         this.seriesOfLessons = seriesOfLessons;
+        this.date = date;
     }
 
     public LessonDTO() {
@@ -75,5 +79,13 @@ public class LessonDTO {
 
     public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
         this.seriesOfLessons = seriesOfLessons;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
