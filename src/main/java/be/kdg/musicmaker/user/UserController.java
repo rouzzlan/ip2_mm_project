@@ -43,12 +43,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/getstudents")
-    public HttpEntity<List<User>> getStudents(){
+    public HttpEntity<List<String>> getStudents(){
         return new ResponseEntity<>(userService.getStudents(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getteachers")
-    public HttpEntity<List<User>> getTeachers(){
+    public HttpEntity<List<String>> getTeachers(){
         return new ResponseEntity<>(userService.getTeachers(), HttpStatus.OK);
     }
 }

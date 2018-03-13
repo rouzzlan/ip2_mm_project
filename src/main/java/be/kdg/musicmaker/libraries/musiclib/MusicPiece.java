@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.model;
+package be.kdg.musicmaker.libraries.musiclib;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

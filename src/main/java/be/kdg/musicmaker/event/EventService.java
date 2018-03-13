@@ -9,8 +9,6 @@ import be.kdg.musicmaker.user.UserRepository;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.ext.JodaDeserializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +43,14 @@ public class EventService {
 
     public void createEvent(EventDTO eventDTO) {
         Event event = new Event(eventDTO);
+
         eventRepository.save(event);
     }
 
-    @JsonDeserialize(using = JodaDeserializers.LocalDateDeserializer.class)
+    //@JsonDeserialize(using = JodaDeserializers.LocalDateDeserializer.class)
     public Event dtoToEvent(EventDTO eventDTO) {
-        mapperFactory.classMap(EventDTO.class, Event.class).exclude("band").exclude("dateTime");
+        mapperFactory.classMap(EventDTO.class, Event.class)
+                .exclude("band").exclude("dateTime").register();
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(eventDTO, Event.class);
     }
@@ -96,8 +96,10 @@ public class EventService {
         if (event == null) {
             throw new EventNotFoundException();
         }
-
-        return eventToDto(event);
+        EventDTO eventDTO = eventToDto(event);
+        eventDTO.setBand(event.getBand().getName());
+        eventDTO.setDateTime(event.getDateTime().toString());
+        return eventDTO;
     }
 
     public Band getBand(String bandName) {
@@ -141,5 +143,11 @@ public class EventService {
         }
 
         return eventDTOs;
+    }
+
+    public List<Event> getEventsByBand(Band band) {
+        return eventRepository.findAll().stream().filter(event -> event.getBand()
+                .equals(band))
+                .collect(Collectors.toList());
     }
 }

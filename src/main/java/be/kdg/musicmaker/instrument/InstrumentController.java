@@ -37,7 +37,7 @@ public class InstrumentController {
     }
 
     @DeleteMapping(value = "/deleteinstrument/{id}")
-    public HttpEntity<String> deleteInstrument(@PathVariable Long id) throws InstrumentNotFoundException{
+    public HttpEntity<String> deleteInstrument(@PathVariable Long id) {
         instrumentService.deleteInstrument(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

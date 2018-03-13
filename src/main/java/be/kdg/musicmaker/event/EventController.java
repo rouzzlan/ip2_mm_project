@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.event;
 
-import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -37,7 +36,7 @@ public class EventController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Event> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
+    public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
         eventService.deleteEvent(eventService.dtoToEvent(eventService.getEventDTO(id)));
         return ResponseEntity.status(HttpStatus.OK).build();
     }

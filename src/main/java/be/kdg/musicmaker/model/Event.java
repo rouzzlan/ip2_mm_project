@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Event {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +41,18 @@ public class Event {
         this.name = name;
     }
 
+    public Event(String name, String place) {
+        this.name = name;
+        this.place = place;
+    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }

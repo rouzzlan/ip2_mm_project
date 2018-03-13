@@ -10,6 +10,7 @@ public class Band {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String name;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "teacher_band",
@@ -36,6 +37,13 @@ public class Band {
         this.name = name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }

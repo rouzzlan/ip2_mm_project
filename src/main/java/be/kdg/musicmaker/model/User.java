@@ -102,6 +102,14 @@ public class User {
         this.enabled = enabled;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -113,4 +121,5 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
 }

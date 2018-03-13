@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.band;
 
-import be.kdg.musicmaker.model.Band;
 import be.kdg.musicmaker.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,23 +26,24 @@ public class BandController {
     }
 
     @GetMapping(value = "/getband/{bandName}")
-    public HttpEntity<Band> getBand(@PathVariable String bandName) throws BandNotFoundException {
-        return new ResponseEntity<Band>(bandService.getBand(bandName), HttpStatus.OK);
+    public HttpEntity<BandDTO> getBand(@PathVariable String bandName) throws BandNotFoundException {
+        return new ResponseEntity<BandDTO>(bandService.getBand(bandName), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getbands/{email}")
-    public HttpEntity<List<Band>> getBandByEmail(@PathVariable String email) throws BandNotFoundException, UserNotFoundException {
-        return new ResponseEntity<List<Band>>(bandService.getBandsByUserMail(email), HttpStatus.OK);
+    public HttpEntity<List<BandDTO>> getBandByEmail(@PathVariable String email) throws BandNotFoundException, UserNotFoundException {
+        return new ResponseEntity<List<BandDTO>>(bandService.getBandsByUserMail(email), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteband/{band}")
-    public ResponseEntity<Band> deleteBand(@PathVariable Band band) throws BandNotFoundException {
-        bandService.deleteBand(bandService.getBand(band.getName()));
+    @DeleteMapping(value = "/deleteband/{id}")
+    public ResponseEntity<String> deleteBand(@PathVariable Long id) throws BandNotFoundException {
+        bandService.deleteBand(bandService.getBand(id));
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @PutMapping(value = "/editBand/{band}")
-//    public HttpE
-
-
+    @PutMapping(value = "/editband/{id}")
+    public HttpEntity<String> editBand(@RequestBody BandDTO band, @PathVariable Long id) throws BandNotFoundException {
+        bandService.updateBand(band, id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
