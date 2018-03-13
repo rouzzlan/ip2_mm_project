@@ -5,6 +5,7 @@ import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xalan.internal.xsltc.dom.MultiValuedNodeHeapIterator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
@@ -248,6 +251,40 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("id", lesson.getId().toString()))
                 .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void addStudentToLessonAsAdmin() throws Exception {
+        MultiValueMap params = new LinkedMultiValueMap();
+        params.add("userid", "1");
+        params.add("role", "leerling");
+        params.add("lessonid", "3");
+
+        mockMvc.perform(put("/lesson/student/add")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .params(params))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addStudentToLessonAsTeacher() throws Exception {
+        MultiValueMap params = new LinkedMultiValueMap();
+        params.add("userid", "2");
+        params.add("role", "leerling");
+        params.add("lessonid", "7");
+
+        mockMvc.perform(put("/lesson/student/add")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+                .params(params))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addStudentToLessonAsStudent() throws Exception {
+        mockMvc.perform(put("/lesson/student/add")
+        .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
+                .param("userid", "1"))
                 .andExpect(status().isForbidden());
     }
 }

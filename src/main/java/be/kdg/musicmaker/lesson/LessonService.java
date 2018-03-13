@@ -96,4 +96,14 @@ public class LessonService {
     public void addStudentToLesson(Attender attender) {
         attenderRepository.save(attender);
     }
+
+    public void addStudentToLesson(String role, String userid, String lessonid) {
+        long useridLong = Long.parseLong(userid);
+        long lessonidLong = Long.parseLong(lessonid);
+
+        User user = userRepository.findOne(useridLong);
+        Lesson lesson = lessonRepository.findOne(lessonidLong);
+
+        attenderRepository.save(new Attender(role, user, lesson));
+    }
 }
