@@ -1,10 +1,9 @@
 package be.kdg.musicmaker.model;
 
-import be.kdg.musicmaker.lesson.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "Lesson")

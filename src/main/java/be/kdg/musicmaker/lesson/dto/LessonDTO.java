@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.lesson;
+package be.kdg.musicmaker.lesson.dto;
 
 import be.kdg.musicmaker.model.LessonType;
 import be.kdg.musicmaker.model.Playlist;

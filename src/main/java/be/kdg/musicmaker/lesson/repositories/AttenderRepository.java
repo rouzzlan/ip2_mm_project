@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.lesson;
+package be.kdg.musicmaker.lesson.repositories;
 
 import be.kdg.musicmaker.model.Attender;
 import be.kdg.musicmaker.model.Lesson;

@@ -1,9 +1,9 @@
 package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.model.Attender;
-import be.kdg.musicmaker.model.Lesson;
-import be.kdg.musicmaker.model.LessonType;
-import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
+import be.kdg.musicmaker.lesson.repositories.*;
+import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +13,27 @@ import java.util.List;
 
 @Service
 public class LessonService {
+    private LessonTypeRepository lessonTypeRepository;
+    private LessonRepository lessonRepository;
+    private AttenderRepository attenderRepository;
+    private UserRepository userRepository;
+    private ExerciseRepository exerciseRepository;
+    private ExercisePieceRepository exercisePieceRepository;
+
     @Autowired
-    LessonTypeRepository lessonTypeRepository;
-    @Autowired
-    LessonRepository lessonRepository;
-    @Autowired
-    AttenderRepository attenderRepository;
-    @Autowired
-    UserRepository userRepository;
+    public LessonService(LessonTypeRepository lessonTypeRepository,
+                         LessonRepository lessonRepository,
+                         AttenderRepository attenderRepository,
+                         UserRepository userRepository,
+                         ExerciseRepository exerciseRepository,
+                         ExercisePieceRepository exercisePieceRepository) {
+        this.lessonTypeRepository = lessonTypeRepository;
+        this.lessonRepository = lessonRepository;
+        this.attenderRepository = attenderRepository;
+        this.userRepository = userRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.exercisePieceRepository = exercisePieceRepository;
+    }
 
     public List<LessonType> getLessonTypes() {
         List<LessonType> lessonTypes = lessonTypeRepository.findAll();

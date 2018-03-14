@@ -1,9 +1,9 @@
 package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.model.Attender;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
-import be.kdg.musicmaker.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

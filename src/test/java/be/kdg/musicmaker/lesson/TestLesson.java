@@ -1,11 +1,11 @@
 package be.kdg.musicmaker.lesson;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.xalan.internal.xsltc.dom.MultiValuedNodeHeapIterator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
