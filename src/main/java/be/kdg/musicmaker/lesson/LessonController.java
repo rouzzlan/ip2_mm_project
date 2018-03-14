@@ -15,9 +15,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/lesson")
 public class LessonController {
-    @Autowired
-    LessonService lessonService;
+    private LessonService lessonService;
 
+    @Autowired
+    public LessonController(LessonService lessonService) {
+        this.lessonService = lessonService;
+    }
+
+    //region lesson
     @RequestMapping(method = RequestMethod.GET, value = "")
     public HttpEntity<List<Lesson>> getLesson() {
         return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
@@ -49,7 +54,9 @@ public class LessonController {
         lessonService.deleteLesson(idLong);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    // endregion
 
+    //region varia
     @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
     public ResponseEntity<String> addStudentToLesson(@RequestParam String userid, @RequestParam String role, @RequestParam String lessonid) {
         lessonService.addStudentToLesson(role, userid, lessonid);
@@ -71,6 +78,7 @@ public class LessonController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    //endregion
 
     //region types
     @RequestMapping(method = RequestMethod.GET, value = "/types")
