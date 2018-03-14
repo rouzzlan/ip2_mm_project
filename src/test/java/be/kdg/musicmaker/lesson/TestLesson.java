@@ -283,8 +283,32 @@ public class TestLesson {
     @Test
     public void addStudentToLessonAsStudent() throws Exception {
         mockMvc.perform(put("/lesson/student/add")
-        .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
-                .param("userid", "1"))
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
+                .andExpect(status().isForbidden());
+    }
+
+
+    // TODO: 3/14/18 vanf hier uitwerken
+    @Test
+    public void addExerciseToLessonAsAdmin() throws Exception {
+        mockMvc.perform(put("/lesson/exercise/add")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("exerciseid", "1").param("lessonid", "3"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addExerciseToLessonAsTeacher() throws Exception {
+        mockMvc.perform(put("/lesson/exercise/add")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+                .param("exerciseid", "1").param("lessonid", "3"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addExerciseToLessonAsStudent() throws Exception {
+        mockMvc.perform(put("/lesson/exercise/add")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
                 .andExpect(status().isForbidden());
     }
 }

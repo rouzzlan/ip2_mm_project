@@ -64,6 +64,14 @@ public class LessonController {
 //        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 //    }
 
+    // TODO: 3/14/18 verder uitwerken
+    @RequestMapping(value = "/exercise/add", method = RequestMethod.PUT)
+    public ResponseEntity<String> addExerciseToLesson(@RequestParam String exerciseid, @RequestParam String lessonid) {
+//        lessonService.addStudentToLesson(exerciseid, lessonid);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     //region types
     @RequestMapping(method = RequestMethod.GET, value = "/types")
     public HttpEntity<List<LessonType>> getLessonTypes() {
