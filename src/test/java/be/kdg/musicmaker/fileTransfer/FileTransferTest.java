@@ -51,7 +51,7 @@ public class FileTransferTest {
     private static String ACCESS_TOKEN_Admin = "";
     private ObjectMapper objectMapper = new ObjectMapper();
     private ClassLoader classLoader;
-    private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
+    private File motzartMusicFile, shuberMusicFile, compactMUsicFile, partituurFile;
     private MockMultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
     private MusicPieceDTO shubertMusicPiece, miniMusicPiece;
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
@@ -96,6 +96,12 @@ public class FileTransferTest {
         path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/Requiem-piano-mozart-lacrymosa.mp3")).toURI());
         data = Files.readAllBytes(path);
         motzartMusicFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
+        FileUtils.writeByteArrayToFile(motzartMusicFile, data);
+
+
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        data = Files.readAllBytes(path);
+        partituurFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray.mxl");
         FileUtils.writeByteArrayToFile(motzartMusicFile, data);
 
         //schubert musicpiece
@@ -259,6 +265,21 @@ public class FileTransferTest {
         MusicPiece musicPiece = service.getMusicPiecesById(musicPieceId);
         String artist = musicPiece.getArtist();
         Assert.assertTrue("Michael Jackson".equalsIgnoreCase(artist));
+    }
+    @Test
+    public void getPartituurTest() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/get_partituur_file/2")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "inline; filename=" + "How_To_Save_A_Life_-_The_Fray.mxl"))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+
+        File receivedFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2.mxl");
+        FileUtils.writeByteArrayToFile(motzartMusicFile, byteArray);
+        assertEquals(FileUtils.checksumCRC32(partituurFile), FileUtils.checksumCRC32(receivedFile));
     }
 
     private MockMultipartFile fileToMultipartFile(File file) throws IOException {
