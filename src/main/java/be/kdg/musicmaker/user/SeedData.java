@@ -162,7 +162,7 @@ public class SeedData {
             MusicPiece musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("Mozart");
             musicPiece1.setTitle("Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence");
-            musicPiece1.setMusicFile("Requiem-piano-mozart-lacrymosa.mp3",fileArray);
+            musicPiece1.setMusicFile("Requiem-piano-mozart-lacrymosa.mp3", fileArray);
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
@@ -173,7 +173,7 @@ public class SeedData {
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("The fray");
             musicPiece1.setTitle("How to save a life");
-            musicPiece1.setMusicFile(musicFile.getName(),fileArray);
+            musicPiece1.setMusicFile(musicFile.getName(), fileArray);
             File partituur = new File(classLoader.getResource("partituren/How_To_Save_A_Life_-_The_Fray.mxl").toURI());
             fileArray = Files.readAllBytes(partituur.toPath());
             musicPiece1.setPartituurFile(partituur.getName(), fileArray);

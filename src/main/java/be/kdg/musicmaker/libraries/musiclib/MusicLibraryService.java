@@ -22,6 +22,7 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
+
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
         mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
@@ -37,7 +38,7 @@ public class MusicLibraryService {
         return map(musicPiece, MusicPieceDTO.class);
     }
 
-    public MusicPiece getMusicPiecesById(Long id){
+    public MusicPiece getMusicPiecesById(Long id) {
         return musicLibraryRepository.findOne(id);
     }
 
@@ -45,7 +46,7 @@ public class MusicLibraryService {
     public Collection<MusicPieceDTO> getMusicPieces() {
         List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
         List<MusicPieceDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
-        for (MusicPiece musicPiece : musicPieces){
+        for (MusicPiece musicPiece : musicPieces) {
             MusicPieceDTO mp = map(musicPiece, MusicPieceDTO.class);
             dtoMusicPieces.add(mp);
         }
@@ -55,6 +56,7 @@ public class MusicLibraryService {
     public boolean isMusicLibEmpty() {
         return musicLibraryRepository.count() == 0;
     }
+
     public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
         return musicLibraryRepository.save(mp).getId();
@@ -76,20 +78,21 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
     }
 
-    public void deleteMusicPiece(Long id) throws ResouceNotFoundException{
-        if (musicLibraryRepository.exists(id)){
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
+        if (musicLibraryRepository.exists(id)) {
             musicLibraryRepository.delete(id);
-        }else {
+        } else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
     }
+
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
         mapDTO(musicPieceDTO, musicPiece);
         musicLibraryRepository.save(musicPiece);
     }
 
-    private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object){
+    private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).
                 mapNulls(false)
@@ -98,6 +101,7 @@ public class MusicLibraryService {
                 register();
         mapperFactory.getMapperFacade().map(dtoObject, object);
     }
+
     private <S, D> D map(S s, Class<D> type) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
