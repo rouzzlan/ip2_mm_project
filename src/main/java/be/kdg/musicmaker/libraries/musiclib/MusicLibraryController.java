@@ -51,6 +51,15 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
+    @RequestMapping(value = "/get_partituur_file/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Resource getPartituurFile(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+        File file = musicLibraryService.getPartituur(id);
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        return new FileSystemResource(file);
+    }
 
     @PostMapping(value = "/upload/music_piece")
     @ResponseStatus(HttpStatus.OK)
