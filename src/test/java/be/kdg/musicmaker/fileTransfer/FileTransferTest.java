@@ -102,7 +102,7 @@ public class FileTransferTest {
         path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
         data = Files.readAllBytes(path);
         partituurFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray.mxl");
-        FileUtils.writeByteArrayToFile(motzartMusicFile, data);
+        FileUtils.writeByteArrayToFile(partituurFile, data);
 
         //schubert musicpiece
         shuberMusicFileMultipartMock = fileToMultipartFile(shuberMusicFile);
@@ -128,29 +128,29 @@ public class FileTransferTest {
 
 
     //todo nog te fixen
-//    @Test
-//    public void testDownloadFileContent() throws Exception {
-//        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
-//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
-//        byte[] byteArray = result.getResponse().getContentAsByteArray();
-//        tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa3.mp3");
-//        FileUtils.writeByteArrayToFile(tempFile, byteArray);
-//        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
-//    }
-//
-//    @Test
-//    public void testDownloadFileContentByMusicPieceId() throws Exception {
-//        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/1")
-//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
-//        byte[] byteArray = result.getResponse().getContentAsByteArray();
-//        tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa2.mp3");
-//        FileUtils.writeByteArrayToFile(tempFile, byteArray);
-//        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
-//    }
+    @Test
+    public void testDownloadFileContent() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa3.mp3");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
+    }
+
+    @Test
+    public void testDownloadFileContentByMusicPieceId() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/1")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa2.mp3");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
+    }
 
     @Test
     public void UploadMusicPieceTest() throws Exception {
@@ -292,7 +292,7 @@ public class FileTransferTest {
         byte[] byteArray = result.getResponse().getContentAsByteArray();
 
         File receivedFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2.mxl");
-        FileUtils.writeByteArrayToFile(motzartMusicFile, byteArray);
+        FileUtils.writeByteArrayToFile(receivedFile, byteArray);
         assertEquals(FileUtils.checksumCRC32(partituurFile), FileUtils.checksumCRC32(receivedFile));
     }
 
