@@ -73,8 +73,8 @@ public class LessonController {
 
     // TODO: 3/14/18 verder uitwerken
     @RequestMapping(value = "/exercise/student/add", method = RequestMethod.PUT)
-    public ResponseEntity<String> addExerciseToLesson(@RequestParam String musicpieceid, @RequestParam String lessonid) {
-        lessonService.addExerciseToLesson(musicpieceid, lessonid);
+    public ResponseEntity<String> addExerciseToLesson(@RequestParam String musicpieceid, @RequestParam String lessonid, @RequestParam String begin, @RequestParam String deadline) {
+        lessonService.addExerciseToLesson(musicpieceid, lessonid, begin, deadline);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

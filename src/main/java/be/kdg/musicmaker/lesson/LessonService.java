@@ -3,12 +3,15 @@ package be.kdg.musicmaker.lesson;
 import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.lesson.repositories.*;
+import be.kdg.musicmaker.libraries.musiclib.MusicLibraryController;
+import be.kdg.musicmaker.libraries.musiclib.MusicLibraryRepository;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class LessonService {
     private LessonRepository lessonRepository;
     private AttenderRepository attenderRepository;
     private UserRepository userRepository;
-    pri
+    private MusicLibraryRepository musicLibraryRepository;
     private ExerciseRepository exerciseRepository;
 
     @Autowired
@@ -26,11 +29,13 @@ public class LessonService {
                          LessonRepository lessonRepository,
                          AttenderRepository attenderRepository,
                          UserRepository userRepository,
+                         MusicLibraryRepository musicLibraryRepository,
                          ExerciseRepository exerciseRepository) {
         this.lessonTypeRepository = lessonTypeRepository;
         this.lessonRepository = lessonRepository;
         this.attenderRepository = attenderRepository;
         this.userRepository = userRepository;
+        this.musicLibraryRepository = musicLibraryRepository;
         this.exerciseRepository = exerciseRepository;
     }
 
@@ -119,10 +124,15 @@ public class LessonService {
         attenderRepository.save(new Attender(role, user, lesson));
     }
 
-    public void addExerciseToLesson(String musicpieceid, String lessonid) {
+    public void addExerciseToLesson(String musicpieceid, String lessonid, String begin, String deadline) {
         long musicpieceidlong = Long.parseLong(musicpieceid);
         long lessonidlong = Long.parseLong(lessonid);
 
-        MusicPiece musicPiece =
+        MusicPiece musicPiece = musicLibraryRepository.findOne(musicpieceidlong);
+        Lesson lesson = lessonRepository.findOne(lessonidlong);
+        LocalDateTime beginTime = LocalDateTime.parse(begin);
+        LocalDateTime deadlineTime = LocalDateTime.parse(deadline);
+
+        exerciseRepository.save(new Exercise(beginTime, deadlineTime, lesson, musicPiece));
     }
 }
