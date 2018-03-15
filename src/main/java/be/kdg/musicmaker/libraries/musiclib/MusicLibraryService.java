@@ -98,6 +98,13 @@ public class MusicLibraryService {
         languagesRepository.save(languages);
     }
 
+    private Language getLanguage(String language){
+        return languagesRepository.getLanguageByLanguageName(language);
+    }
+    private Language getLanguage(Long id){
+        return languagesRepository.getOne(id);
+    }
+
     private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).

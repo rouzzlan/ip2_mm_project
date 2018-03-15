@@ -9,15 +9,15 @@ public class Language {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Column(name = "language")
-    private String language;
+    @Column(name = "language_name")
+    private String languageName;
 
     public Language(String language) {
-        this.language = language;
+        this.languageName = language;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getLanguageName() {
+        return languageName;
     }
 
     public Long getId() {
