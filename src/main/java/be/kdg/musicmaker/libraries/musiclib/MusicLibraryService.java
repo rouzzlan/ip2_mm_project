@@ -17,6 +17,8 @@ import java.util.List;
 public class MusicLibraryService {
     @Autowired
     MusicLibraryRepository musicLibraryRepository;
+    @Autowired
+    LanguagesRepository languagesRepository;
 
 
     public void addMusicPiece(MusicPiece musicPiece) {
@@ -90,6 +92,10 @@ public class MusicLibraryService {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
         mapDTO(musicPieceDTO, musicPiece);
         musicLibraryRepository.save(musicPiece);
+    }
+
+    public void updateLanguageList(List<Language> languages){
+        languagesRepository.save(languages);
     }
 
     private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {

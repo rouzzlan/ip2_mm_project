@@ -11,9 +11,11 @@ import be.kdg.musicmaker.instrument.InstrumentService;
 import be.kdg.musicmaker.lesson.LessonDTO;
 import be.kdg.musicmaker.lesson.LessonService;
 import be.kdg.musicmaker.lesson.LessonTypeDTO;
+import be.kdg.musicmaker.libraries.musiclib.Language;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
+import be.kdg.musicmaker.util.LanguagesImporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class SeedData {
@@ -97,6 +100,7 @@ public class SeedData {
         seedLessons();
         addStudentsoLessons();
     }
+
 
     private void seedRoles() {
         if (userService.isRolesEmpty()) {
@@ -179,8 +183,14 @@ public class SeedData {
             musicPiece1.setPartituurFile(partituur.getName(), fileArray);
 
             musicLibService.addMusicPiece(musicPiece1);
+
+            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
 //
-//            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+            LanguagesImporter languagesImporter = new LanguagesImporter();
+            List<Language> languageList = languagesImporter.getLanguagesList();
+            musicLibService.updateLanguageList(languageList);
+
+            LOG.info("Languages added");
         }
 
     }

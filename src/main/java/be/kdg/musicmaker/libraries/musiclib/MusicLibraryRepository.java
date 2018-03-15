@@ -10,6 +10,4 @@ import java.util.List;
 public interface MusicLibraryRepository extends JpaRepository<MusicPiece, Long> {
     @Query("select mp from MusicPiece mp where mp.title = ?1")
     List<MusicPiece> findByTitle(String title);
-
-
 }

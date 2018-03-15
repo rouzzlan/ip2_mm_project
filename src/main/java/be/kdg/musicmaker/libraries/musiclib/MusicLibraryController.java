@@ -21,7 +21,8 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/music_library")
 @SessionAttributes("music_piece")
-public class MusicLibraryController {
+public class
+MusicLibraryController {
     @Autowired
     MusicLibraryService musicLibraryService;
 
