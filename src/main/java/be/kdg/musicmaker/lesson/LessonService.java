@@ -3,6 +3,7 @@ package be.kdg.musicmaker.lesson;
 import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.lesson.repositories.*;
+import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class LessonService {
     private LessonRepository lessonRepository;
     private AttenderRepository attenderRepository;
     private UserRepository userRepository;
+    pri
     private ExerciseRepository exerciseRepository;
 
     @Autowired
@@ -115,5 +117,12 @@ public class LessonService {
         Lesson lesson = lessonRepository.findOne(lessonidLong);
 
         attenderRepository.save(new Attender(role, user, lesson));
+    }
+
+    public void addExerciseToLesson(String musicpieceid, String lessonid) {
+        long musicpieceidlong = Long.parseLong(musicpieceid);
+        long lessonidlong = Long.parseLong(lessonid);
+
+        MusicPiece musicPiece =
     }
 }
