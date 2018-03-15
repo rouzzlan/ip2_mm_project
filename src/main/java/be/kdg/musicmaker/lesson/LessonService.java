@@ -18,21 +18,18 @@ public class LessonService {
     private AttenderRepository attenderRepository;
     private UserRepository userRepository;
     private ExerciseRepository exerciseRepository;
-    private ExercisePieceRepository exercisePieceRepository;
 
     @Autowired
     public LessonService(LessonTypeRepository lessonTypeRepository,
                          LessonRepository lessonRepository,
                          AttenderRepository attenderRepository,
                          UserRepository userRepository,
-                         ExerciseRepository exerciseRepository,
-                         ExercisePieceRepository exercisePieceRepository) {
+                         ExerciseRepository exerciseRepository) {
         this.lessonTypeRepository = lessonTypeRepository;
         this.lessonRepository = lessonRepository;
         this.attenderRepository = attenderRepository;
         this.userRepository = userRepository;
         this.exerciseRepository = exerciseRepository;
-        this.exercisePieceRepository = exercisePieceRepository;
     }
 
     public List<LessonType> getLessonTypes() {

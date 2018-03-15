@@ -64,15 +64,15 @@ public class LessonController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
-//    public ResponseEntity<String> addStudentsToLesson(@RequestParam List<String> userids) {
+//    @RequestMapping(value = "/student/addmulti", method = RequestMethod.PUT)
+//    public ResponseEntity<String> addStudentsToLesson(@RequestParam List<String> userids, @RequestParam String role, @RequestParam String lessonid) {
 //        // todo verder uitwerken
 //
 //        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 //    }
 
     // TODO: 3/14/18 verder uitwerken
-    @RequestMapping(value = "/exercise/add", method = RequestMethod.PUT)
+    @RequestMapping(value = "/exercise/student/add", method = RequestMethod.PUT)
     public ResponseEntity<String> addExerciseToLesson(@RequestParam String exerciseid, @RequestParam String lessonid) {
 //        lessonService.addStudentToLesson(exerciseid, lessonid);
 

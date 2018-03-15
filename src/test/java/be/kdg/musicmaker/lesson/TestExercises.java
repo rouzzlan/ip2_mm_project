@@ -53,7 +53,7 @@ public class TestExercises {
     // TODO: 3/14/18 vanf hier uitwerken
     @Test
     public void addExerciseToLessonAsAdmin() throws Exception {
-        mockMvc.perform(put("/lesson/exercise/add")
+        mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .param("exerciseid", "1").param("lessonid", "3"))
                 .andExpect(status().isOk());
@@ -61,7 +61,7 @@ public class TestExercises {
 
     @Test
     public void addExerciseToLessonAsTeacher() throws Exception {
-        mockMvc.perform(put("/lesson/exercise/add")
+        mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .param("exerciseid", "1").param("lessonid", "3"))
                 .andExpect(status().isOk());
@@ -69,7 +69,7 @@ public class TestExercises {
 
     @Test
     public void addExerciseToLessonAsStudent() throws Exception {
-        mockMvc.perform(put("/lesson/exercise/add")
+        mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
                 .andExpect(status().isForbidden());
     }

@@ -17,6 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,6 +63,21 @@ public class TestAttenders {
                 .param("lessonid", "3"))
                 .andExpect(status().isOk());
     }
+
+//    @Test
+//    public void addStudentTsoLessonAsAdmin() throws Exception {
+//        ArrayList<String> userids = new ArrayList<>(3);
+//        userids.add("1");
+//        userids.add("2");
+//        userids.add("3");
+//
+//        mockMvc.perform(put("/lesson/student/addmulti")
+//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+//                .param("userid", "1")
+//                .param("role", "leerling")
+//                .param("lessonid", userids.toString()))
+//                .andExpect(status().isOk());
+//    }
 
     @Test
     public void addStudentToLessonAsTeacher() throws Exception {
