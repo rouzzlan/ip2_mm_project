@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,12 +52,14 @@ public class TestExercises {
         ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
     }
 
-    // TODO: 3/14/18 vanf hier uitwerken
     @Test
     public void addExerciseToLessonAsAdmin() throws Exception {
         mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .param("exerciseid", "1").param("lessonid", "3"))
+                .param("musicpieceid", "1")
+                .param("lessonid", "3")
+                .param("begin", LocalDateTime.now().toString())
+                .param("deadline", LocalDateTime.now().toString()))
                 .andExpect(status().isOk());
     }
 
@@ -63,7 +67,9 @@ public class TestExercises {
     public void addExerciseToLessonAsTeacher() throws Exception {
         mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                .param("exerciseid", "1").param("lessonid", "3"))
+                .param("musicpieceid", "1").param("lessonid", "3")
+                .param("begin", LocalDateTime.now().toString())
+                .param("deadline", LocalDateTime.now().toString()))
                 .andExpect(status().isOk());
     }
 
