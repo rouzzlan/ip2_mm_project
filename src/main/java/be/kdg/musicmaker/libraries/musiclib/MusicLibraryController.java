@@ -91,6 +91,19 @@ MusicLibraryController {
         }
     }
 
+    @PostMapping(value = "/upload/music_piece_full")
+    @ResponseStatus(HttpStatus.OK)
+    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("music_file") MultipartFile musicFile, @RequestParam("partituur_file") MultipartFile partituur) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
+            musicLibraryService.addMusicPiece(musicPiecePostDTO, musicFile, partituur);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+
     @GetMapping(value = "/musicpieces")
     public HttpEntity<Collection<MusicPieceDTO>> getMusicPieces() {
         Collection<MusicPieceDTO> musicpieces = musicLibraryService.getMusicPieces();

@@ -31,6 +31,13 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
     }
 
+    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile musicFile, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPiece, MusicPiece.class);
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
     public List<MusicPiece> getMusicPiecesByTitle(String title) {
         return musicLibraryRepository.findByTitle(title);
     }
