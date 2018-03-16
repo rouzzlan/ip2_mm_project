@@ -113,7 +113,7 @@ public class MusicLibraryService {
     }
 
     public Language getLanguage(String language) {
-        return languagesRepository.getLanguageByLanguageName(language);
+        return languagesRepository.findLanguageByLanguageName(language);
     }
 
     public Language getLanguage(Long id) {

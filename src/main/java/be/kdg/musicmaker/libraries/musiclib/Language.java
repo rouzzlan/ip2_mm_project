@@ -9,7 +9,7 @@ public class Language {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Column(name = "language_name")
+    @Column(name = "language_name", unique = true)
     private String languageName;
 
     public Language(String language) {

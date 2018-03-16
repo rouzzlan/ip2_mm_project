@@ -179,7 +179,7 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
 
             // 2e musicfile
-            Language language = musicLibService.getLanguage(10L);
+            Language language = musicLibService.getLanguage("American English");
             musicFile = new File(classLoader.getResource("musicFiles/how_to_save_a_life_-_the_fray.mp3").toURI());
             fileArray = Files.readAllBytes(musicFile.toPath());
             musicPiece1 = new MusicPiece();
