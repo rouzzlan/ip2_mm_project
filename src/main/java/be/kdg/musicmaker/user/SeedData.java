@@ -8,9 +8,9 @@ import be.kdg.musicmaker.event.EventRepository;
 import be.kdg.musicmaker.event.EventService;
 import be.kdg.musicmaker.instrument.InstrumentRepository;
 import be.kdg.musicmaker.instrument.InstrumentService;
-import be.kdg.musicmaker.lesson.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.LessonService;
-import be.kdg.musicmaker.lesson.LessonTypeDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
@@ -162,12 +162,27 @@ public class SeedData {
             MusicPiece musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("Mozart");
             musicPiece1.setTitle("Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence");
-            musicPiece1.setMusicClip(fileArray);
-            musicPiece1.setFileName("Requiem-piano-mozart-lacrymosa.mp3");
+            musicPiece1.setMusicFile("Requiem-piano-mozart-lacrymosa.mp3", fileArray);
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+//
+            // 2e musicfile
+            musicFile = new File(classLoader.getResource("musicFiles/how_to_save_a_life_-_the_fray.mp3").toURI());
+            fileArray = Files.readAllBytes(musicFile.toPath());
+            musicPiece1 = new MusicPiece();
+            musicPiece1.setArtist("The fray");
+            musicPiece1.setTitle("How to save a life");
+            musicPiece1.setMusicFile(musicFile.getName(), fileArray);
+            File partituur = new File(classLoader.getResource("partituren/How_To_Save_A_Life_-_The_Fray.mxl").toURI());
+            fileArray = Files.readAllBytes(partituur.toPath());
+            musicPiece1.setPartituurFile(partituur.getName(), fileArray);
+
+            musicLibService.addMusicPiece(musicPiece1);
+//
+//            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
         }
+
     }
 
     private void seedEvents() throws BandNotFoundException, EventNotFoundException {

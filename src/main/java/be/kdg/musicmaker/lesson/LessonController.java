@@ -1,5 +1,7 @@
 package be.kdg.musicmaker.lesson;
 
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.LessonType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/lesson")
 public class LessonController {
-    @Autowired
-    LessonService lessonService;
+    private LessonService lessonService;
 
+    @Autowired
+    public LessonController(LessonService lessonService) {
+        this.lessonService = lessonService;
+    }
+
+    //region lesson
     @RequestMapping(method = RequestMethod.GET, value = "")
     public HttpEntity<List<Lesson>> getLesson() {
         return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
@@ -47,20 +54,31 @@ public class LessonController {
         lessonService.deleteLesson(idLong);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    // endregion
 
+    //region varia
     @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
-    public ResponseEntity<String> addStudentToLesson(@RequestParam String userid) {
-        // todo verder uitwerken
+    public ResponseEntity<String> addStudentToLesson(@RequestParam String userid, @RequestParam String role, @RequestParam String lessonid) {
+        lessonService.addStudentToLesson(role, userid, lessonid);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-//    @RequestMapping(value = "/student/add", method = RequestMethod.PUT)
-//    public ResponseEntity<String> addStudentsToLesson(@RequestParam List<String> userids) {
+//    @RequestMapping(value = "/student/addmulti", method = RequestMethod.PUT)
+//    public ResponseEntity<String> addStudentsToLesson(@RequestParam List<String> userids, @RequestParam String role, @RequestParam String lessonid) {
 //        // todo verder uitwerken
 //
 //        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 //    }
+
+    // TODO: 3/14/18 verder uitwerken
+    @RequestMapping(value = "/exercise/student/add", method = RequestMethod.PUT)
+    public ResponseEntity<String> addExerciseToLesson(@RequestParam String musicpieceid, @RequestParam String lessonid, @RequestParam String begin, @RequestParam String deadline) {
+        lessonService.addExerciseToLesson(musicpieceid, lessonid, begin, deadline);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    //endregion
 
     //region types
     @RequestMapping(method = RequestMethod.GET, value = "/types")

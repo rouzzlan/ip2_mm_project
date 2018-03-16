@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.lesson;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;

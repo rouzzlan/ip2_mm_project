@@ -1,12 +1,13 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
-import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,10 +22,10 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
+
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
-        mp.setMusicClip(file.getBytes());
-        mp.setFileName(file.getOriginalFilename());
+        mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
         musicLibraryRepository.save(mp);
     }
 
@@ -37,7 +38,7 @@ public class MusicLibraryService {
         return map(musicPiece, MusicPieceDTO.class);
     }
 
-    public MusicPiece getMusicPiecesById(Long id){
+    public MusicPiece getMusicPiecesById(Long id) {
         return musicLibraryRepository.findOne(id);
     }
 
@@ -45,7 +46,7 @@ public class MusicLibraryService {
     public Collection<MusicPieceDTO> getMusicPieces() {
         List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
         List<MusicPieceDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
-        for (MusicPiece musicPiece : musicPieces){
+        for (MusicPiece musicPiece : musicPieces) {
             MusicPieceDTO mp = map(musicPiece, MusicPieceDTO.class);
             dtoMusicPieces.add(mp);
         }
@@ -55,6 +56,7 @@ public class MusicLibraryService {
     public boolean isMusicLibEmpty() {
         return musicLibraryRepository.count() == 0;
     }
+
     public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
         return musicLibraryRepository.save(mp).getId();
@@ -62,26 +64,35 @@ public class MusicLibraryService {
 
     }
 
+    public File getPartituur(Long id) throws IOException {
+        MusicPiece mp = musicLibraryRepository.findOne(id);
+        File file = new File(mp.getPartituurFileName());
+        FileUtils.writeByteArrayToFile(file, mp.getPartiturBinary());
+        file.deleteOnExit();
+        return file;
+    }
+
     public void addMusicPieceFile(Long id, MultipartFile file) throws IOException {
         MusicPiece mp = musicLibraryRepository.findOne(id);
-        mp.setMusicClip(file.getBytes());
-        mp.setFileName(file.getOriginalFilename());
+        mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
         musicLibraryRepository.save(mp);
     }
 
-    public void deleteMusicPiece(Long id) throws ResouceNotFoundException{
-        if (musicLibraryRepository.exists(id)){
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
+        if (musicLibraryRepository.exists(id)) {
             musicLibraryRepository.delete(id);
-        }else {
+        } else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
     }
+
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
         mapDTO(musicPieceDTO, musicPiece);
         musicLibraryRepository.save(musicPiece);
     }
-    private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object){
+
+    private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).
                 mapNulls(false)
@@ -90,6 +101,7 @@ public class MusicLibraryService {
                 register();
         mapperFactory.getMapperFacade().map(dtoObject, object);
     }
+
     private <S, D> D map(S s, Class<D> type) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).

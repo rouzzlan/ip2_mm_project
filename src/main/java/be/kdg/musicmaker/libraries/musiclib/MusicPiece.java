@@ -2,6 +2,7 @@ package be.kdg.musicmaker.libraries.musiclib;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 
 @Entity
 @Table(name = "Music_Piece")
@@ -17,23 +18,20 @@ public class MusicPiece {
     @Column(name = "music_language")
     private String language;
     private String topic;
-//    @NotNull
+
     @Lob
     @Column(name = "music_file")
     private byte[] musicClip;
-//    @NotNull
-    @Column(name = "file_name")
+
+    @Column(name = "musicFile_name")
     private String fileName;
+    @Column(name = "partituurFile_name")
+    private String partituurFileName;
+    @Lob
+    @Column(name = "partituur_file")
+    private byte[] partiturBinary;
 
     public MusicPiece() {
-    }
-
-    public MusicPiece(String title, String artist, String language, String topic, byte[] musicClip) {
-        this.title = title;
-        this.artist = artist;
-        this.language = language;
-        this.topic = topic;
-        this.musicClip = musicClip;
     }
 
     public String getTitle() {
@@ -72,9 +70,6 @@ public class MusicPiece {
         return musicClip;
     }
 
-    public void setMusicClip(byte[] musicClip) {
-        this.musicClip = musicClip;
-    }
 
     public Long getId() {
         return id;
@@ -84,7 +79,21 @@ public class MusicPiece {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setMusicFile(String fileName, byte[] file) {
+        this.musicClip = file;
         this.fileName = fileName;
+    }
+
+    public void setPartituurFile(String fileName, byte[] file) {
+        this.partiturBinary = file;
+        this.partituurFileName = fileName;
+    }
+
+    public String getPartituurFileName() {
+        return partituurFileName;
+    }
+
+    public byte[] getPartiturBinary() {
+        return partiturBinary;
     }
 }

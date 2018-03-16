@@ -1,26 +1,42 @@
 package be.kdg.musicmaker.lesson;
 
-import be.kdg.musicmaker.model.Attender;
-import be.kdg.musicmaker.model.Lesson;
-import be.kdg.musicmaker.model.LessonType;
-import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
+import be.kdg.musicmaker.lesson.repositories.*;
+import be.kdg.musicmaker.libraries.musiclib.MusicLibraryRepository;
+import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
 @Service
 public class LessonService {
+    private LessonTypeRepository lessonTypeRepository;
+    private LessonRepository lessonRepository;
+    private AttenderRepository attenderRepository;
+    private UserRepository userRepository;
+    private MusicLibraryRepository musicLibraryRepository;
+    private ExerciseRepository exerciseRepository;
+
     @Autowired
-    LessonTypeRepository lessonTypeRepository;
-    @Autowired
-    LessonRepository lessonRepository;
-    @Autowired
-    AttenderRepository attenderRepository;
-    @Autowired
-    UserRepository userRepository;
+    public LessonService(LessonTypeRepository lessonTypeRepository,
+                         LessonRepository lessonRepository,
+                         AttenderRepository attenderRepository,
+                         UserRepository userRepository,
+                         MusicLibraryRepository musicLibraryRepository,
+                         ExerciseRepository exerciseRepository) {
+        this.lessonTypeRepository = lessonTypeRepository;
+        this.lessonRepository = lessonRepository;
+        this.attenderRepository = attenderRepository;
+        this.userRepository = userRepository;
+        this.musicLibraryRepository = musicLibraryRepository;
+        this.exerciseRepository = exerciseRepository;
+    }
 
     public List<LessonType> getLessonTypes() {
         List<LessonType> lessonTypes = lessonTypeRepository.findAll();
@@ -89,11 +105,34 @@ public class LessonService {
     public void deleteLesson(long idLong) {
         Lesson lesson = lessonRepository.findOne(idLong);
 
-        attenderRepository.deleteAttendersFromLessom(lesson);
+        exerciseRepository.deleteExerciseFromLesson(lesson);
+        attenderRepository.deleteAttendersFromLesson(lesson);
         lessonRepository.delete(idLong);
     }
 
     public void addStudentToLesson(Attender attender) {
         attenderRepository.save(attender);
+    }
+
+    public void addStudentToLesson(String role, String userid, String lessonid) {
+        long useridLong = Long.parseLong(userid);
+        long lessonidLong = Long.parseLong(lessonid);
+
+        User user = userRepository.findOne(useridLong);
+        Lesson lesson = lessonRepository.findOne(lessonidLong);
+
+        attenderRepository.save(new Attender(role, user, lesson));
+    }
+
+    public void addExerciseToLesson(String musicpieceid, String lessonid, String begin, String deadline) {
+        long musicpieceidlong = Long.parseLong(musicpieceid);
+        long lessonidlong = Long.parseLong(lessonid);
+
+        MusicPiece musicPiece = musicLibraryRepository.findOne(musicpieceidlong);
+        Lesson lesson = lessonRepository.findOne(lessonidlong);
+        LocalDateTime beginTime = LocalDateTime.parse(begin);
+        LocalDateTime deadlineTime = LocalDateTime.parse(deadline);
+
+        exerciseRepository.save(new Exercise(beginTime, deadlineTime, lesson, musicPiece));
     }
 }
