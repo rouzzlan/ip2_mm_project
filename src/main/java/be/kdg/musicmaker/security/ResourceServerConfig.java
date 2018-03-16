@@ -18,7 +18,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 .antMatchers("/confirm").permitAll()
                 .antMatchers("/private/**", "/lesson/add", "/lesson/update", "/lesson/delete", "/lesson","/lesson/types")
                 .hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
-                .antMatchers("/getRoles").hasRole("LEERLING")
+                .antMatchers("/getroles").permitAll()
                 .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}"
                         ,"/lesson/types/add", "/lesson/types/update", "/lesson/types/delete")
                 .hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces
