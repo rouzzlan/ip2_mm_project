@@ -75,6 +75,9 @@ public class MusicLibraryService {
     public boolean isMusicLibEmpty() {
         return musicLibraryRepository.count() == 0;
     }
+    public boolean isLanguagesEmpty() {
+        return musicLibraryRepository.count() == 0;
+    }
 
 
     public File getPartituur(Long id) throws IOException {
