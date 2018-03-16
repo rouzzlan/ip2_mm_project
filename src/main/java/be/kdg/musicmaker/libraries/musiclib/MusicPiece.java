@@ -2,7 +2,6 @@ package be.kdg.musicmaker.libraries.musiclib;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.File;
 
 @Entity
 @Table(name = "Music_Piece")
@@ -16,8 +15,11 @@ public class MusicPiece {
     @NotNull
     private String artist;
 
-    @Column(name = "music_language")
-    private String language;
+//    @Column(name = "music_language")
+    @ManyToOne(optional = true, cascade = CascadeType.DETACH)
+    @JoinColumn(name="language_id")
+    private Language language;
+
     private String topic;
 
     @Lob
@@ -51,11 +53,11 @@ public class MusicPiece {
         this.artist = artist;
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 

@@ -160,6 +160,12 @@ public class SeedData {
 
     private void seedMuziekstukken() throws URISyntaxException, IOException {
         if (musicLibService.isMusicLibEmpty()) {
+            LanguagesImporter languagesImporter = new LanguagesImporter();
+            List<Language> languageList = languagesImporter.getLanguagesList();
+            musicLibService.updateLanguageList(languageList);
+
+            LOG.info("Languages added");
+
             ClassLoader classLoader = getClass().getClassLoader();
             File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
             byte[] fileArray = Files.readAllBytes(musicFile.toPath());
@@ -170,13 +176,15 @@ public class SeedData {
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
-//
+//todo bij koppelen met language wordt niets gepersisteert in musicpieces tabel
             // 2e musicfile
+            Language language = musicLibService.getLanguage(1L);
             musicFile = new File(classLoader.getResource("musicFiles/how_to_save_a_life_-_the_fray.mp3").toURI());
             fileArray = Files.readAllBytes(musicFile.toPath());
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("The fray");
             musicPiece1.setTitle("How to save a life");
+//            musicPiece1.setLanguage(language);
             musicPiece1.setMusicFile(musicFile.getName(), fileArray);
             File partituur = new File(classLoader.getResource("partituren/How_To_Save_A_Life_-_The_Fray.mxl").toURI());
             fileArray = Files.readAllBytes(partituur.toPath());
@@ -186,11 +194,6 @@ public class SeedData {
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
 //
-            LanguagesImporter languagesImporter = new LanguagesImporter();
-            List<Language> languageList = languagesImporter.getLanguagesList();
-            musicLibService.updateLanguageList(languageList);
-
-            LOG.info("Languages added");
         }
 
     }

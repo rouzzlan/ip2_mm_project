@@ -15,11 +15,15 @@ import java.util.List;
 
 @Service
 public class MusicLibraryService {
-    @Autowired
-    MusicLibraryRepository musicLibraryRepository;
-    @Autowired
-    LanguagesRepository languagesRepository;
 
+    private MusicLibraryRepository musicLibraryRepository;
+
+    private LanguagesRepository languagesRepository;
+    @Autowired
+    public MusicLibraryService(MusicLibraryRepository musicLibraryRepository, LanguagesRepository languagesRepository) {
+        this.musicLibraryRepository = musicLibraryRepository;
+        this.languagesRepository = languagesRepository;
+    }
 
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
@@ -105,12 +109,12 @@ public class MusicLibraryService {
         languagesRepository.save(languages);
     }
 
-    private Language getLanguage(String language) {
+    public Language getLanguage(String language) {
         return languagesRepository.getLanguageByLanguageName(language);
     }
 
-    private Language getLanguage(Long id) {
-        return languagesRepository.getOne(id);
+    public Language getLanguage(Long id) {
+        return languagesRepository.findOne(id);
     }
 
     private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {
