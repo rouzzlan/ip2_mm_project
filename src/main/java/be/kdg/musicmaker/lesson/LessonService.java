@@ -3,7 +3,6 @@ package be.kdg.musicmaker.lesson;
 import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.lesson.repositories.*;
-import be.kdg.musicmaker.libraries.musiclib.MusicLibraryController;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryRepository;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
@@ -106,7 +105,8 @@ public class LessonService {
     public void deleteLesson(long idLong) {
         Lesson lesson = lessonRepository.findOne(idLong);
 
-        attenderRepository.deleteAttendersFromLessom(lesson);
+        exerciseRepository.deleteExerciseFromLesson(lesson);
+        attenderRepository.deleteAttendersFromLesson(lesson);
         lessonRepository.delete(idLong);
     }
 

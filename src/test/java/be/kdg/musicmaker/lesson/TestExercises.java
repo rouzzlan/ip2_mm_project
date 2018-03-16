@@ -67,7 +67,7 @@ public class TestExercises {
     public void addExerciseToLessonAsTeacher() throws Exception {
         mockMvc.perform(put("/lesson/exercise/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                .param("musicpieceid", "1").param("lessonid", "3")
+                .param("musicpieceid", "1").param("lessonid", "1")
                 .param("begin", LocalDateTime.now().toString())
                 .param("deadline", LocalDateTime.now().toString()))
                 .andExpect(status().isOk());

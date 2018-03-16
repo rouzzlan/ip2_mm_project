@@ -14,16 +14,16 @@ public class Exercise {
     private Long id;
 
     private LocalDateTime begin;
-    private LocalDateTime deathline;
+    private LocalDateTime deadline;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private Lesson lesson;
     @ManyToOne(cascade = CascadeType.MERGE)
     private MusicPiece musicPiece;
 
-    public Exercise(LocalDateTime begin, LocalDateTime deathline, Lesson lesson, MusicPiece musicPiece) {
+    public Exercise(LocalDateTime begin, LocalDateTime deadline, Lesson lesson, MusicPiece musicPiece) {
         this.begin = begin;
-        this.deathline = deathline;
+        this.deadline = deadline;
         this.lesson = lesson;
         this.musicPiece = musicPiece;
     }
@@ -43,12 +43,12 @@ public class Exercise {
         this.begin = begin;
     }
 
-    public LocalDateTime getDeathline() {
-        return deathline;
+    public LocalDateTime getDeadline() {
+        return deadline;
     }
 
-    public void setDeathline(LocalDateTime deathline) {
-        this.deathline = deathline;
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
     }
 
     public Lesson getLesson() {
