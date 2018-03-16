@@ -78,6 +78,12 @@ public class LessonController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    //region lesson
+    @RequestMapping(method = RequestMethod.GET, value = "/planning/free")
+    public HttpEntity<List<Lesson>> getFreeMoments() {
+        return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
+    }
     //endregion
 
     //region types
