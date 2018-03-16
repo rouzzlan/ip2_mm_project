@@ -24,10 +24,15 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
     }
+    public long addMusicPiece(MusicPieceDTO musicPieceDTO) {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        return musicLibraryRepository.save(mp).getId();
+    }
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
         mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
+//        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
@@ -35,6 +40,7 @@ public class MusicLibraryService {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+//        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
@@ -66,12 +72,6 @@ public class MusicLibraryService {
         return musicLibraryRepository.count() == 0;
     }
 
-    public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
-        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
-        return musicLibraryRepository.save(mp).getId();
-
-
-    }
 
     public File getPartituur(Long id) throws IOException {
         MusicPiece mp = musicLibraryRepository.findOne(id);
@@ -101,14 +101,15 @@ public class MusicLibraryService {
         musicLibraryRepository.save(musicPiece);
     }
 
-    public void updateLanguageList(List<Language> languages){
+    public void updateLanguageList(List<Language> languages) {
         languagesRepository.save(languages);
     }
 
-    private Language getLanguage(String language){
+    private Language getLanguage(String language) {
         return languagesRepository.getLanguageByLanguageName(language);
     }
-    private Language getLanguage(Long id){
+
+    private Language getLanguage(Long id) {
         return languagesRepository.getOne(id);
     }
 
@@ -116,9 +117,10 @@ public class MusicLibraryService {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).
                 mapNulls(false)
-                .exclude("id").
-                byDefault().
-                register();
+                .exclude("id")
+                .exclude("language")
+                .byDefault()
+                .register();
         mapperFactory.getMapperFacade().map(dtoObject, object);
     }
 
@@ -126,9 +128,10 @@ public class MusicLibraryService {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
                 mapNulls(false).
-                mapNullsInReverse(false).
-                byDefault().
-                register();
+                mapNullsInReverse(false)
+                .exclude("language")
+                .byDefault()
+                .register();
         return mapperFactory.getMapperFacade().map(s, type);
     }
 }

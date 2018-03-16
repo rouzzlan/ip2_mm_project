@@ -118,7 +118,7 @@ MusicLibraryController {
 
     @PostMapping(value = "/musicpiece/submit")
     public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
-        Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
+        Long id = musicLibraryService.addMusicPiece(musicPieceDTO);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("musicPieceId", id.toString());
         responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
@@ -136,7 +136,7 @@ MusicLibraryController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/musicpiece/submit/file/{id}")
+    @DeleteMapping(value = "/musicpiece/delete/{id}")
     public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id) {
         try {
             musicLibraryService.deleteMusicPiece(id);
