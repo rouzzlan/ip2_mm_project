@@ -26,6 +26,9 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         }
         additionalInfo.put("user_roles", roles);
 
+        //add e-mail
+        additionalInfo.put("email", authentication.getName());
+
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         return accessToken;
     }
