@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.lesson;
+package be.kdg.musicmaker.lesson.repositories;
 
 import be.kdg.musicmaker.model.Attender;
 import be.kdg.musicmaker.model.Lesson;
@@ -15,7 +15,7 @@ public interface AttenderRepository extends JpaRepository<Attender, Long> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Attender a WHERE a.lesson = ?1")
-    void deleteAttendersFromLessom(Lesson lesson);
+    void deleteAttendersFromLesson(Lesson lesson);
 
     @Query("select a.lesson from Attender a where a.user=?1")
     List<Lesson> getLessonidsFor(User id);

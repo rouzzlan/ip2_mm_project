@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.lesson;
+package be.kdg.musicmaker.lesson.dto;
 
 public class LessonTypeDTO {
     private Long id;
