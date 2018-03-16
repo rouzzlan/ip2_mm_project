@@ -64,5 +64,10 @@ public class TestPlanning {
 
     @Test
     public void getFreeMomentsAsAdmin() throws Exception {
+        mockMvc.perform(get("/lesson/planning/free")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        .param("userid","2")
+        .param("date", ""))
+                .andExpect(status().isOk());
     }
 }

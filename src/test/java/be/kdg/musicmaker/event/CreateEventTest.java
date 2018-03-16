@@ -89,7 +89,6 @@ public class CreateEventTest {
         }
     }
 
-    // todo: test faalt
     @Test
     public void createEventByAdmin() throws EventNotFoundException {
         String jsonString = "";

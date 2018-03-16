@@ -20,17 +20,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class EventService {
-
-    @Autowired
     EventRepository eventRepository;
-
-    @Autowired
     BandRepository bandRepository;
-
-    @Autowired
     UserRepository userRepository;
 
-    private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    private MapperFactory mapperFactory;
+
+    public EventService(EventRepository eventRepository,
+                        BandRepository bandRepository,
+                        UserRepository userRepository) {
+        this.eventRepository = eventRepository;
+        this.bandRepository = bandRepository;
+        this.userRepository = userRepository;
+        this.mapperFactory = new DefaultMapperFactory.Builder().build();
+    }
 
     public Event doesEventExist(String name) throws EventNotFoundException {
         Event event = eventRepository.findByName(name);
@@ -42,7 +45,9 @@ public class EventService {
     }
 
     public void createEvent(EventDTO eventDTO) {
+        Band band = bandRepository.findByName(eventDTO.getBand());
         Event event = new Event(eventDTO);
+        event.setBand(band);
 
         eventRepository.save(event);
     }
