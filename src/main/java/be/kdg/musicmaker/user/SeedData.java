@@ -32,58 +32,67 @@ import java.util.Arrays;
 @Component
 public class SeedData {
     //ROLES
-    Role leerling = new Role("ROLE_LEERLING");
-    Role lesgever = new Role("ROLE_LESGEVER");
-    Role beheerder = new Role("ROLE_BEHEERDER");
+    private Role leerling = new Role("ROLE_LEERLING");
+    private Role lesgever = new Role("ROLE_LESGEVER");
+    private Role beheerder = new Role("ROLE_BEHEERDER");
 
     //USERS
-    User user = new User("user", "user", "user", "user", "user@user.com");
-    User user2 = new User("user2", "user2", "user2", "user2", "user2@user.com");
-    User user3 = new User("user3", "user3", "user3", "user3", "user3@user.com");
+    private User user = new User("user", "user", "user", "user", "user@user.com");
+    private User user2 = new User("user2", "user2", "user2", "user2", "user2@user.com");
+    private User user3 = new User("user3", "user3", "user3", "user3", "user3@user.com");
+    private User user4 = new User("user4", "user4", "user4", "user4", "user4@user.com");
+    private User user5 = new User("user5", "user5", "user5", "user5", "user5@user.com");
+    private User user6 = new User("user6", "user6", "user6", "user6", "user6@user.com");
+    private User user7 = new User("user7", "user7", "user7", "user7", "user7@user.com");
+    private User user8 = new User("user8", "user8", "user8", "user8", "user8@user.com");
+    private User user9 = new User("user9", "user9", "user9", "user9", "user9@user.com");
 
     //INSTRUMENTEN
-    MusicInstrument instrument = new MusicInstrument("basgitaar", "elektrisch", InstrumentSort.SNAAR, "5 snaren");
+    private MusicInstrument instrument = new MusicInstrument("basgitaar", "elektrisch", InstrumentSort.SNAAR, "5 snaren");
 
     //BANDS
-    Band band = new Band("The X-Nuts");
+    private Band band = new Band("The X-Nuts");
 
     //LESSONTYPES
-    LessonType lessonType = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor nerds", "gitaar 0"));
-    LessonType lessonType1 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
-    LessonType lessonType2 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
-    LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
+    private LessonType lessonType = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor nerds", "gitaar 0"));
+    private LessonType lessonType1 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));
+    private LessonType lessonType2 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor gevorderden", "gitaar 2"));
+    private LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
 
     //LESSONS
-    Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    private LessonService lessonService;
+    private UserService userService;
+    private BandService bandService;
+    private EventService eventService;
+    private InstrumentService instrumentService;
+    private MusicLibraryService musicLibService;
+
     @Autowired
-    LessonService lessonService;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    BandRepository bandRepository;
-    @Autowired
-    BandService bandService;
-    @Autowired
-    EventRepository eventRepository;
-    @Autowired
-    EventService eventService;
-    @Autowired
-    InstrumentRepository instrumentRepository;
-    @Autowired
-    InstrumentService instrumentService;
-    @Autowired
-    MusicLibraryService musicLibService;
+    public SeedData(LessonService lessonService,
+                    UserService userService,
+                    BandService bandService,
+                    EventService eventService,
+                    InstrumentService instrumentService,
+                    MusicLibraryService musicLibService) {
+        this.lessonService = lessonService;
+        this.userService = userService;
+        this.bandService = bandService;
+        this.eventService = eventService;
+        this.instrumentService = instrumentService;
+        this.musicLibService = musicLibService;
+    }
 
     @EventListener
     public void seed(ContextRefreshedEvent event) throws IOException, URISyntaxException, BandNotFoundException, EventNotFoundException {
@@ -116,10 +125,22 @@ public class SeedData {
             userService.createUser(user);
             userService.createUser(user2);
             userService.createUser(user3);
+            userService.createUser(user4);
+            userService.createUser(user5);
+            userService.createUser(user6);
+            userService.createUser(user7);
+            userService.createUser(user8);
+            userService.createUser(user9);
 
             //SET ROLES AND ENABLE
             user.setRoles(Arrays.asList(leerling));
+            user5.setRoles(Arrays.asList(leerling));
+            user6.setRoles(Arrays.asList(leerling));
+            user7.setRoles(Arrays.asList(leerling));
+            user8.setRoles(Arrays.asList(leerling));
+            user9.setRoles(Arrays.asList(leerling));
             user2.setRoles(Arrays.asList(leerling, lesgever));
+            user4.setRoles(Arrays.asList(leerling, lesgever));
             user3.setRoles(Arrays.asList(leerling, lesgever, beheerder));
             user.setEnabled(true);
             user2.setEnabled(true);
@@ -131,6 +152,12 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user.getUsername().toUpperCase(), user.getEmail(), user.getPassword()));
             LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user2.getUsername().toUpperCase(), user2.getEmail(), user2.getPassword()));
             LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user3.getUsername().toUpperCase(), user3.getEmail(), user3.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user4.getUsername().toUpperCase(), user4.getEmail(), user4.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user5.getUsername().toUpperCase(), user5.getEmail(), user5.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user6.getUsername().toUpperCase(), user6.getEmail(), user6.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user7.getUsername().toUpperCase(), user7.getEmail(), user7.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user8.getUsername().toUpperCase(), user8.getEmail(), user8.getPassword()));
+            LOG.info(String.format("%-6s ADDED || email: %-15s || password: %s", user9.getUsername().toUpperCase(), user9.getEmail(), user9.getPassword()));
         }
     }
 
