@@ -88,4 +88,12 @@ public class Lesson {
     public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
         this.seriesOfLessons = seriesOfLessons;
     }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 }

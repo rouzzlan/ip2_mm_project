@@ -49,9 +49,22 @@ public class SeedData {
 
     //INSTRUMENTEN
     private MusicInstrument instrument = new MusicInstrument("basgitaar", "elektrisch", InstrumentSort.SNAAR, "5 snaren");
+    private MusicInstrument instrument1 = new MusicInstrument("viool", "klassiek", InstrumentSort.SNAAR, "4 snaren");
+    private MusicInstrument instrument2 = new MusicInstrument("trombone", "brass", InstrumentSort.BLAAS, "ook gekend als een schuiftrompet");
+    private MusicInstrument instrument3 = new MusicInstrument("gitaar", "klassiek", InstrumentSort.SNAAR, "6 snaren");
+    private MusicInstrument instrument4 = new MusicInstrument("ukelele", "klassiek", InstrumentSort.SNAAR, "5 snaren");
 
     //BANDS
     private Band band = new Band("The X-Nuts");
+    private Band band1 = new Band("Band1");
+    private Band band2 = new Band("Band2");
+
+    //EVENTS
+    private Event event = new Event("SportPladijsje", null, "Sportpaleis", band);
+    private Event event1 = new Event("event1", null, "Lotto Arena", band);
+    private Event event2 = new Event("event2", null, "Prins Bouwdesijnstadion", band);
+    private Event event3 = new Event("event3", null, "Sportpaleis", band);
+
 
     //LESSONTYPES
     private LessonType lessonType = new LessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor nerds", "gitaar 0"));
@@ -70,7 +83,7 @@ public class SeedData {
     private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private LessonService lessonService;
     private UserService userService;
@@ -165,19 +178,38 @@ public class SeedData {
         if (bandService.isBandEmpty()) {
             //CREATE BAND
             bandService.createBand(band);
+            bandService.createBand(band2);
+            bandService.createBand(band1);
             //SET TEACHER AND USERS
             band.setTeacher(user2);
             band.setStudents(Arrays.asList(user, user3));
+            band.setTeacher(user2);
+            band.setStudents(Arrays.asList(user6, user5, user8));
+            band.setTeacher(user4);
+            band.setStudents(Arrays.asList(user9, user3, user6, user8));
             bandService.createBand(band);
+            bandService.createBand(band1);
+            bandService.createBand(band2);
 
             LOG.info(String.format("%-6s ADDED || teacher: %-15s || students: %s", band.getName().toUpperCase(), band.getTeacher(), band.getStudents().toString()));
+            LOG.info(String.format("%-6s ADDED || teacher: %-15s || students: %s", band1.getName().toUpperCase(), band1.getTeacher(), band1.getStudents().toString()));
+            LOG.info(String.format("%-6s ADDED || teacher: %-15s || students: %s", band2.getName().toUpperCase(), band2.getTeacher(), band2.getStudents().toString()));
         }
     }
 
     private void seedInstruments() {
         if (instrumentService.isInstrumentsEmpty()) {
+            instrumentService.createInstrument(instrument1);
+            instrumentService.createInstrument(instrument2);
+            instrumentService.createInstrument(instrument3);
+            instrumentService.createInstrument(instrument4);
             instrumentService.createInstrument(instrument);
+
             LOG.info(String.format("%-6s ADDED ", instrument.getName()));
+            LOG.info(String.format("%-6s ADDED ", instrument1.getName()));
+            LOG.info(String.format("%-6s ADDED ", instrument2.getName()));
+            LOG.info(String.format("%-6s ADDED ", instrument3.getName()));
+            LOG.info(String.format("%-6s ADDED ", instrument4.getName()));
         }
     }
 
@@ -214,19 +246,20 @@ public class SeedData {
 
     private void seedEvents() throws BandNotFoundException, EventNotFoundException {
         if (eventService.isEventEmpty()) {
-            band = bandService.doesBandExist("The X-Nuts");
+            event.setDateTime(LocalDateTime.parse("03/06/2018 20:00", formatter));
+            event1.setDateTime(LocalDateTime.parse("29/06/2018 20:00", formatter));
+            event2.setDateTime(LocalDateTime.parse("03/08/2018 20:00", formatter));
+            event3.setDateTime(LocalDateTime.parse("25/03/2018 20:00", formatter));
 
-            String dateTimeString = "2018-06-03T12:30:00";
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-            LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
-
-            Event event = new Event("SportPladijsje", dateTime, "Sportpaleis", band);
             eventService.createEvent(event);
+            eventService.createEvent(event1);
+            eventService.createEvent(event2);
+            eventService.createEvent(event3);
 
             LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));
-
-            Event testEvent = eventService.getEvent(new Long(1));
-            System.out.println(testEvent.toString());
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event1.getName().toUpperCase(), event1.getDateTime().toString(), event1.getPlace(), event1.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event2.getName().toUpperCase(), event2.getDateTime().toString(), event2.getPlace(), event2.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event3.getName().toUpperCase(), event3.getDateTime().toString(), event3.getPlace(), event3.getBand().getName()));
         }
     }
 
@@ -241,6 +274,15 @@ public class SeedData {
     }
 
     private void seedLessons() {
+        lesson1.setDate(LocalDateTime.parse("22/03/2018 13:30", formatter));
+        lesson2.setDate(LocalDateTime.parse("23/03/2018 13:30", formatter));
+        lesson3.setDate(LocalDateTime.parse("22/03/2018 15:30", formatter));
+        lesson4.setDate(LocalDateTime.parse("24/03/2018 13:30", formatter));
+        lesson5.setDate(LocalDateTime.parse("22/03/2018 17:00", formatter));
+        lesson6.setDate(LocalDateTime.parse("23/03/2018 15:30", formatter));
+        lesson7.setDate(LocalDateTime.parse("24/03/2018 13:30", formatter));
+        lesson8.setDate(LocalDateTime.parse("23/03/2018 20:30", formatter));
+
         lessonService.addLesson(lesson1);
         lessonService.addLesson(lesson2);
         lessonService.addLesson(lesson3);
@@ -249,6 +291,7 @@ public class SeedData {
         lessonService.addLesson(lesson6);
         lessonService.addLesson(lesson7);
         lessonService.addLesson(lesson8);
+
         LOG.info(String.format("%-6s ADDED ", "LES 1"));
         LOG.info(String.format("%-6s ADDED ", "LES 2"));
         LOG.info(String.format("%-6s ADDED ", "LES 3"));
@@ -261,25 +304,25 @@ public class SeedData {
 
     private void addStudentsoLessons() {
         lessonService.addStudentToLesson(new Attender("leerling", user, lesson1));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson2));
+        lessonService.addStudentToLesson(new Attender("leerling", user7, lesson2));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
         lessonService.addStudentToLesson(new Attender("leerling", user, lesson4));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson5));
+        lessonService.addStudentToLesson(new Attender("leerling", user5, lesson5));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson6));
-        lessonService.addStudentToLesson(new Attender("leerling", user, lesson7));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson8));
+        lessonService.addStudentToLesson(new Attender("leerling", user6, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user5, lesson8));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson1));
-        lessonService.addStudentToLesson(new Attender("leerling", user, lesson2));
+        lessonService.addStudentToLesson(new Attender("leerling", user8, lesson2));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson4));
+        lessonService.addStudentToLesson(new Attender("leerling", user9, lesson4));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson5));
         lessonService.addStudentToLesson(new Attender("leerling", user, lesson6));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user9, lesson7));
         lessonService.addStudentToLesson(new Attender("leerling", user, lesson8));
         lessonService.addStudentToLesson(new Attender("leerling", user3, lesson1));
-        lessonService.addStudentToLesson(new Attender("leerling", user2, lesson7));
-        lessonService.addStudentToLesson(new Attender("leerling", user, lesson8));
-        lessonService.addStudentToLesson(new Attender("leerling", user3, lesson3));
+        lessonService.addStudentToLesson(new Attender("leerling", user7, lesson7));
+        lessonService.addStudentToLesson(new Attender("leerling", user7, lesson8));
+        lessonService.addStudentToLesson(new Attender("leerling", user5, lesson3));
 
         LOG.info(String.format("%-6s ADDED TO LESSONS", "STUDENTS"));
 
@@ -287,11 +330,11 @@ public class SeedData {
         lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson1));
         lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson2));
         lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson3));
-        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson4));
-        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson5));
-        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson6));
-        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson7));
-        lessonService.addStudentToLesson(new Attender("lesgever", user3, lesson8));
+        lessonService.addStudentToLesson(new Attender("lesgever", user4, lesson4));
+        lessonService.addStudentToLesson(new Attender("lesgever", user4, lesson5));
+        lessonService.addStudentToLesson(new Attender("lesgever", user4, lesson6));
+        lessonService.addStudentToLesson(new Attender("lesgever", user4, lesson7));
+        lessonService.addStudentToLesson(new Attender("lesgever", user2, lesson8));
 
         LOG.info(String.format("%-6s ADDED TO LESSONS", "TEACHERS"));
     }
