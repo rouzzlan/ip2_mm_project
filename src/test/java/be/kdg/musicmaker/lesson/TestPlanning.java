@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +29,7 @@ public class TestPlanning {
     private static String ACCESS_TOKEN_Admin = "";
     private static String ACCESS_TOKEN_Teacher = "";
     private ObjectMapper objectMapper = new ObjectMapper();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm");
 
     @Autowired
     LessonService lessonService;
@@ -66,8 +70,9 @@ public class TestPlanning {
     public void getFreeMomentsAsAdmin() throws Exception {
         mockMvc.perform(get("/lesson/planning/free")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-        .param("userid","2")
-        .param("date", ""))
+                .param("userid", "2")
+                .param("date", LocalDateTime.now().toString()))
                 .andExpect(status().isOk());
+        System.out.println(LocalDateTime.parse("10/08/1990 00:00", formatter).toString());
     }
 }
