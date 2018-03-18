@@ -12,6 +12,7 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class EventService {
 
     @Autowired
@@ -71,8 +73,13 @@ public class EventService {
         bandRepository.save(band);
     }
 
-    public List<EventDTO> getEvents() {
-        List<Event> events = eventRepository.findAll();
+
+    public List<Event> getEvents(){
+        return eventRepository.findAll();
+    }
+
+    public List<EventDTO> getEventsDTO() {
+        List<Event> events = getEvents();
         List<EventDTO> eventDTOs = new ArrayList<>();
         for (Event event : events) {
             EventDTO eventDTO = eventToDto(event);
@@ -89,7 +96,6 @@ public class EventService {
         if (event == null) {
             throw new EventNotFoundException();
         }
-
         return event;
     }
 
@@ -122,8 +128,8 @@ public class EventService {
     }
 
 
-    public void deleteEvent(Event event) {
-        eventRepository.delete(event);
+    public void deleteEvent(Long id) {
+        eventRepository.delete(id);
     }
 
     public List<EventDTO> getEventByUser(String userEmail) throws UserNotFoundException {

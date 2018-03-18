@@ -25,25 +25,25 @@ public class BandController {
         return new ResponseEntity<>(bandService.getBands(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getband/{bandName}")
-    public HttpEntity<BandDTO> getBand(@PathVariable String bandName) throws BandNotFoundException {
-        return new ResponseEntity<BandDTO>(bandService.getBand(bandName), HttpStatus.OK);
+    @GetMapping(value = "/getband/{id}")
+    public HttpEntity<BandDTO> getBand(@PathVariable Long id) throws BandNotFoundException {
+        return new ResponseEntity<>(bandService.getBand(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getbands/{email}")
-    public HttpEntity<List<BandDTO>> getBandByEmail(@PathVariable String email) throws BandNotFoundException, UserNotFoundException {
-        return new ResponseEntity<List<BandDTO>>(bandService.getBandsByUserMail(email), HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/deleteband/{id}")
-    public ResponseEntity<String> deleteBand(@PathVariable Long id) throws BandNotFoundException {
-        bandService.deleteBand(bandService.getBand(id));
-        return ResponseEntity.status(HttpStatus.OK).build();
+    @GetMapping(value = "/getbands/{userId}")
+    public HttpEntity<List<BandDTO>> getBandsByEmail(@PathVariable Long userId) throws UserNotFoundException {
+        return new ResponseEntity<>(bandService.getBandsByUserMail(userId), HttpStatus.OK);
     }
 
     @PutMapping(value = "/editband/{id}")
     public HttpEntity<String> editBand(@RequestBody BandDTO band, @PathVariable Long id) throws BandNotFoundException {
         bandService.updateBand(band, id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping(value = "/deleteband/{id}")
+    public ResponseEntity<String> deleteBand(@PathVariable Long id) throws BandNotFoundException {
+        bandService.deleteBand(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

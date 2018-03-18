@@ -70,10 +70,12 @@ public class InstrumentTest {
     public void createInstrumentByAdmin() throws Exception {
         String jsonString = "";
         jsonString = objectMapper.writeValueAsString(instrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("testgitaar");
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonString)).andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        MusicInstrument instrument = instrumentService.getInstrument(instrumentDto.getId());
         assertNotNull(instrument);
     }
 
@@ -128,17 +130,17 @@ public class InstrumentTest {
     public void editInstrumentByAdmin() throws Exception {
         InstrumentDTO editInstrumentDTO= new InstrumentDTO("editgitaar","SNAAR","klassiek","5 snaren");
         String jsonString = objectMapper.writeValueAsString(editInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("editgitaar");
-        Long id = instrument.getId();
-        InstrumentDTO jsonEditDTO = new InstrumentDTO(id,"editgitaar","SNAAR","klassiek", "4 snaren");
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        InstrumentDTO jsonEditDTO = new InstrumentDTO(instrumentDto.getId(),"editgitaar","SNAAR","klassiek", "4 snaren");
         String jsonEditString = objectMapper.writeValueAsString(jsonEditDTO);
-        this.mockMvc.perform(put("/editinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        this.mockMvc.perform(put("/editinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonEditString)).andDo(print())
                 .andExpect(status().isOk());
-        MusicInstrument musicInstrument = instrumentService.getInstrument(id);
+        MusicInstrument musicInstrument = instrumentService.getInstrument(instrumentDto.getId());
         assertTrue(musicInstrument.getVersion().equals("4 snaren"));
     }
 
@@ -146,14 +148,14 @@ public class InstrumentTest {
     public void editInstrumentByTeacher() throws Exception{
         InstrumentDTO editInstrumentDTO= new InstrumentDTO("editgitaarByTeacher","SNAAR","klassiek","5 snaren");
         String jsonString = objectMapper.writeValueAsString(editInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("editgitaarByTeacher");
-        Long id = instrument.getId();
-        InstrumentDTO jsonEditDTO = new InstrumentDTO(id,"editgitaarByTeacher","SNAAR","klassiek", "4 snaren");
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        InstrumentDTO jsonEditDTO = new InstrumentDTO(instrumentDto.getId(),"editgitaarByTeacher","SNAAR","klassiek", "4 snaren");
         String jsonEditString = objectMapper.writeValueAsString(jsonEditDTO);
-        this.mockMvc.perform(put("/editinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+        this.mockMvc.perform(put("/editinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonEditString)).andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -162,14 +164,14 @@ public class InstrumentTest {
     public void editInstrumentByStudent() throws Exception{
         InstrumentDTO editInstrumentDTO= new InstrumentDTO("editgitaarByStudent","SNAAR","klassiek","5 snaren");
         String jsonString = objectMapper.writeValueAsString(editInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("editgitaarByStudent");
-        Long id = instrument.getId();
-        InstrumentDTO jsonEditDTO = new InstrumentDTO(id,"editgitaarByStudent","SNAAR","klassiek", "4 snaren");
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        InstrumentDTO jsonEditDTO = new InstrumentDTO(instrumentDto.getId(),"editgitaarByStudent","SNAAR","klassiek", "4 snaren");
         String jsonEditString = objectMapper.writeValueAsString(jsonEditDTO);
-        this.mockMvc.perform(put("/editinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
+        this.mockMvc.perform(put("/editinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonEditString)).andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -178,12 +180,12 @@ public class InstrumentTest {
     public void deleteInstrumentByAdmin() throws Exception {
         InstrumentDTO deleteInstrumentDTO = new InstrumentDTO("deleteGitaar","SNAAR","","");
         String jsonString = objectMapper.writeValueAsString(deleteInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("deleteGitaar");
-        Long id = instrument.getId();
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
 
@@ -191,24 +193,25 @@ public class InstrumentTest {
     public void deleteInstrumentByTeacher() throws Exception {
         InstrumentDTO deleteInstrumentDTO = new InstrumentDTO("deleteGitaarTeacher","SNAAR","","");
         String jsonString = objectMapper.writeValueAsString(deleteInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("deleteGitaarTeacher");
-        Long id = instrument.getId();
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
+                .andExpect(status().isCreated())
+                .andReturn();
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
                 .andExpect(status().isForbidden());
     }
     @Test
     public void deleteInstrumentByStudent() throws Exception {
         InstrumentDTO deleteInstrumentDTO = new InstrumentDTO("deleteGitaarStudent","SNAAR","","");
         String jsonString = objectMapper.writeValueAsString(deleteInstrumentDTO);
-        this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+        MvcResult result = this.mockMvc.perform(post("/addinstrument").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
-                .andExpect(status().isCreated());
-        MusicInstrument instrument = instrumentService.getInstrument("deleteGitaarStudent");
-        Long id = instrument.getId();
-        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", id).header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        InstrumentDTO instrumentDto = objectMapper.readValue(result.getResponse().getContentAsString(), InstrumentDTO.class);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/deleteinstrument/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Student))
                 .andExpect(status().isForbidden());
     }
 

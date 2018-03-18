@@ -15,25 +15,25 @@ public class InstrumentController {
     InstrumentService instrumentService;
 
     @PostMapping(value = "/addinstrument")
-    public ResponseEntity<String> postInstrument(@RequestBody InstrumentDTO instrumentDTO){
+    public ResponseEntity postInstrument(@RequestBody InstrumentDTO instrumentDTO) {
         instrumentService.createInstrument(instrumentDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PutMapping(value = "/editinstrument/{id}")
-    public ResponseEntity<String> updateInstrument(@RequestBody InstrumentDTO instrumentDTO, @PathVariable Long id){
-        instrumentService.updateInstrument(instrumentDTO, id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity<>(instrumentService.createInstrument(instrumentDTO), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/getinstruments")
-    public HttpEntity<List<MusicInstrument>> getInstruments(){
+    public ResponseEntity<List<MusicInstrument>> getInstruments() {
         return new ResponseEntity<>(instrumentService.getInstruments(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getinstrument/{id}")
-    public HttpEntity<MusicInstrument> getInstrument(@PathVariable Long id) throws InstrumentNotFoundException {
-        return new ResponseEntity(instrumentService.getInstrument(id), HttpStatus.OK);
+    public ResponseEntity getInstrument(@PathVariable Long id) throws InstrumentNotFoundException {
+        return new ResponseEntity<>(instrumentService.getInstrument(id), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/editinstrument/{id}")
+    public ResponseEntity<String> updateInstrument(@RequestBody InstrumentDTO instrumentDTO, @PathVariable Long id) {
+        instrumentService.updateInstrument(instrumentDTO, id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/deleteinstrument/{id}")

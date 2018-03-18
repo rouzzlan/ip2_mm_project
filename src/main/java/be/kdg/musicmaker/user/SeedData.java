@@ -153,14 +153,13 @@ public class SeedData {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
 
-            Event event = new Event("SportPladijsje", dateTime , "Sportpaleis", band);
+            Event event = new Event("SportPladijsje", dateTime , "Sportpaleis");
+            eventService.createEvent(event);
+            event.setBand(band);
             eventService.createEvent(event);
 
             LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));
-
-            Event testEvent = eventService.getEvent(new Long(1));
-            System.out.println(testEvent.toString());
-        }
+            }
     }
     private void seedLessonTypes() {
         lessonService.addLessonType(new LessonTypeDTO(15.50, "gitaar", "gitaar voor beginners", "gitaar 1"));

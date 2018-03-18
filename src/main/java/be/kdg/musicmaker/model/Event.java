@@ -23,12 +23,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(String name, LocalDateTime dateTime, String place, Band band) {
+    public Event(String name, LocalDateTime dateTime, String place) {
         this.name = name;
         this.dateTime = dateTime;
         this.place = place;
-        this.band = band;
-
     }
 
     public Event(String name) {
@@ -39,6 +37,8 @@ public class Event {
         this.name = name;
         this.place = place;
     }
+
+
     public Long getId() {
         return id;
     }
