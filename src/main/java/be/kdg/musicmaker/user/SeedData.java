@@ -183,10 +183,10 @@ public class SeedData {
             //SET TEACHER AND USERS
             band.setTeacher(user2);
             band.setStudents(Arrays.asList(user, user3));
-            band.setTeacher(user2);
-            band.setStudents(Arrays.asList(user6, user5, user8));
-            band.setTeacher(user4);
-            band.setStudents(Arrays.asList(user9, user3, user6, user8));
+            band1.setTeacher(user2);
+            band1.setStudents(Arrays.asList(user6, user5, user8));
+            band2.setTeacher(user4);
+            band2.setStudents(Arrays.asList(user9, user3, user6, user8));
             bandService.createBand(band);
             bandService.createBand(band1);
             bandService.createBand(band2);
