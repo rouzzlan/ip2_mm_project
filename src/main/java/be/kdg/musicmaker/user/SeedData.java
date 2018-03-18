@@ -199,11 +199,12 @@ public class SeedData {
 
     private void seedInstruments() {
         if (instrumentService.isInstrumentsEmpty()) {
+            instrumentService.createInstrument(instrument);
             instrumentService.createInstrument(instrument1);
             instrumentService.createInstrument(instrument2);
             instrumentService.createInstrument(instrument3);
             instrumentService.createInstrument(instrument4);
-            instrumentService.createInstrument(instrument);
+
 
             LOG.info(String.format("%-6s ADDED ", instrument.getName()));
             LOG.info(String.format("%-6s ADDED ", instrument1.getName()));
