@@ -14,12 +14,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/confirm").permitAll()
+
+                //account
+                .antMatchers("/account/**").permitAll()
+
+                .antMatchers("/getroles").hasRole("LEERLING")
+
+
                 .antMatchers("/private/**", "/lesson/add", "/lesson/update", "/lesson/delete", "/lesson",
                         "/lesson/types", "/lesson/student/add", "/lesson/exercise/student/add")
                 .hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
-                .antMatchers("/getroles").permitAll()
+
                 .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}"
                         ,"/lesson/types/add", "/lesson/types/update", "/lesson/types/delete")
                 .hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces

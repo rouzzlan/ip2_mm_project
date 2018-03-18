@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/account")
 public class RegisterController {
 
     @Autowired
@@ -45,7 +46,7 @@ public class RegisterController {
             registrationEmail.setTo(user.getEmail());
             registrationEmail.setSubject("Registration Confirmation");
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/confirm?token=" + user.getConfirmationToken());
+                    + appUrl + "/account/confirm?token=" + user.getConfirmationToken());
             registrationEmail.setFrom("noreply@domain.com");
 
             emailService.sendEmail(registrationEmail);
