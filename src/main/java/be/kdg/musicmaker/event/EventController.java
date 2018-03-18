@@ -22,7 +22,7 @@ public class EventController {
 
     @GetMapping(value= "/getevents")
     public HttpEntity<List<EventDTO>> getEvents(){
-        return new ResponseEntity<>(eventService.getEvents(), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.getEventsDTO(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getevent/{id}")
@@ -35,9 +35,9 @@ public class EventController {
         return new ResponseEntity<List<EventDTO>>(eventService.getEventByUser(userEmail), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
-        eventService.deleteEvent(eventService.dtoToEvent(eventService.getEventDTO(id)));
+    @DeleteMapping(value = "/deleteevent/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
+        eventService.deleteEvent(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

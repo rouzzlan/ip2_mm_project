@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.instrument;
 
-import be.kdg.musicmaker.model.InstrumentSort;
 import be.kdg.musicmaker.model.MusicInstrument;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
@@ -8,14 +7,31 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class InstrumentService {
+@Transactional
+public class    InstrumentService {
     @Autowired
     InstrumentRepository instrumentRepository;
 
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+
+    //region CRUD
+    public MusicInstrument createInstrument(InstrumentDTO instrumentDTO) {
+        MusicInstrument instrument = dtoToInstrument(instrumentDTO);
+        instrumentRepository.save(instrument);
+        return instrument;
+    }
+
+    public void createInstrument(MusicInstrument instrument) {
+        instrumentRepository.save(instrument);
+    }
+
+    public List<MusicInstrument> getInstruments() {
+        return instrumentRepository.findAll();
+    }
 
     public MusicInstrument getInstrument(String name) throws InstrumentNotFoundException {
         MusicInstrument instrument = instrumentRepository.findByName(name);
@@ -24,60 +40,34 @@ public class InstrumentService {
         } else throw new InstrumentNotFoundException();
     }
 
-    public void createInstrument(InstrumentDTO instrumentDTO) {
-        MusicInstrument instrument = dtoToInstrument(instrumentDTO);
-        instrument.setSort(getSort(instrumentDTO.getSort()));
-        instrumentRepository.save(instrument);
+    public MusicInstrument getInstrument(Long id) throws InstrumentNotFoundException {
+        MusicInstrument instrument = instrumentRepository.findOne(id);
+        if (instrument == null) {
+            throw new InstrumentNotFoundException();
+        } else {
+            return instrument;
+        }
     }
+
+    public void updateInstrument(InstrumentDTO instrumentDTO, Long id) {
+        instrumentDTO.setId(id);
+        MusicInstrument musicInstrument = dtoToInstrument(instrumentDTO);
+        instrumentRepository.save(musicInstrument);
+    }
+
+    public void deleteInstrument(Long id) {
+        instrumentRepository.delete(id);
+    }
+    //endregion
 
     private MusicInstrument dtoToInstrument(InstrumentDTO instrumentDTO) {
-        mapperFactory.classMap(InstrumentDTO.class, MusicInstrument.class).exclude("sort");
+        mapperFactory.classMap(InstrumentDTO.class, MusicInstrument.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(instrumentDTO, MusicInstrument.class);
-    }
-
-    public void createInstrument(MusicInstrument instrument) {
-        instrumentRepository.save(instrument);
-    }
-
-    private InstrumentSort getSort(String sort) {
-        return InstrumentSort.valueOf(sort);
-    }
-
-    public List<MusicInstrument> getInstruments() {
-        List<MusicInstrument> muziekInstrumenten = instrumentRepository.findAll();
-        for (MusicInstrument mi : muziekInstrumenten) {
-            System.out.println(mi.toString());
-        }
-        return muziekInstrumenten;
-
     }
 
     public boolean isInstrumentsEmpty() {
         return instrumentRepository.count() == 0;
     }
 
-    public void updateInstrument(InstrumentDTO instrumentDTO, Long id) {
-        MusicInstrument musicInstrument = instrumentRepository.findOne(id);
-        if (musicInstrument != null){
-            musicInstrument.setName(instrumentDTO.getName());
-            musicInstrument.setSort(getSort(instrumentDTO.getSort()));
-            musicInstrument.setType(instrumentDTO.getType());
-            musicInstrument.setVersion(instrumentDTO.getVersion());
-        }
-        instrumentRepository.save(musicInstrument);
-    }
-
-    public MusicInstrument getInstrument(Long id) throws InstrumentNotFoundException {
-        MusicInstrument instrument = instrumentRepository.findOne(id);
-        if (instrument == null){
-            throw new InstrumentNotFoundException();
-        }else {
-            return instrument;
-        }
-    }
-
-    public void deleteInstrument(Long id) {
-        instrumentRepository.delete(id);
-    }
 }

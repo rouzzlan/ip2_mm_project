@@ -8,11 +8,13 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -113,9 +115,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) throws UserNotFoundException {
-        System.out.println(email);
         email = email.concat(".com");
-        System.out.println(email);
         User user = userRepository.findByEmail(email);
         if (user == null){
             throw new UserNotFoundException();
