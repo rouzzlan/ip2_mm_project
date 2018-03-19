@@ -9,7 +9,7 @@ import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.LessonService;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.musiclib.MusicLibraryService;
-import be.kdg.musicmaker.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.UserService;
 import org.slf4j.Logger;

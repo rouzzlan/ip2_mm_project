@@ -1,6 +1,6 @@
 package be.kdg.musicmaker.musiclib.repo;
 
-import be.kdg.musicmaker.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.MusicPiece;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

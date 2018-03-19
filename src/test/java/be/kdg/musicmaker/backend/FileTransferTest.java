@@ -3,7 +3,7 @@ package be.kdg.musicmaker.backend;
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
-import be.kdg.musicmaker.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.TokenGetter;

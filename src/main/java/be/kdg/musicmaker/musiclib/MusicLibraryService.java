@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import ma.glasnost.orika.MapperFactory;

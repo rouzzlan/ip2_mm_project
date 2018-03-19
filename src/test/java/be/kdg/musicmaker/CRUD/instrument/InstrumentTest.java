@@ -209,6 +209,7 @@ public class InstrumentTest {
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/instrument/delete/{id}", instrumentDto.getId()).header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher))
                 .andExpect(status().isOk());
     }
+
     @Test
     public void deleteInstrumentByStudent() throws Exception {
         InstrumentDTO deleteInstrumentDTO = new InstrumentDTO("deleteGitaarStudent","SNAAR","","");

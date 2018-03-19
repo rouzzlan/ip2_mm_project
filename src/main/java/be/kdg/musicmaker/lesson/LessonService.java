@@ -4,7 +4,7 @@ import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.lesson.repo.*;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
-import be.kdg.musicmaker.musiclib.MusicPiece;
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
