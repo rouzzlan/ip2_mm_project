@@ -11,32 +11,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/event")
 public class EventController {
     @Autowired
     EventService eventService;
 
-    @PostMapping(value = "/addevent")
+    @PostMapping(value = "/add")
     public ResponseEntity<String> postEvent(@RequestBody EventDTO eventDTO){
         eventService.createEvent(eventDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value= "/getevents")
+    @GetMapping(value= "/get")
     public HttpEntity<List<EventDTO>> getEvents(){
         return new ResponseEntity<>(eventService.getEventsDTO(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getevent/{id}")
+    @GetMapping(value = "/get/{id}")
     public HttpEntity<EventDTO> getEvent(@PathVariable Long id) throws EventNotFoundException {
         return new ResponseEntity<>(eventService.getEventDTO(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getevents/{userEmail}")
-    public HttpEntity<List<EventDTO>> getEventsOfUser(@PathVariable String userEmail) throws EventNotFoundException, UserNotFoundException {
-        return new ResponseEntity<List<EventDTO>>(eventService.getEventByUser(userEmail), HttpStatus.OK);
+    @GetMapping(value = "/get/{email}")
+    public HttpEntity<List<EventDTO>> getEventsOfUser(@PathVariable String email) throws EventNotFoundException, UserNotFoundException {
+        return new ResponseEntity<>(eventService.getEventByUser(email), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteevent/{id}")
+    //TODO Update functie?
+
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
         eventService.deleteEvent(id);
         return ResponseEntity.status(HttpStatus.OK).build();

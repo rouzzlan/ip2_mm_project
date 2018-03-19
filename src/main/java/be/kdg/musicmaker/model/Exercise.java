@@ -1,7 +1,7 @@
 package be.kdg.musicmaker.model;
 
 
-import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
+import be.kdg.musicmaker.musiclib.MusicPiece;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

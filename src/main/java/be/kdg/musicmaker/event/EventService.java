@@ -47,7 +47,6 @@ public class EventService {
 
     public void createEvent(EventDTO eventDTO) {
         Event event = new Event(eventDTO);
-
         eventRepository.save(event);
     }
 

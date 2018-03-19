@@ -126,8 +126,8 @@ public class BandService {
         return bandRepository.count() == 0;
     }
 
-    public List<BandDTO> getBandsByUserMail(Long userId) throws UserNotFoundException {
-        User user = userRepository.findOne(userId);
+    public List<BandDTO> getBandsByUserMail(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email);
         if(user == null){
             throw new UserNotFoundException();
         } else {

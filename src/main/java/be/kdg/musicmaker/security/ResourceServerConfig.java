@@ -29,17 +29,24 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                                         "/lesson/types/update",
                                         "/lesson/types/delete").hasRole("BEHEERDER")
                 .antMatchers("/lesson/**").hasAnyRole("LESGEVER","BEHEERDER")
-                
-
-                //===============================================================================
-                //===============================================================================
 
                 //INSTRUMENT
+                .antMatchers("/instrument/get/**").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
                 .antMatchers("/instrument/**").hasAnyRole("LESGEVER","BEHEERDER")
 
+
+                //=============================================================================================
+                // ALLES ONDER DEZE LIJN MOET WSS NOG SPECIFIEKER MOMENTEEL GWN GEZET DAT JE INGELOGD MOET ZIJN
+                //=============================================================================================
+
+                //MUSIC-LIB
+                .antMatchers("/music_library/**").authenticated()
+
                 //EVENT
+                .antMatchers("/event/**").authenticated()
 
                 //BAND
+                .antMatchers("/band/**").authenticated()
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())

@@ -95,7 +95,7 @@ public class EventTest {
         }
 
         try {
-            this.mockMvc.perform(post("/addevent")
+            this.mockMvc.perform(post("/event/add")
                     .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
                     .andExpect(status().isCreated());

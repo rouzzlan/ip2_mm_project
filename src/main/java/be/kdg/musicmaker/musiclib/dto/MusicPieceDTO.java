@@ -1,4 +1,4 @@
-package be.kdg.musicmaker.libraries.musiclib;
+package be.kdg.musicmaker.musiclib.dto;
 
 public class MusicPieceDTO {
     private Long id;

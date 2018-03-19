@@ -86,7 +86,7 @@ public class BandTest {
         }
 
         try {
-            this.mockMvc.perform(post("/addband").header("Authorization", "Bearer " + ACCES_TOKEN_Admin)
+            this.mockMvc.perform(post("/band/add").header("Authorization", "Bearer " + ACCES_TOKEN_Admin)
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString))
                     .andDo(print())
                     .andExpect(status().isCreated());
