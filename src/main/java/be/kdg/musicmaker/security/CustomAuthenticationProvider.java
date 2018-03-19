@@ -26,7 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 		User user = null;
 		try {
-			user = userService.doesUserExist(username);
+			user = userService.getUser(username);
 		} catch (UserNotFoundException e) {
 		}
 

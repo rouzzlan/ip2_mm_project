@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.user;
 
 import be.kdg.musicmaker.model.User;
+import be.kdg.musicmaker.user.dto.UserDTO;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class RegisterController {
             jsonObj = new JSONObject(jsonString);
             user.setEmail(jsonObj.getString("email"));
             user.setPassword(jsonObj.getString("password"));
-            userService.doesUserExist(user.getEmail());
+            userService.getUser(user.getEmail());
         } catch (UserNotFoundException e) {
 
             // Disable user until they click on confirmation link in email
@@ -61,7 +62,7 @@ public class RegisterController {
     @GetMapping(value="/confirm")
     public ResponseEntity<String> confirm(@RequestParam("token") String token) throws UserNotFoundException  {
         try {
-            User user = userService.findByConfirmationToken(token);
+            User user = userService.getUserByToken(token);
             if (user.isEnabled() == true){
                 return ResponseEntity.status(HttpStatus.valueOf(409)).build();
             } else {

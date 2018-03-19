@@ -1,11 +1,13 @@
 package be.kdg.musicmaker.band;
 
+import be.kdg.musicmaker.band.dto.BandDTO;
+import be.kdg.musicmaker.band.repo.BandRepository;
 import be.kdg.musicmaker.event.EventService;
 import be.kdg.musicmaker.model.Band;
 import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserNotFoundException;
-import be.kdg.musicmaker.user.UserRepository;
+import be.kdg.musicmaker.user.repo.UserRepository;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

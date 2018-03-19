@@ -15,20 +15,32 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
 
-                //account
+                //ACCOUNT
                 .antMatchers("/account/**").permitAll()
 
-                .antMatchers("/getroles").hasRole("LEERLING")
+                //USER
+                .antMatchers("/user/update",
+                                        "/user/getroles").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
+                .antMatchers("/user/**").hasAnyRole("LESGEVER","BEHEERDER")
 
-
-                .antMatchers("/private/**", "/lesson/add", "/lesson/update", "/lesson/delete", "/lesson",
-                        "/lesson/types", "/lesson/student/add", "/lesson/exercise/student/add")
-                .hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
-
-                .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}"
-                        ,"/lesson/types/add", "/lesson/types/update", "/lesson/types/delete")
-                .hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces
+                //LESSONS
                 .antMatchers("/lesson/mine").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
+                .antMatchers("/lesson/types/add",
+                                        "/lesson/types/update",
+                                        "/lesson/types/delete").hasRole("BEHEERDER")
+                .antMatchers("/lesson/**").hasAnyRole("LESGEVER","BEHEERDER")
+                
+
+                //===============================================================================
+                //===============================================================================
+
+                //INSTRUMENT
+                .antMatchers("/instrument/**").hasAnyRole("LESGEVER","BEHEERDER")
+
+                //EVENT
+
+                //BAND
+
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())
                 .and()

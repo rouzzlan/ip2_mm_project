@@ -1,6 +1,6 @@
 package be.kdg.musicmaker.security;
 
-import be.kdg.musicmaker.user.UserRepository;
+import be.kdg.musicmaker.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;

@@ -2,11 +2,11 @@ package be.kdg.musicmaker.lesson;
 
 import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
-import be.kdg.musicmaker.lesson.repositories.*;
+import be.kdg.musicmaker.lesson.repo.*;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryRepository;
 import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.model.*;
-import be.kdg.musicmaker.user.UserRepository;
+import be.kdg.musicmaker.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

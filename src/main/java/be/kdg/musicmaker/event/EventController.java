@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.event;
 
+import be.kdg.musicmaker.event.dto.EventDTO;
 import be.kdg.musicmaker.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

@@ -1,59 +1,47 @@
-package be.kdg.musicmaker.model;
 
-import javax.persistence.*;
+package be.kdg.musicmaker.user.dto;
+
+
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "User")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class UserDTO {
     private String username;
-    private String password;
     private String firstname;
     private String lastname;
-    @Column(unique=true)
     private String email;
-    @Column(name = "confirmation_token")
+    private String password;
     private String confirmationToken;
     private boolean enabled;
+    private List<String> roles;
 
-    @ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @JoinTable(name="users_roles",
-            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
-    )
-    private List<Role> roles;
-
-    @ManyToMany(mappedBy = "students",
-            cascade = {CascadeType.ALL})
-    private List<Band> BandAsStudent;
-
-    @OneToMany(mappedBy = "teacher",
-            cascade = {CascadeType.ALL})
-    private List<Band> BandAsTeacher;
-
-    public User() {
+    public UserDTO() {
+        this.roles = new ArrayList<>();
     }
 
-    public User(String username, String password, String firstname, String lastname, String email) {
+    public UserDTO(String username,String password) {
         this.username = username;
         this.password = password;
+        this.roles = new ArrayList<>();
+    }
+
+    public UserDTO(String username, String firstname, String lastname, String email, String password) {
+        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-        this.confirmationToken = null;
+        this.password = password;
+        this.roles = new ArrayList<>();
     }
 
-    public User(String username, String password, String firstname, String lastname, String email, List<Role> roles) {
+    public UserDTO(String username, String firstname, String lastname, String email, String password, List<String> roles) {
         this.username = username;
-        this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.password = password;
         this.roles = roles;
+        this.roles = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -61,12 +49,6 @@ public class User {
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
     public String getFirstname() {
         return firstname;
@@ -86,14 +68,20 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public List<Role> getRoles() {
-        return roles;
+    public String getPassword() {
+        return password;
     }
-    public void setRoles(List<Role> roles) {
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
-    public void addRole(Role role) {
+    public void addRole(String role) {
         this.roles.add(role);
+    }
+    public List<String> getRoles() {
+        return roles;
     }
     public String getConfirmationToken() {
         return confirmationToken;
@@ -107,20 +95,15 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-    public Long getId() {
-        return id;
-    }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
+        return "UserDTO{" +
+                "username='" + username + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
-
 }

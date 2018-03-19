@@ -1,6 +1,8 @@
 package be.kdg.musicmaker.instrument;
 
-import be.kdg.musicmaker.model.MusicInstrument;
+import be.kdg.musicmaker.instrument.dto.InstrumentDTO;
+import be.kdg.musicmaker.instrument.repo.InstrumentRepository;
+import be.kdg.musicmaker.model.Instrument;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -19,29 +21,29 @@ public class    InstrumentService {
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     //region CRUD
-    public MusicInstrument createInstrument(InstrumentDTO instrumentDTO) {
-        MusicInstrument instrument = dtoToInstrument(instrumentDTO);
+    public Instrument createInstrument(InstrumentDTO instrumentDTO) {
+        Instrument instrument = dtoToInstrument(instrumentDTO);
         instrumentRepository.save(instrument);
         return instrument;
     }
 
-    public void createInstrument(MusicInstrument instrument) {
+    public void createInstrument(Instrument instrument) {
         instrumentRepository.save(instrument);
     }
 
-    public List<MusicInstrument> getInstruments() {
+    public List<Instrument> getInstruments() {
         return instrumentRepository.findAll();
     }
 
-    public MusicInstrument getInstrument(String name) throws InstrumentNotFoundException {
-        MusicInstrument instrument = instrumentRepository.findByName(name);
+    public Instrument getInstrument(String name) throws InstrumentNotFoundException {
+        Instrument instrument = instrumentRepository.findByName(name);
         if (instrument != null) {
             return instrument;
         } else throw new InstrumentNotFoundException();
     }
 
-    public MusicInstrument getInstrument(Long id) throws InstrumentNotFoundException {
-        MusicInstrument instrument = instrumentRepository.findOne(id);
+    public Instrument getInstrument(Long id) throws InstrumentNotFoundException {
+        Instrument instrument = instrumentRepository.findOne(id);
         if (instrument == null) {
             throw new InstrumentNotFoundException();
         } else {
@@ -51,8 +53,8 @@ public class    InstrumentService {
 
     public void updateInstrument(InstrumentDTO instrumentDTO, Long id) {
         instrumentDTO.setId(id);
-        MusicInstrument musicInstrument = dtoToInstrument(instrumentDTO);
-        instrumentRepository.save(musicInstrument);
+        Instrument Instrument = dtoToInstrument(instrumentDTO);
+        instrumentRepository.save(Instrument);
     }
 
     public void deleteInstrument(Long id) {
@@ -60,10 +62,10 @@ public class    InstrumentService {
     }
     //endregion
 
-    private MusicInstrument dtoToInstrument(InstrumentDTO instrumentDTO) {
-        mapperFactory.classMap(InstrumentDTO.class, MusicInstrument.class);
+    private Instrument dtoToInstrument(InstrumentDTO instrumentDTO) {
+        mapperFactory.classMap(InstrumentDTO.class, Instrument.class);
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
-        return mapperFacade.map(instrumentDTO, MusicInstrument.class);
+        return mapperFacade.map(instrumentDTO, Instrument.class);
     }
 
     public boolean isInstrumentsEmpty() {

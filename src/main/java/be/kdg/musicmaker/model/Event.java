@@ -1,7 +1,6 @@
 package be.kdg.musicmaker.model;
 
-import be.kdg.musicmaker.event.EventDTO;
-import org.springframework.format.annotation.DateTimeFormat;
+import be.kdg.musicmaker.event.dto.EventDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
