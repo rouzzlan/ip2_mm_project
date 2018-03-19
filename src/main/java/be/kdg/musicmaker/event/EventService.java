@@ -36,7 +36,7 @@ public class EventService {
 
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
-    public Event doesEventExist(String name) throws EventNotFoundException {
+    public Event getEvent(String name) throws EventNotFoundException {
         Event event = eventRepository.findByName(name);
         if (event != null) {
             return event;
@@ -156,4 +156,15 @@ public class EventService {
                 .equals(band))
                 .collect(Collectors.toList());
     }
+
+    //UPDATE
+    public void updateEvent(EventDTO eventDTO) {
+        Event event = eventRepository.findByName(eventDTO.getName());
+        event.setDateTime(LocalDateTime.parse(eventDTO.getDateTime()));
+        event.setName(eventDTO.getName());
+        event.setPlace(eventDTO.getPlace());
+        event.setBand(getBand(eventDTO.getBand()));
+        eventRepository.save(event);
+    }
+
 }

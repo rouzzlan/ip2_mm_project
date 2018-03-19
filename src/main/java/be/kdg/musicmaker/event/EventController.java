@@ -37,7 +37,11 @@ public class EventController {
         return new ResponseEntity<>(eventService.getEventByUser(email), HttpStatus.OK);
     }
 
-    //TODO Update functie?
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateLesson(@RequestBody EventDTO eventDTO) {
+        eventService.updateEvent(eventDTO);
+        return ResponseEntity.status(HttpStatus.CONTINUE).build();
+    }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable Long id) throws EventNotFoundException {
