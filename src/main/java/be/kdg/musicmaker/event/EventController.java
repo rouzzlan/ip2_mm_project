@@ -27,12 +27,12 @@ public class EventController {
         return new ResponseEntity<>(eventService.getEventsDTO(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/id/{id}")
     public HttpEntity<EventDTO> getEvent(@PathVariable Long id) throws EventNotFoundException {
         return new ResponseEntity<>(eventService.getEventDTO(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{email}")
+    @GetMapping(value = "/email/{email:.+}")
     public HttpEntity<List<EventDTO>> getEventsOfUser(@PathVariable String email) throws EventNotFoundException, UserNotFoundException {
         return new ResponseEntity<>(eventService.getEventByUser(email), HttpStatus.OK);
     }

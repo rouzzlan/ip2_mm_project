@@ -105,7 +105,7 @@ public class InstrumentTest {
 
     @Test
     public void getInstrumentByAdmin() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/instrument/get/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
+        MvcResult result = this.mockMvc.perform(get("/instrument/id/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn();
@@ -114,7 +114,7 @@ public class InstrumentTest {
     }
     @Test
     public void getInstrumentByTeacher() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/instrument/get/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
+        MvcResult result = this.mockMvc.perform(get("/instrument/id/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn();
@@ -124,7 +124,7 @@ public class InstrumentTest {
 
     @Test
      public void getInstrumentByStudent() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/instrument/get/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
+        MvcResult result = this.mockMvc.perform(get("/instrument/id/{id}", 1).header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn();

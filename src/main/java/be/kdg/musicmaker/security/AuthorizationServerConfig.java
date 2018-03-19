@@ -95,8 +95,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        //TODO BEST NIET HARDCODED HE
-        //geen idee waaron we encryptie nodig hebben als Auth en Resource server samen staan eigenlijk maarja
+        //geen idee waarom we encryptie nodig hebben als Auth en Resource server samen staan eigenlijk maarja
         converter.setSigningKey("MaYzkSjmkzPC57L");
         return converter;
     }

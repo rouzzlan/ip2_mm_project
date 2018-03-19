@@ -46,20 +46,19 @@ public class EventService {
     }
 
     public void createEvent(EventDTO eventDTO) {
-        Event event = new Event(eventDTO);
+        Event event = dtoToEvent(eventDTO);
+        event.setBand(getBand(eventDTO.getBand()));
         eventRepository.save(event);
     }
 
-    //@JsonDeserialize(using = JodaDeserializers.LocalDateDeserializer.class)
     public Event dtoToEvent(EventDTO eventDTO) {
-        mapperFactory.classMap(EventDTO.class, Event.class)
-                .exclude("band").exclude("dateTime").register();
+        mapperFactory.classMap(EventDTO.class, Event.class).exclude("band");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(eventDTO, Event.class);
     }
 
     public EventDTO eventToDto(Event event) {
-        mapperFactory.classMap(Event.class, EventDTO.class).exclude("band").exclude("dateTime");
+        mapperFactory.classMap(Event.class, EventDTO.class).exclude("band");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(event, EventDTO.class);
     }

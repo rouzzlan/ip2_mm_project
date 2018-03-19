@@ -8,6 +8,7 @@ import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -20,13 +21,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,18 +66,13 @@ public class EventTest {
                 .build();
 
         try {
-
-            /**
-             * Specifiek om Time Objecten te parsen volgends ISO formaat
-             */
             tokenGetter = TokenGetter.getInstance(this.mockMvc);
             objectMapper = new ObjectMapper();
+            //REQ om Time Obj. te parsen naar JSON
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
             localDateTime = LocalDateTime.now();
-
-            //TODO re-add dateTime
 
             eventDTO = new EventDTO("testEvent", LocalDateTime.now().toString(), "KdG", "The X-Nuts");
             ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
@@ -83,11 +83,14 @@ public class EventTest {
         }
     }
 
-    // todo: test faalt
+    //CREATE
     @Test
-    public void createEventByAdmin() throws EventNotFoundException {
+    public void CreateEventAsAdmin() throws EventNotFoundException {
         String jsonString = "";
         try {
+            //Volledige LocalDateTime objecten serializen naar blob
+            //kunnen ook ISO string opslaan in plaats van volledige objecten
+            //dan moet er gewoon geparsed worden voor gebruik
             jsonString = objectMapper.writeValueAsString(eventDTO);
             System.out.println(jsonString);
         } catch (JsonProcessingException e) {
@@ -106,4 +109,39 @@ public class EventTest {
         Event event = eventService.doesEventExist("testEvent");
         assertNotNull(event);
     }
+
+    //READ
+    //MVC result parsing
+    //http://tutorials.jenkov.com/java-json/jackson-objectmapper.html#read-object-from-json-string
+    @Test
+    public void GetEventAsAdmin() throws Exception {
+        MvcResult res =  mockMvc.perform(get("/event/get")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andReturn();
+
+        List<EventDTO> result = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
+        assertEquals(result.get(0).getName(), "SportPladijsje");
+        assertEquals(result.get(3).getName(), "event3");
+
+        res = mockMvc.perform(get("/event/id/1")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andReturn();
+
+        EventDTO result2 = objectMapper.readValue(res.getResponse().getContentAsString(), EventDTO.class);
+        assertEquals(result2.getName(), "SportPladijsje");
+
+        //deze gebruiker is door andere testen verwijderd dus zou null moeten geven
+        res = mockMvc.perform(get("/event/email/user3@user.com")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andReturn();
+
+        List<EventDTO> result3 = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
+        assertEquals(result3.get(0).getName(), "SportPladijsje");
+        assertEquals(result3.get(3).getName(), "event3");
+    }
+
+    //UPDATE
+    //TODO /event/update staat nog niet in de controller
+
+    //DELETE
+    //TODO Implement plox
 }

@@ -27,12 +27,12 @@ public class BandController {
         return new ResponseEntity<>(bandService.getBands(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/id/{id}")
     public HttpEntity<BandDTO> getBand(@PathVariable Long id) throws BandNotFoundException {
         return new ResponseEntity<>(bandService.getBand(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{email}")
+    @GetMapping(value = "/email/{email:.+}")
     public HttpEntity<List<BandDTO>> getBandsByEmail(@PathVariable String email) throws UserNotFoundException {
         return new ResponseEntity<>(bandService.getBandsByUserMail(email), HttpStatus.OK);
     }

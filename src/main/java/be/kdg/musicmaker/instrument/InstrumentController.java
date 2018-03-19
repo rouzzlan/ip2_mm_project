@@ -27,7 +27,7 @@ public class InstrumentController {
         return new ResponseEntity<>(instrumentService.getInstruments(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/id/{id}")
     public ResponseEntity getInstrument(@PathVariable Long id) throws InstrumentNotFoundException {
         return new ResponseEntity<>(instrumentService.getInstrument(id), HttpStatus.OK);
     }
