@@ -58,6 +58,14 @@ public class BandService {
         }
     }
 
+    //READ
+    public Band getBand(String naam) throws BandNotFoundException {
+        Band band = bandRepository.findByName(naam);
+        if (band != null) {
+            return band;
+        } else throw new BandNotFoundException();
+    }
+
     public void createBand(BandDTO bandDTO) {
         Band band = dtoToBand(bandDTO);
         band.setTeacher(getTeacher(bandDTO.getTeacher()));

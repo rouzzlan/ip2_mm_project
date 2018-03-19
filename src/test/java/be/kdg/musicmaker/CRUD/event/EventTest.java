@@ -127,7 +127,6 @@ public class EventTest {
         EventDTO result2 = objectMapper.readValue(res.getResponse().getContentAsString(), EventDTO.class);
         assertEquals(result2.getName(), "SportPladijsje");
 
-        //deze gebruiker is door andere testen verwijderd dus zou null moeten geven
         res = mockMvc.perform(get("/event/email/user3@user.com")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andReturn();
