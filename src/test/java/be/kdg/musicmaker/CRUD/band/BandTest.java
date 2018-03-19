@@ -75,6 +75,8 @@ public class BandTest {
         }
     }
 
+    //CREATE
+
     @Test
     public void createBandByAdmin() throws BandNotFoundException, UserNotFoundException {
         String jsonString = "";

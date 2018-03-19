@@ -2,6 +2,7 @@ package be.kdg.musicmaker.backend;
 
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.security.CorsFilter;
+import be.kdg.musicmaker.util.TokenGetter;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
 public class TokenTest {
+    private TokenGetter tokenGetter;
 
     @Autowired
     private WebApplicationContext wac;
@@ -44,14 +46,16 @@ public class TokenTest {
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity())
-                .addFilter(corsFilter).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
+                                        .apply(springSecurity())
+                                        .addFilter(corsFilter).build();
+        tokenGetter = TokenGetter.getInstance(this.mockMvc);
     }
     @Test
     public void getAdminTokenTest() {
         String accessToken = "";
         try {
-            accessToken = obtainAccessToken("user3@user.com", "user3");
+            accessToken = tokenGetter.obtainAccessToken("user3@user.com", "user3");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +66,7 @@ public class TokenTest {
     public void getTeacherTokenTest() {
         String accessToken = "";
         try {
-            accessToken = obtainAccessToken("user2@user.com", "user2");
+            accessToken = tokenGetter.obtainAccessToken("user2@user.com", "user2");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,32 +77,11 @@ public class TokenTest {
     public void getStudentTokenTest() {
         String accessToken = "";
         try {
-            accessToken = obtainAccessToken("user@user.com", "user");
+            accessToken = tokenGetter.obtainAccessToken("user@user.com", "user");
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("token:" + accessToken);
         assertTrue(accessToken.length() > 0);
-    }
-
-    private String obtainAccessToken(String username, String password) throws Exception {
-
-        LinkedList<BasicNameValuePair> componentList = new LinkedList<>();
-        componentList.add(new BasicNameValuePair("grant_type", "password"));
-        componentList.add(new BasicNameValuePair("username", username));
-        componentList.add(new BasicNameValuePair("password", password));
-
-
-        ResultActions result
-                = mockMvc.perform(post("/oauth/token")
-                .content(EntityUtils.toString(new UrlEncodedFormEntity(componentList)))
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .with(httpBasic("mmapp", "mmapp"))).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
-
-        String resultString = result.andReturn().getResponse().getContentAsString();
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(resultString).get("access_token").toString();
     }
 }
