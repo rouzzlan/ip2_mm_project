@@ -14,7 +14,8 @@ import java.util.List;
 
 @Service
 @Transactional
-public class    InstrumentService {
+public class InstrumentService {
+
     @Autowired
     InstrumentRepository instrumentRepository;
 

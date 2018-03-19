@@ -36,6 +36,8 @@ public class EventService {
 
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
+    //TODO opkuisen van hele klasse
+
     public Event getEvent(String name) throws EventNotFoundException {
         Event event = eventRepository.findByName(name);
         if (event != null) {
