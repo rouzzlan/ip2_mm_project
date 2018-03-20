@@ -4,7 +4,6 @@ import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.lesson.repo.*;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
-import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +79,8 @@ public class LessonService {
         return lessonRepository.findAll();
     }
 
-    public List<Lesson> getLessonsFromUser(long id) {
-        User user = userRepository.findOne(id);
+    public List<Lesson> getLessonsFromUser(String email) {
+        User user = userRepository.findByEmail(email);
         List<Lesson> lessons = attenderRepository.getLessonidsFor(user);
         if (lessons == null) {
             return Collections.emptyList();
@@ -114,11 +113,10 @@ public class LessonService {
         attenderRepository.save(attender);
     }
 
-    public void addStudentToLesson(String role, String userid, String lessonid) {
-        long useridLong = Long.parseLong(userid);
+    public void addStudentToLesson(String role, String email, String lessonid) {
         long lessonidLong = Long.parseLong(lessonid);
 
-        User user = userRepository.findOne(useridLong);
+        User user = userRepository.findByEmail(email);
         Lesson lesson = lessonRepository.findOne(lessonidLong);
 
         attenderRepository.save(new Attender(role, user, lesson));
