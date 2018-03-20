@@ -11,6 +11,7 @@ import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 import be.kdg.musicmaker.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.model.*;
+import be.kdg.musicmaker.musiclib.util.LanguagesImporter;
 import be.kdg.musicmaker.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class SeedData {
@@ -213,6 +215,13 @@ public class SeedData {
     }
 
     private void seedMuziekstukken() throws URISyntaxException, IOException {
+        if(musicLibService.isLanguagesEmpty()){
+            LanguagesImporter languagesImporter = new LanguagesImporter();
+            List<Language> languageList = languagesImporter.getLanguagesList();
+            musicLibService.updateLanguageList(languageList);
+
+            LOG.info("Languages added");
+        }
         if (musicLibService.isMusicLibEmpty()) {
             ClassLoader classLoader = getClass().getClassLoader();
             File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
@@ -224,21 +233,24 @@ public class SeedData {
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
-//
+
             // 2e musicfile
+            Language language = musicLibService.getLanguage("English");
             musicFile = new File(classLoader.getResource("musicFiles/how_to_save_a_life_-_the_fray.mp3").toURI());
             fileArray = Files.readAllBytes(musicFile.toPath());
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("The fray");
             musicPiece1.setTitle("How to save a life");
+            musicPiece1.setLanguage(language);
             musicPiece1.setMusicFile(musicFile.getName(), fileArray);
             File partituur = new File(classLoader.getResource("partituren/How_To_Save_A_Life_-_The_Fray.mxl").toURI());
             fileArray = Files.readAllBytes(partituur.toPath());
             musicPiece1.setPartituurFile(partituur.getName(), fileArray);
 
             musicLibService.addMusicPiece(musicPiece1);
+
+            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
 //
-//            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
         }
 
     }

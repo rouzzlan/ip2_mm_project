@@ -1,7 +1,9 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.model.Language;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
+import be.kdg.musicmaker.musiclib.repo.LanguagesRepository;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -18,9 +20,14 @@ import java.util.List;
 
 @Service
 public class MusicLibraryService {
-    @Autowired
-    MusicLibraryRepository musicLibraryRepository;
+    private MusicLibraryRepository musicLibraryRepository;
 
+    private LanguagesRepository languagesRepository;
+    @Autowired
+    public MusicLibraryService(MusicLibraryRepository musicLibraryRepository, LanguagesRepository languagesRepository) {
+        this.musicLibraryRepository = musicLibraryRepository;
+        this.languagesRepository = languagesRepository;
+    }
 
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
@@ -29,6 +36,13 @@ public class MusicLibraryService {
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
         mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile musicFile, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPiece, MusicPiece.class);
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
@@ -94,14 +108,26 @@ public class MusicLibraryService {
         mapDTO(musicPieceDTO, musicPiece);
         musicLibraryRepository.save(musicPiece);
     }
+    public boolean isLanguagesEmpty() {
+        return musicLibraryRepository.count() == 0;
+    }
+
+    public Language getLanguage(String language) {
+        return languagesRepository.findLanguageByLanguageName(language);
+    }
+
+    public void updateLanguageList(List<Language> languages) {
+        languagesRepository.save(languages);
+    }
 
     private void mapDTO(MusicPieceDTO dtoObject, MusicPiece object) {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPieceDTO.class, MusicPiece.class).
                 mapNulls(false)
-                .exclude("id").
-                byDefault().
-                register();
+                .exclude("id")
+                .exclude("language")
+                .byDefault()
+                .register();
         mapperFactory.getMapperFacade().map(dtoObject, object);
     }
 
@@ -109,9 +135,10 @@ public class MusicLibraryService {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
                 mapNulls(false).
-                mapNullsInReverse(false).
-                byDefault().
-                register();
+                mapNullsInReverse(false)
+                .exclude("language")
+                .byDefault()
+                .register();
         return mapperFactory.getMapperFacade().map(s, type);
     }
 }
