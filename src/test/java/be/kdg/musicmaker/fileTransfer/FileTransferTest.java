@@ -3,7 +3,7 @@ package be.kdg.musicmaker.fileTransfer;
 import be.kdg.musicmaker.MMAplication;
 import be.kdg.musicmaker.libraries.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.libraries.musiclib.MusicPieceDTO;
-import be.kdg.musicmaker.model.MusicPiece;
+import be.kdg.musicmaker.libraries.musiclib.MusicPiece;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.user.UserService;
 import be.kdg.musicmaker.util.TokenGetter;
@@ -51,7 +51,7 @@ public class FileTransferTest {
     private static String ACCESS_TOKEN_Admin = "";
     private ObjectMapper objectMapper = new ObjectMapper();
     private ClassLoader classLoader;
-    private File motzartMusicFile, shuberMusicFile, compactMUsicFile;
+    private File motzartMusicFile, shuberMusicFile, compactMUsicFile, partituurFile;
     private MockMultipartFile shuberMusicFileMultipartMock, miniMusicMultiPartMock;
     private MusicPieceDTO shubertMusicPiece, miniMusicPiece;
     private final String existingMusicPieceName = "Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence";
@@ -98,6 +98,12 @@ public class FileTransferTest {
         motzartMusicFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa.mp3");
         FileUtils.writeByteArrayToFile(motzartMusicFile, data);
 
+
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        data = Files.readAllBytes(path);
+        partituurFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray.mxl");
+        FileUtils.writeByteArrayToFile(partituurFile, data);
+
         //schubert musicpiece
         shuberMusicFileMultipartMock = fileToMultipartFile(shuberMusicFile);
         shubertMusicPiece = new MusicPieceDTO();
@@ -120,6 +126,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
     }
 
+
     @Test
     public void testDownloadFileContent() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
@@ -127,9 +134,21 @@ public class FileTransferTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
         byte[] byteArray = result.getResponse().getContentAsByteArray();
+        tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa3.mp3");
+        FileUtils.writeByteArrayToFile(tempFile, byteArray);
+        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
+    }
+
+    @Test
+    public void testDownloadFileContentByMusicPieceId() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/1")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
         tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa2.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
-        assertEquals(FileUtils.checksumCRC32(tempFile), FileUtils.checksumCRC32(motzartMusicFile));
+        assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
     }
 
     @Test
@@ -168,7 +187,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
 
         byte[] byteArray = result.getResponse().getContentAsByteArray();
-        Assert.assertArrayEquals( miniMusicMultiPartMock.getBytes(), byteArray );
+        Assert.assertArrayEquals(miniMusicMultiPartMock.getBytes(), byteArray);
     }
 
 
@@ -229,7 +248,7 @@ public class FileTransferTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("MusicPiece", musicPieceDTO.getTitle())).andReturn();
 
-        Long id = Long.parseLong( result.getResponse().getHeader("musicPieceId"));
+        Long id = Long.parseLong(result.getResponse().getHeader("musicPieceId"));
 
         MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/musicpiece/submit/file/" + id)
@@ -241,7 +260,7 @@ public class FileTransferTest {
     @Test
     public void updateMusicPieceTest() throws Exception {
         final long musicPieceId = 1;
-        MvcResult result = this.mockMvc.perform(get("/music_library/musicpiece/"+musicPieceId)
+        MvcResult result = this.mockMvc.perform(get("/music_library/musicpiece/" + musicPieceId)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
@@ -252,13 +271,29 @@ public class FileTransferTest {
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         MusicPieceDTO mp = mapperFacade.map(musicPieceDTO, MusicPieceDTO.class);
         //Object terug posten
-        this.mockMvc.perform(patch("/music_library/update/musicpiece/"+musicPieceId)
+        this.mockMvc.perform(patch("/music_library/update/musicpiece/" + musicPieceId)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(mp)))
                 .andExpect(status().isOk());
         MusicPiece musicPiece = service.getMusicPiecesById(musicPieceId);
         String artist = musicPiece.getArtist();
         Assert.assertTrue("Michael Jackson".equalsIgnoreCase(artist));
+    }
+
+    @Test
+    public void getPartituurTest() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/get_partituur_file/2")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "inline; filename=" + "How_To_Save_A_Life_-_The_Fray.mxl"))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+
+        File receivedFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2.mxl");
+        FileUtils.writeByteArrayToFile(receivedFile, byteArray);
+        assertEquals(FileUtils.checksumCRC32(partituurFile), FileUtils.checksumCRC32(receivedFile));
     }
 
     private MockMultipartFile fileToMultipartFile(File file) throws IOException {

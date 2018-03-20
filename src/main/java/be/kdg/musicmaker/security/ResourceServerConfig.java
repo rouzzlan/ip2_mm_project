@@ -14,14 +14,21 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/register").permitAll()
-                .antMatchers("/confirm").permitAll()
-                .antMatchers("/private/**", "/lesson/types").hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
-                .antMatchers("/getRoles").hasRole("LEERLING")
+
+                //account
+                .antMatchers("/account/**").permitAll()
+
+                .antMatchers("/getroles").hasRole("LEERLING")
+
+
+                .antMatchers("/private/**", "/lesson/add", "/lesson/update", "/lesson/delete", "/lesson",
+                        "/lesson/types", "/lesson/student/add", "/lesson/exercise/student/add")
+                .hasAnyRole("LESGEVER","BEHEERDER") //.hasAnyAuthority("ROLE_BEHEERDER","ROLE_LESGEVER")
+
                 .antMatchers("/adduser", "/getusers", "/addinstrument","/editinstrument/{id}","/deleteinstrument/{id}"
                         ,"/lesson/types/add", "/lesson/types/update", "/lesson/types/delete")
                 .hasRole("BEHEERDER")       //.hasAuthority("ROLE_BEHEERDER") // single auth acces
-                                                                                                // .hasRole("BEHEERDER")         // single auth access
+                .antMatchers("/lesson/mine").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())
                 .and()

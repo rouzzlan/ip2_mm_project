@@ -1,6 +1,6 @@
 package be.kdg.musicmaker.model;
 
-import be.kdg.musicmaker.lesson.LessonTypeDTO;
+import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 
 import javax.persistence.*;
 
@@ -10,6 +10,7 @@ public class LessonType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private double price;
     private String instrument;
     private String description;

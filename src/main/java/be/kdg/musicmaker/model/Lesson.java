@@ -1,7 +1,9 @@
 package be.kdg.musicmaker.model;
 
+import be.kdg.musicmaker.lesson.dto.LessonDTO;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Lesson")
@@ -13,24 +15,23 @@ public class Lesson {
     private int time; // duurtijd
     private double price;
     private String state;
+    private LocalDateTime date;
 
-//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-//    private Playlist playlist;
-//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-//    private LessonType lessonType;
-//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-//    private ClassMoment classMoment;
-//    @ManyToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
-//    private SeriesOfLessons seriesOfLessons;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Playlist playlist;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private LessonType lessonType;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private SeriesOfLessons seriesOfLessons;
 
-    public Lesson(int time, double price, String state, Playlist playlist, LessonType lessonType, ClassMoment classMoment, SeriesOfLessons seriesOfLessons) {
-        this.time = time;
-        this.price = price;
-        this.state = state;
-//        this.playlist = playlist;
-//        this.lessonType = lessonType;
-//        this.classMoment = classMoment;
-//        this.seriesOfLessons = seriesOfLessons;
+    public Lesson(LessonDTO lessonDTO) {
+        this.date = LocalDateTime.parse(lessonDTO.getDate());
+        this.time = lessonDTO.getTime();
+        this.price = lessonDTO.getPrice();
+        this.state = lessonDTO.getState();
+        this.playlist = lessonDTO.getPlaylist();
+        this.lessonType = lessonDTO.getLessonType();
+        this.seriesOfLessons = lessonDTO.getSeriesOfLessons();
     }
 
     public Lesson() {
@@ -63,36 +64,36 @@ public class Lesson {
     public void setState(String state) {
         this.state = state;
     }
-//
-//    public Playlist getPlaylist() {
-//        return playlist;
-//    }
-//
-//    public void setPlaylist(Playlist playlist) {
-//        this.playlist = playlist;
-//    }
-//
-//    public LessonType getLessonType() {
-//        return lessonType;
-//    }
-//
-//    public void setLessonType(LessonType lessonType) {
-//        this.lessonType = lessonType;
-//    }
-//
-//    public ClassMoment getClassMoment() {
-//        return classMoment;
-//    }
-//
-//    public void setClassMoment(ClassMoment classMoment) {
-//        this.classMoment = classMoment;
-//    }
-//
-//    public SeriesOfLessons getSeriesOfLessons() {
-//        return seriesOfLessons;
-//    }
-//
-//    public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
-//        this.seriesOfLessons = seriesOfLessons;
-//    }
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
+
+    public LessonType getLessonType() {
+        return lessonType;
+    }
+
+    public void setLessonType(LessonType lessonType) {
+        this.lessonType = lessonType;
+    }
+
+    public SeriesOfLessons getSeriesOfLessons() {
+        return seriesOfLessons;
+    }
+
+    public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
+        this.seriesOfLessons = seriesOfLessons;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 }

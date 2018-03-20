@@ -69,7 +69,7 @@ public class RegisterUser {
             e.printStackTrace();
         }
         try {
-            this.mockMvc.perform(post("/register")
+            this.mockMvc.perform(post("/account/register")
                     .contentType(MediaType.APPLICATION_JSON).content(jsonString)).andDo(print())
                     .andExpect(status().isCreated());
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class RegisterUser {
             token = user.getConfirmationToken();
 
             //do confirm request with token
-            this.mockMvc.perform(get("/confirm").param("token", token))
+            this.mockMvc.perform(get("/account/confirm").param("token", token))
                     .andExpect(status().isOk());
 
             user = userService.findByConfirmationToken(token);

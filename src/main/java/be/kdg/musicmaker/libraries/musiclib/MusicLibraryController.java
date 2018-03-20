@@ -1,6 +1,5 @@
 package be.kdg.musicmaker.libraries.musiclib;
 
-import be.kdg.musicmaker.model.MusicPiece;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -52,6 +51,31 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
+    @RequestMapping(value = "/get_music_piece/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Resource getSteamingFile(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        MusicPiece musicPiece = musicLibraryService.getMusicPiecesById(id);
+
+        File file = new File(musicPiece.getFileName());
+        FileUtils.writeByteArrayToFile(file, musicPiece.getMusicClip());
+        file.deleteOnExit();
+
+
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        return new FileSystemResource(file);
+    }
+
+    @RequestMapping(value = "/get_partituur_file/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody
+    Resource getPartituurFile(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+        File file = musicLibraryService.getPartituur(id);
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        return new FileSystemResource(file);
+    }
 
     @PostMapping(value = "/upload/music_piece")
     @ResponseStatus(HttpStatus.OK)
