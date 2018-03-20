@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    @Query("select e from Event e where e.name = ?1")
+    @Query("select e from Event e where e.title = ?1")
     Event findByName(String event);
 }

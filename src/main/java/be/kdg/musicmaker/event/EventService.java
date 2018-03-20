@@ -42,23 +42,24 @@ public class EventService {
     }
 
     public void createEvent(EventDTO eventDTO) {
-        LocalDateTime ldt = getDateTime(eventDTO.getDateTime());
-        Event event = new Event(eventDTO.getName(),eventDTO.getPlace());
+        LocalDateTime ldt = getDateTime(eventDTO.getStart());
+        Event event = new Event(eventDTO.getTitle(),eventDTO.getPlace());
         event.setBand(getBand(eventDTO.getBand()));
-        event.setDateTime(ldt);
+        event.setStart(ldt);
         eventRepository.save(event);
+        System.out.println(eventRepository.findOne(1L));
     }
 
     //@JsonDeserialize(using = JodaDeserializers.LocalDateDeserializer.class)
     public Event dtoToEvent(EventDTO eventDTO) {
         mapperFactory.classMap(EventDTO.class, Event.class)
-                .exclude("band").exclude("dateTime").register();
+                .exclude("band").exclude("start").register();
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(eventDTO, Event.class);
     }
 
     public EventDTO eventToDto(Event event) {
-        mapperFactory.classMap(Event.class, EventDTO.class).exclude("band").exclude("dateTime");
+        mapperFactory.classMap(Event.class, EventDTO.class).exclude("band").exclude("start");
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(event, EventDTO.class);
     }
@@ -73,11 +74,14 @@ public class EventService {
 
     public List<EventDTO> getEvents() {
         List<Event> events = eventRepository.findAll();
+        for (Event event : events) {
+            System.out.println(event + " ,");
+        }
         List<EventDTO> eventDTOs = new ArrayList<>();
         for (Event event : events) {
             EventDTO eventDTO = eventToDto(event);
             eventDTO.setBand(event.getBand().getName());
-            eventDTO.setDateTime(event.getDateTime().toString());
+            eventDTO.setStart(event.getStart().toString());
             eventDTOs.add(eventDTO);
         }
 
@@ -100,7 +104,7 @@ public class EventService {
         }
         EventDTO eventDTO = eventToDto(event);
         eventDTO.setBand(event.getBand().getName());
-        eventDTO.setDateTime(event.getDateTime().toString());
+        eventDTO.setStart(event.getStart().toString());
         return eventDTO;
     }
 
@@ -140,7 +144,7 @@ public class EventService {
         for (Event event : eventsOfUser) {
             EventDTO eventDTO = eventToDto(event);
             eventDTO.setBand(event.getBand().getName());
-            eventDTO.setDateTime(event.getDateTime().toString());
+            eventDTO.setStart(event.getStart().toString());
             eventDTOs.add(eventDTO);
         }
 
