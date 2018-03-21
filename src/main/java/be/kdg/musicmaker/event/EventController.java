@@ -15,14 +15,24 @@ public class EventController {
     EventService eventService;
 
     @PostMapping(value = "/addevent")
-    public ResponseEntity<String> postEvent(@RequestBody EventDTO eventDTO){
+    public ResponseEntity<String> postEvent(@RequestBody EventDTO eventDTO) {
         eventService.createEvent(eventDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value= "/getevents")
-    public HttpEntity<List<EventDTO>> getEvents(){
+    @GetMapping(value = "/getevents")
+    public HttpEntity<List<EventDTO>> getEvents() {
         return new ResponseEntity<>(eventService.getEventsDTO(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/geteventslessons")
+    public HttpEntity<List<EventLessonDTO>> getEventLessons() {
+        return new ResponseEntity<>(eventService.getEventAndLessons(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/geteventslessonsfromstudent/{id}")
+    public HttpEntity<List<EventLessonDTO>> getEventsLessonsFromUesr(@PathVariable Long id) {
+        return new ResponseEntity<>(eventService.getUserEventsAndLessons(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getevent/{id}")

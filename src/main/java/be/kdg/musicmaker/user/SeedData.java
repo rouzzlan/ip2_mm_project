@@ -1,12 +1,9 @@
 package be.kdg.musicmaker.user;
 
 import be.kdg.musicmaker.band.BandNotFoundException;
-import be.kdg.musicmaker.band.BandRepository;
 import be.kdg.musicmaker.band.BandService;
 import be.kdg.musicmaker.event.EventNotFoundException;
-import be.kdg.musicmaker.event.EventRepository;
 import be.kdg.musicmaker.event.EventService;
-import be.kdg.musicmaker.instrument.InstrumentRepository;
 import be.kdg.musicmaker.instrument.InstrumentService;
 import be.kdg.musicmaker.lesson.dto.LessonDTO;
 import be.kdg.musicmaker.lesson.LessonService;
@@ -247,20 +244,20 @@ public class SeedData {
 
     private void seedEvents() throws BandNotFoundException, EventNotFoundException {
         if (eventService.isEventEmpty()) {
-            event.setDateTime(LocalDateTime.parse("03/06/2018 20:00", formatter));
-            event1.setDateTime(LocalDateTime.parse("29/06/2018 20:00", formatter));
-            event2.setDateTime(LocalDateTime.parse("03/08/2018 20:00", formatter));
-            event3.setDateTime(LocalDateTime.parse("25/03/2018 20:00", formatter));
+            event.setStart(LocalDateTime.parse("03/06/2018 20:00", formatter));
+            event1.setStart(LocalDateTime.parse("29/06/2018 20:00", formatter));
+            event2.setStart(LocalDateTime.parse("03/08/2018 20:00", formatter));
+            event3.setStart(LocalDateTime.parse("25/03/2018 20:00", formatter));
 
             eventService.createEvent(event);
             eventService.createEvent(event1);
             eventService.createEvent(event2);
             eventService.createEvent(event3);
 
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event1.getName().toUpperCase(), event1.getDateTime().toString(), event1.getPlace(), event1.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event2.getName().toUpperCase(), event2.getDateTime().toString(), event2.getPlace(), event2.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event3.getName().toUpperCase(), event3.getDateTime().toString(), event3.getPlace(), event3.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getTitle().toUpperCase(), event.getStart().toString(), event.getPlace(), event.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event1.getTitle().toUpperCase(), event1.getStart().toString(), event1.getPlace(), event1.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event2.getTitle().toUpperCase(), event2.getStart().toString(), event2.getPlace(), event2.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event3.getTitle().toUpperCase(), event3.getStart().toString(), event3.getPlace(), event3.getBand().getName()));
         }
     }
 
@@ -275,14 +272,14 @@ public class SeedData {
     }
 
     private void seedLessons() {
-        lesson1.setDate(LocalDateTime.parse("22/03/2018 13:30", formatter));
-        lesson2.setDate(LocalDateTime.parse("23/03/2018 13:30", formatter));
-        lesson3.setDate(LocalDateTime.parse("22/03/2018 15:30", formatter));
-        lesson4.setDate(LocalDateTime.parse("24/03/2018 13:30", formatter));
-        lesson5.setDate(LocalDateTime.parse("22/03/2018 17:00", formatter));
-        lesson6.setDate(LocalDateTime.parse("23/03/2018 15:30", formatter));
-        lesson7.setDate(LocalDateTime.parse("24/03/2018 13:30", formatter));
-        lesson8.setDate(LocalDateTime.parse("23/03/2018 20:30", formatter));
+        lesson1.setStart(LocalDateTime.parse("22/03/2018 13:30", formatter));
+        lesson2.setStart(LocalDateTime.parse("23/03/2018 13:30", formatter));
+        lesson3.setStart(LocalDateTime.parse("22/03/2018 15:30", formatter));
+        lesson4.setStart(LocalDateTime.parse("24/03/2018 13:30", formatter));
+        lesson5.setStart(LocalDateTime.parse("22/03/2018 17:00", formatter));
+        lesson6.setStart(LocalDateTime.parse("23/03/2018 15:30", formatter));
+        lesson7.setStart(LocalDateTime.parse("24/03/2018 13:30", formatter));
+        lesson8.setStart(LocalDateTime.parse("23/03/2018 20:30", formatter));
 
         lessonService.addLesson(lesson1);
         lessonService.addLesson(lesson2);

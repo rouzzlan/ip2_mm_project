@@ -1,8 +1,10 @@
 package be.kdg.musicmaker.event;
 
 import be.kdg.musicmaker.band.BandRepository;
+import be.kdg.musicmaker.lesson.repositories.LessonRepository;
 import be.kdg.musicmaker.model.Band;
 import be.kdg.musicmaker.model.Event;
+import be.kdg.musicmaker.model.Lesson;
 import be.kdg.musicmaker.model.User;
 import be.kdg.musicmaker.user.UserNotFoundException;
 import be.kdg.musicmaker.user.UserRepository;
@@ -32,6 +34,9 @@ public class EventService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    LessonRepository lessonRepository;
+
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
     public Event doesEventExist(String name) throws EventNotFoundException {
@@ -45,7 +50,7 @@ public class EventService {
 
     public void createEvent(EventDTO eventDTO) {
         LocalDateTime ldt = getDateTime(eventDTO.getStart());
-        Event event = new Event(eventDTO.getTitle(),eventDTO.getPlace());
+        Event event = new Event(eventDTO.getTitle(), eventDTO.getPlace());
         event.setBand(getBand(eventDTO.getBand()));
         event.setStart(ldt);
         eventRepository.save(event);
@@ -73,22 +78,22 @@ public class EventService {
     public void createBand(Band band) {
         bandRepository.save(band);
     }
-
-    public List<EventDTO> getEvents() {
-        List<Event> events = eventRepository.findAll();
-        for (Event event : events) {
-            System.out.println(event + " ,");
-        }
-        List<EventDTO> eventDTOs = new ArrayList<>();
-        for (Event event : events) {
-            EventDTO eventDTO = eventToDto(event);
-            eventDTO.setBand(event.getBand().getName());
-            eventDTO.setStart(event.getStart().toString());
-            eventDTOs.add(eventDTO);
-        }
-
-        return eventDTOs;
-    }
+//
+//    public List<EventDTO> getEvents() {
+//        List<Event> events = eventRepository.findAll();
+//        for (Event event : events) {
+//            System.out.println(event + " ,");
+//        }
+//        List<EventDTO> eventDTOs = new ArrayList<>();
+//        for (Event event : events) {
+//            EventDTO eventDTO = eventToDto(event);
+//            eventDTO.setBand(event.getBand().getName());
+//            eventDTO.setStart(event.getStart().toString());
+//            eventDTOs.add(eventDTO);
+//        }
+//
+//        return eventDTOs;
+//    }
 
     public Event getEvent(Long id) throws EventNotFoundException {
         Event event = eventRepository.findOne(id);
@@ -96,6 +101,10 @@ public class EventService {
             throw new EventNotFoundException();
         }
         return event;
+    }
+
+    public List<Event> getEvents() {
+        return eventRepository.findAll();
     }
 
     public EventDTO getEventDTO(Long id) throws EventNotFoundException {
@@ -107,6 +116,19 @@ public class EventService {
         eventDTO.setBand(event.getBand().getName());
         eventDTO.setStart(event.getStart().toString());
         return eventDTO;
+    }
+
+    public List<EventDTO> getEventsDTO() {
+        List<Event> events = getEvents();
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (Event event : events) {
+            EventDTO eventDTO = eventToDto(event);
+            eventDTO.setBand(event.getBand().getName());
+            eventDTO.setStart(event.getStart().toString());
+            eventDTOs.add(eventDTO);
+        }
+
+        return eventDTOs;
     }
 
     public Band getBand(String bandName) {
@@ -156,5 +178,35 @@ public class EventService {
         return eventRepository.findAll().stream().filter(event -> event.getBand()
                 .equals(band))
                 .collect(Collectors.toList());
+    }
+
+    public List<EventLessonDTO> getEventAndLessons() {
+        List<EventLessonDTO> eventLessonDTOs = new ArrayList<>();
+        for (Event event : eventRepository.findAll()) {
+            EventLessonDTO eldto = new EventLessonDTO(event.getTitle(), event.getStart().toString(), "green");
+            eventLessonDTOs.add(eldto);
+        }
+
+        for (Lesson lesson : lessonRepository.findAll()) {
+            EventLessonDTO eldto = new EventLessonDTO(lesson.getTitle(), lesson.getStart().toString(), "blue");
+            eventLessonDTOs.add(eldto);
+        }
+
+        return eventLessonDTOs;
+    }
+
+    public List<EventLessonDTO> getUserEventsAndLessons(Long id) {
+        List<EventLessonDTO> eventLessonDTOs = new ArrayList<>();
+        for (Event event: eventRepository.findByBand_Teacher(userRepository.findOne(id))) {
+            EventLessonDTO eldto = new EventLessonDTO(event.getTitle(), event.getStart().toString(), "green");
+            eventLessonDTOs.add(eldto);
+        }
+//
+//        for (Lesson lesson : lessonRepository.findById(id)) {
+//            EventLessonDTO eldto = new EventLessonDTO(lesson.getTitle(), lesson.getStart().toString(), "blue");
+//            eventLessonDTOs.add(eldto);
+//        }
+
+        return eventLessonDTOs;
     }
 }

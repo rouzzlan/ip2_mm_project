@@ -15,7 +15,8 @@ public class Lesson {
     private int time; // duurtijd
     private double price;
     private String state;
-    private LocalDateTime date;
+    private LocalDateTime start;
+    private String title;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Playlist playlist;
@@ -25,13 +26,14 @@ public class Lesson {
     private SeriesOfLessons seriesOfLessons;
 
     public Lesson(LessonDTO lessonDTO) {
-        this.date = LocalDateTime.parse(lessonDTO.getDate());
+        this.start = LocalDateTime.parse(lessonDTO.getDate());
         this.time = lessonDTO.getTime();
         this.price = lessonDTO.getPrice();
         this.state = lessonDTO.getState();
         this.playlist = lessonDTO.getPlaylist();
         this.lessonType = lessonDTO.getLessonType();
         this.seriesOfLessons = lessonDTO.getSeriesOfLessons();
+        this.title = lessonDTO.getLessonType().getName();
     }
 
     public Lesson() {
@@ -89,11 +91,19 @@ public class Lesson {
         this.seriesOfLessons = seriesOfLessons;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
