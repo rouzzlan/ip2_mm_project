@@ -50,6 +50,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 //BAND
                 .antMatchers("/band/**").authenticated()
 
+                //todo tijdig voor te testen toegevoegd
+                //Chat
+                .antMatchers("/chatjs").permitAll()
+                .antMatchers("//app/chat/**").permitAll()
+                .antMatchers("/topic/chat/**").permitAll()
+
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())
                 .and()
