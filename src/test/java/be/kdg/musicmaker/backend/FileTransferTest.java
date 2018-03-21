@@ -231,7 +231,7 @@ public class FileTransferTest {
     }
 
     @Test
-    public void muiscFileUploadInSteps() throws Exception {
+    public void musicFileUploadInSteps() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
         musicPieceDTO.setArtist("Test2");
         musicPieceDTO.setTitle("Test Music piece");
