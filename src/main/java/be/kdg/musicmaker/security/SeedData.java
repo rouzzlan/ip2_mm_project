@@ -54,6 +54,20 @@ public class SeedData {
     private Instrument instrument3 = new Instrument("gitaar", "klassiek", InstrumentSort.SNAAR, "6 snaren");
     private Instrument instrument4 = new Instrument("ukelele", "klassiek", InstrumentSort.SNAAR, "5 snaren");
 
+    //MUSICPIECES
+    private Language l = new Language("Engels");
+    private MusicPiece musicpiece = new MusicPiece("Sweet Home Alabama", "Lynyrd Skynyrd", l, "Love",    " [D]Big[Cadd9] wheels [G]keep on turning\n[D]Carry [Cadd9] me home [G]to see my kin\n[D]Singing[Cadd9]  songs [G]about the south land\n[D]I miss [Cadd9] 'ole' [G]'bamy once again and I think it's a sin\n\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]\n\n[D]Well I heard [Cadd9] Mr. Young [G]sing about her\n[D]Well I heard [Cadd9] old Neil [G]put her down\n[D]Well I hope Neil[Cadd9]  [G]Young will remember\n[D]A southern[Cadd9]  man don’t [G]need him around, anyhow\n\n[D]Sweet [Cadd9] home Alabama[D], [Cadd9] where [G]the skies are so blue\n[D]Sweet [Cadd9] home Alabama, lord I’m [Cadd9] coming [G]home to you.\n\n[F] [C]\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]\n\n[D]In Birmin[Cadd9] gham they [G]love the [F]Gov'nor, [C]boo-hoo[D]-hoo\n[D]Now we all [Cadd9] did what [G]we could do\n[D]Now water[Cadd9] gate [G]doesn't bother me\n[D]Does you [Cadd9] conscience [G]bother you, (now tell the truth!)\n\n[D]Sweet [Cadd9] home [G]Alabama[D], where the skies [G]are so blue\n[D]Sweet [Cadd9] home [G]Alabama[D], lord I’m coming [G]home to you. Here I come\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n   [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n\n[D]Now [Cadd9]Muscle Shoals has got the[G] Swappers\n[D] And they've been known to pick a song or [G]two (yes we do)\n[D]Lord they get me off so [G]much\n[D]They pick me up when I'm feeling [G]blue, Now how about you?\n\n[D]Sweet [Cadd9]home [D]Alab[G]ama, where the[Cadd9] skies are so [G]blue\n[D]Sweet [Cadd9]home [D]Alab[G]ama, lord I’m[Cadd9] coming home to [G]you\n\n[D]Sweet [Cadd9]home Alab[G]ama (Oh sweet home baby)\n[D]Where the [Cadd9]skies are so [G]blue (And the governor's true)\n[D]Sweet [Cadd9]Home Alab[G]ama, (Lord, yeah)\n[D]Lord, I'm [Cadd9]coming home to [G]you\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]", "rock", "gitaarakkoorden", "https://www.youtube.com/watch?v=2fntQxhkht4","akkoord","easy",null,null);
+    private MusicPiece musicpiece1 = new MusicPiece("Havana","Camilla Cabello", l,"Longing", "test[a]", "Pop","gitaarakkoorden", "https://www.youtube.com/watch?v=6tEZoZOh8MM", "akkoord","easy",null,null);
+    private MusicPiece musicpiece2 = new MusicPiece("You'll be in my heart", "Phil Collins", l, "Disney",null, "Pop","pianoakkoorden", null, "muziekstuk","average","../../../../../../resources/musicFiles/Youll_Be_In_My_Heart.mp3","../../../../../../resources/musicFiles/Youll_Be_In_My_Heart.mxl");
+/*    private MusicPiece musicpiece3 = new MusicPiece();
+    private MusicPiece musicpiece4 = new MusicPiece();
+    private MusicPiece musicpiece5 = new MusicPiece();
+    private MusicPiece musicpiece6 = new MusicPiece();*/
+
+
+
+
+
     //BANDS
     private Band band = new Band("The X-Nuts");
     private Band band1 = new Band("Band1");
@@ -118,6 +132,7 @@ public class SeedData {
         seedLessonTypes();
         seedLessons();
         addStudentsoLessons();
+        seedMusicPieces();
     }
 
     private void seedRoles() {
@@ -213,6 +228,27 @@ public class SeedData {
             LOG.info(String.format("%-6s ADDED ", instrument4.getName()));
         }
     }
+
+   private void seedMusicPieces(){
+        if(musicLibService.isMusicLibEmpty()){
+            musicLibService.addMusicPiece(musicpiece);
+            musicLibService.addMusicPiece(musicpiece1);
+            musicLibService.addMusicPiece(musicpiece2);
+         /*   musicLibService.addMusicPiece(musicpiece3);
+            musicLibService.addMusicPiece(musicpiece4);
+            musicLibService.addMusicPiece(musicpiece5);
+            musicLibService.addMusicPiece(musicpiece6);*/
+        }
+       LOG.info(String.format("%-6s ADDED ", musicpiece.getTitle()));
+       LOG.info(String.format("%-6s ADDED ",  musicpiece1.getTitle()));
+       LOG.info(String.format("%-6s ADDED ",  musicpiece2.getTitle()));
+      /* LOG.info(String.format("%-6s ADDED ", musicpiece3.getTitle()));
+       LOG.info(String.format("%-6s ADDED ", musicpiece4.getTitle()));
+       LOG.info(String.format("%-6s ADDED ", musicpiece5.getTitle()));
+       LOG.info(String.format("%-6s ADDED ", musicpiece6.getTitle()));*/
+
+   }
+
 
     private void seedMuziekstukken() throws URISyntaxException, IOException {
         if(musicLibService.isLanguagesEmpty()){

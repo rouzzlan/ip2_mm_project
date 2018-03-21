@@ -50,6 +50,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 //BAND
                 .antMatchers("/band/**").authenticated()
 
+                //SEARCHBAR
+                .antMatchers("/search").authenticated()
+
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())
                 .and()

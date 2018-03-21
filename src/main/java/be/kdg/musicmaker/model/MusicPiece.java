@@ -19,7 +19,18 @@ public class MusicPiece {
     @JoinColumn(name="language_id")
     private Language language;
     private String topic;
-
+    @Column(name="chord_text")
+    private String chordText;
+    @Column(name="genre")
+    private String genre;
+    @Column(name="music_instrumentType")
+    private String instrumentType;
+    @Column(name="music_youtube")
+    private String youtubeUrl;
+    @Column(name="music_typeofpiece")
+    private String musicType;
+    @Column(name="music_difficulty")
+    private String difficulty;
     @Lob
     @Column(name = "music_file")
     private byte[] musicClip;
@@ -32,8 +43,29 @@ public class MusicPiece {
     @Column(name = "partituur_file")
     private byte[] partiturBinary;
 
+
     public MusicPiece() {
     }
+
+
+    public MusicPiece(String title, String artist, Language language, String topic, String chordText, String genre, String instrumentType, String youtubeUrl, String musicType, String difficulty,String fileName, String partituurFileName) {
+        this.title = title;
+        this.artist = artist;
+        this.language = language;
+        this.topic = topic;
+        this.chordText = chordText;
+        this.genre = genre;
+        this.instrumentType = instrumentType;
+        this.youtubeUrl = youtubeUrl;
+        this.musicType = musicType;
+        this.difficulty = difficulty;
+        this.musicClip = musicClip;
+        this.fileName = fileName;
+        this.partituurFileName = partituurFileName;
+        this.partiturBinary = partiturBinary;
+    }
+
+
 
     public String getTitle() {
         return title;
@@ -97,4 +129,4 @@ public class MusicPiece {
     public byte[] getPartiturBinary() {
         return partiturBinary;
     }
-}
+    }
