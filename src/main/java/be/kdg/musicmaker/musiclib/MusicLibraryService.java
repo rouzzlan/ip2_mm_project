@@ -43,6 +43,24 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
         return mp;
     }
+    public void addMusicPieceEnPartituur(MusicPieceDTO musicPieceDTO, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
+    public void addMusicPieceEnMusicFile(MusicPieceDTO musicPieceDTO, MultipartFile musicFile) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
+    public void addMusicPieceFull(MusicPieceDTO musicPieceDTO, MultipartFile musicFile, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setMusicFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
+    }
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
@@ -205,17 +223,5 @@ public class MusicLibraryService {
         MusicPieceRating mpr = map(dto, MusicPieceRating.class);
         musicRatingRepository.save(mpr);
         return mpr;
-    }
-
-    public void addMusicPieceEnPartituur(MusicPieceDTO musicPiecePostDTO, MultipartFile partituur) throws IOException {
-        MusicPiece mp = map(musicPiecePostDTO, MusicPiece.class);
-        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
-        musicLibraryRepository.save(mp);
-    }
-
-    public void addMusicPieceEnMusicFile(MusicPieceDTO musicPiecePostDTO, MultipartFile musicFile) throws IOException {
-        MusicPiece mp = map(musicPiecePostDTO, MusicPiece.class);
-        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
-        musicLibraryRepository.save(mp);
     }
 }

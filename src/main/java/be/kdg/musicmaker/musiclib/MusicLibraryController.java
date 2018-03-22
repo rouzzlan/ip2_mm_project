@@ -3,6 +3,7 @@ package be.kdg.musicmaker.musiclib;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.musiclib.dto.RatingDTO;
+import be.kdg.musicmaker.security.SeedData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -34,7 +35,8 @@ public class MusicLibraryController {
     @Autowired
     MusicLibraryService musicLibraryService;
 
-    private final Logger logger = LoggerFactory.getLogger(MusicLibraryController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MusicLibraryController.class);
+
 
     //ADD
   /*  @PostMapping(value = "/musicpiece/submit")
@@ -154,18 +156,23 @@ public class MusicLibraryController {
                                       @RequestParam(value = "partituur_file", required = false) MultipartFile partituur) {
         try{
             ObjectMapper mapper = new ObjectMapper();
-            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
+            MusicPieceDTO musicPieceDTO = mapper.readValue(info, MusicPieceDTO.class);
             if (musicFile == null && partituur == null){
-                musicLibraryService.addMusicPiece(musicPiecePostDTO);
+                musicLibraryService.addMusicPiece(musicPieceDTO);
+                LOG.info("Muziekstuk zonder file geupload");
                 return HttpStatus.OK;
             }else if (musicFile == null){
-                musicLibraryService.addMusicPieceEnPartituur(musicPiecePostDTO, partituur);
+                musicLibraryService.addMusicPieceEnPartituur(musicPieceDTO, partituur);
+                LOG.info("Muziekstuk met partituur geupload");
                 return HttpStatus.OK;
             }else if (partituur == null){
-                musicLibraryService.addMusicPieceEnMusicFile(musicPiecePostDTO, musicFile);
+                musicLibraryService.addMusicPieceEnMusicFile(musicPieceDTO, musicFile);
+                LOG.info("Muziekstuk met muziek file geupload");
                 return HttpStatus.OK;
             }else {
-                return HttpStatus.BAD_REQUEST;
+                musicLibraryService.addMusicPieceFull(musicPieceDTO, musicFile, partituur);
+                LOG.info("Muziekstuk compleet geupload");
+                return HttpStatus.OK;
             }
         }catch (IOException e){
             return HttpStatus.BAD_REQUEST;
