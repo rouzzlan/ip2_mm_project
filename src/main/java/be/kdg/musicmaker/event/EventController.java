@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.event;
 
 import be.kdg.musicmaker.event.dto.EventDTO;
+import be.kdg.musicmaker.event.dto.EventLessonDTO;
 import be.kdg.musicmaker.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -25,6 +26,16 @@ public class EventController {
     @GetMapping(value= "/get")
     public HttpEntity<List<EventDTO>> getEvents(){
         return new ResponseEntity<>(eventService.getEventsDTO(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/geteventslessons")
+    public HttpEntity<List<EventLessonDTO>> getEventLessons() {
+        return new ResponseEntity<>(eventService.getEventAndLessons(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/geteventslessonsfromstudent/{id}")
+    public HttpEntity<List<EventLessonDTO>> getEventsLessonsFromUesr(@PathVariable Long id) {
+        return new ResponseEntity<>(eventService.getUserEventsAndLessons(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/id/{id}")

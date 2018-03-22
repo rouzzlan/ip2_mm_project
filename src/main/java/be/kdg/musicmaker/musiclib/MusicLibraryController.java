@@ -80,13 +80,13 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
             musicLibraryService.addMusicPiece(musicPiecePostDTO, file);
-            return HttpStatus.OK;
+            return HttpStatus.CREATED;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;
         }

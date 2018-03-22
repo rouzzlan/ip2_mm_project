@@ -163,7 +163,7 @@ public class FileTransferTest {
                 .file(file)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -177,7 +177,7 @@ public class FileTransferTest {
                 .file(miniMusicMultiPartMock)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
                 .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
@@ -231,7 +231,7 @@ public class FileTransferTest {
     }
 
     @Test
-    public void muiscFileUploadInSteps() throws Exception {
+    public void musicFileUploadInSteps() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
         musicPieceDTO.setArtist("Test2");
         musicPieceDTO.setTitle("Test Music piece");

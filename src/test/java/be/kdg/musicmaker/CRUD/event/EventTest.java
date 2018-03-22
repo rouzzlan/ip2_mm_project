@@ -1,9 +1,9 @@
 package be.kdg.musicmaker.CRUD.event;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.event.dto.EventDTO;
 import be.kdg.musicmaker.event.EventNotFoundException;
 import be.kdg.musicmaker.event.EventService;
+import be.kdg.musicmaker.event.dto.EventDTO;
 import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
@@ -72,7 +72,8 @@ public class EventTest {
 
             localDateTime = LocalDateTime.now();
 
-            eventDTO = new EventDTO("testEvent", LocalDateTime.now().toString(), "KdG", "The X-Nuts");
+            eventDTO = new EventDTO("testEvent", "2018-03-22T18:46", "KdG", "The X-Nuts");
+
             ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
             ACCESS_TOKEN_Student = tokenGetter.obtainAccessToken("user@user.com", "user");
             ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
@@ -104,7 +105,7 @@ public class EventTest {
             e.printStackTrace();
         }
 
-        Event event = eventService.getEvent("testEvent");
+        Event event = eventService.doesEventExist("testEvent");
         assertNotNull(event);
     }
 
@@ -117,23 +118,23 @@ public class EventTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andReturn();
 
         List<EventDTO> result = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
-        assertEquals(result.get(0).getName(), "SportPladijsje");
-        assertEquals(result.get(2).getName(), "event2");
+        assertEquals(result.get(0).getTitle(), "SportPladijsje");
+        assertEquals(result.get(2).getTitle(), "event2");
 
         res = mockMvc.perform(get("/event/id/1")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andReturn();
 
         EventDTO result2 = objectMapper.readValue(res.getResponse().getContentAsString(), EventDTO.class);
-        assertEquals(result2.getName(), "SportPladijsje");
+        assertEquals(result2.getTitle(), "SportPladijsje");
 
         res = mockMvc.perform(get("/event/email/user3@user.com")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andReturn();
 
         List<EventDTO> result3 = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
-        assertEquals(result3.get(0).getName(), "SportPladijsje");
-        assertEquals(result3.get(2).getName(), "event2");
+        assertEquals(result3.get(0).getTitle(), "SportPladijsje");
+        assertEquals(result3.get(2).getTitle(), "event2");
     }
 
     //UPDATE
@@ -142,7 +143,7 @@ public class EventTest {
         EventDTO original = new EventDTO("event3", LocalDateTime.now().toString(), "Sportpaleis", "The X-Nuts");
         EventDTO updateDTO = new EventDTO("event3", LocalDateTime.now().toString(), "BijSeppeThuis", "The X-Nuts");
 
-        Event event = eventService.getEvent(original.getName());
+        Event event = eventService.doesEventExist(original.getTitle());
         assertEquals("Sportpaleis", event.getPlace());
 
         mockMvc.perform(put("/event/update")
@@ -152,18 +153,18 @@ public class EventTest {
                 .andDo(print())
                 .andExpect(status().isContinue());
 
-        event = eventService.getEvent(original.getName());
+        event = eventService.doesEventExist(original.getTitle());
         assertEquals("BijSeppeThuis", event.getPlace());
         eventService.updateEvent(original);
-        event = eventService.getEvent(original.getName());
+        event = eventService.doesEventExist(original.getTitle());
         assertEquals("Sportpaleis", event.getPlace());
     }
 
     //DELETE
     @Test
     public void DeleteEventAsAdmin() throws Exception {
-        Event original = eventService.getEvent("event3");
-        EventDTO originalDTO = new EventDTO(original.getName(), original.getDateTime().toString(), original.getPlace(), original.getBand().getName());
+        Event original = eventService.doesEventExist("event3");
+        EventDTO originalDTO = new EventDTO(original.getTitle(), original.getStart().toString(), original.getPlace(), original.getBand().getName());
 
         mockMvc.perform(delete("/event/delete/" + original.getId())
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
@@ -173,12 +174,12 @@ public class EventTest {
 
         Event event = null;
         try {
-            event = eventService.getEvent("event3");
+            event = eventService.doesEventExist("event3");
         } catch (EventNotFoundException e) {
             event = null;
         }
         assertNull(event);
         eventService.createEvent(originalDTO);
-        assertNotNull(eventService.getEvent("event3"));
+        assertNotNull(eventService.doesEventExist("event3"));
     }
 }
