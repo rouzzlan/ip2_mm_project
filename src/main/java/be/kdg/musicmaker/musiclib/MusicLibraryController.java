@@ -203,6 +203,14 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
+    @RequestMapping(value = "/get_music_piece/title", method = GET)
+    public HttpEntity<MusicPieceDTO> getMusicPieceByTitle(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String musicPieceName = request.getParameter("title");
+        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceByTitle(musicPieceName);
+
+        return new ResponseEntity<MusicPieceDTO>(musicPiece, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/get_music_piece/{id}", method = GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getSteamingFile(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {

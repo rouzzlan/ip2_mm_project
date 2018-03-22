@@ -345,31 +345,105 @@ public class FileTransferTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void UploadMusicPieceAndVerifyTest2() throws Exception {
-//        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
-//        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
-//        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-//        musicPieceDTO.setArtist("Test");
-//        musicPieceDTO.setTitle("Test Music piece 222");
-//        musicPieceDTO.setLanguage("English");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
-//                .file(firstFile)
-//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-//                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
-//                .andExpect(status().isOk());
-//
-//
-//        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
-//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-//                .andExpect(status().isOk())
-//                .andExpect(header().string("Content-Disposition",
-//                        "inline; filename=" + firstFile.getOriginalFilename()))
-//                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
-//
-//        byte[] byteArray = result.getResponse().getContentAsByteArray();
-//        Assert.assertArrayEquals(firstFile.getBytes(), byteArray);
-//    }
+    @Test
+    public void UploadMusicPieceAndVerifyTest2() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
+        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test" + rand.nextInt());
+        musicPieceDTO.setTitle("Test Music piece" + rand.nextInt());
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(firstFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+
+
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "inline; filename=" + firstFile.getOriginalFilename()))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        Assert.assertArrayEquals(firstFile.getBytes(), byteArray);
+    }
+
+    @Test
+    public void UploadMusicPieceCompleetEnVerify() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
+        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        MockMultipartFile secondFile = new MockMultipartFile("partituur_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test" + rand.nextInt());
+        musicPieceDTO.setTitle("Test Music piece" + rand.nextInt());
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(firstFile)
+                .file(secondFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+
+
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "inline; filename=" + firstFile.getOriginalFilename()))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+        Assert.assertArrayEquals(firstFile.getBytes(), byteArray);
+    }
+    @Test
+    public void UploadMusicPieceCompleetEnVerifyPartituur() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
+        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        Path path1 = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        MockMultipartFile secondFile = new MockMultipartFile("partituur_file", path1.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path1));
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test" + rand.nextInt());
+        musicPieceDTO.setTitle("Test Music piece" + rand.nextInt());
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(firstFile)
+                .file(secondFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+
+
+        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/title").param("title", musicPieceDTO.getTitle())
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andReturn();
+        MusicPieceDTO musicPieceGetDTOReceived = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceDTO.class);
+
+
+
+
+        result = mockMvc.perform(get("/music_library/get_partituur_file/"+ musicPieceGetDTOReceived.getId())
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Disposition",
+                        "inline; filename=" + secondFile.getOriginalFilename()))
+                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
+
+
+        byte[] byteArray = result.getResponse().getContentAsByteArray();
+
+        File receivedFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2.mxl");
+        FileUtils.writeByteArrayToFile(receivedFile, byteArray);
+        File originalFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2"+rand.nextInt() +".mxl");
+        FileUtils.writeByteArrayToFile(originalFile, secondFile.getBytes());
+        assertEquals(FileUtils.checksumCRC32(originalFile), FileUtils.checksumCRC32(receivedFile));
+    }
 
 }
