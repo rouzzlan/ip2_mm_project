@@ -1,9 +1,7 @@
 package be.kdg.musicmaker.model;
 
-import be.kdg.musicmaker.event.dto.EventDTO;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
+        import javax.persistence.*;
+        import java.time.LocalDateTime;
 
 @Entity
 public class Event {
@@ -12,8 +10,9 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private LocalDateTime dateTime;
+    private String title;
+    // @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime start;
     private String place;
 
     @ManyToOne(cascade = CascadeType.MERGE ,fetch=FetchType.EAGER)
@@ -22,26 +21,20 @@ public class Event {
     public Event() {
     }
 
-    public Event(EventDTO eventDTO) {
-        this.name =eventDTO.getName();
-        this.place = eventDTO.getPlace();
-        this.dateTime = LocalDateTime.parse(eventDTO.getDateTime());
-    }
-
-    public Event(String name, LocalDateTime dateTime, String place, Band band) {
-        this.name = name;
-        this.dateTime = dateTime;
+    public Event(String title, LocalDateTime start, String place, Band band) {
+        this.title = title;
+        this.start = start;
         this.place = place;
         this.band = band;
 
     }
 
-    public Event(String name) {
-        this.name = name;
+    public Event(String title) {
+        this.title = title;
     }
 
-    public Event(String name, String place) {
-        this.name = name;
+    public Event(String title, String place) {
+        this.title = title;
         this.place = place;
     }
     public Long getId() {
@@ -51,21 +44,21 @@ public class Event {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public String getName() {
-        return name;
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 
     public String getPlace() {
@@ -88,12 +81,10 @@ public class Event {
     public String toString() {
         return "Event{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", dateTime=" + dateTime +
+                ", title='" + title + '\'' +
+                ", start=" + start +
                 ", place='" + place + '\'' +
                 ", band=" + band +
                 '}';
     }
 }
-
-

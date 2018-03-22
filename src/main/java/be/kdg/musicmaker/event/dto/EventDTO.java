@@ -2,35 +2,35 @@ package be.kdg.musicmaker.event.dto;
 
 public class EventDTO {
     private Long id;
-    private String name;
-    private String dateTime;
+    private String title;
+    private String start;
     private String place;
     private String band;
 
     public EventDTO() {
     }
 
-    public EventDTO(String name, String dateTime, String place, String band) {
-        this.name = name;
-        this.dateTime = dateTime;
+    public EventDTO(String title, String start, String place, String band) {
+        this.title = title;
+        this.start = start;
         this.place = place;
         this.band = band;
     }
 
-    public EventDTO(Long id, String name, String dateTime, String place, String band) {
+    public EventDTO(Long id, String title, String start, String place, String band) {
         this.id = id;
-        this.name = name;
-        this.dateTime = dateTime;
+        this.title = title;
+        this.start = start;
         this.place = place;
         this.band = band;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPlace() {
@@ -41,12 +41,12 @@ public class EventDTO {
         this.place = place;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getStart() {
+        return start;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setStart(String start) {
+        this.start = start;
     }
 
     public String getBand() {
@@ -60,8 +60,8 @@ public class EventDTO {
     @Override
     public String toString() {
         return "EventDTO{" +
-                "name='" + name + '\'' +
-                ", dateTime=" + dateTime +
+                "title='" + title + '\'' +
+                ", start=" + start +
                 ", place='" + place + '\'' +
                 ", band=" + band +
                 '}';

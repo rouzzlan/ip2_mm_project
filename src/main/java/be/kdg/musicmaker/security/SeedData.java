@@ -245,20 +245,20 @@ public class SeedData {
 
     private void seedEvents() throws BandNotFoundException, EventNotFoundException {
         if (eventService.isEventEmpty()) {
-            event.setDateTime(LocalDateTime.parse("03/06/2018 20:00", formatter));
-            event1.setDateTime(LocalDateTime.parse("29/06/2018 20:00", formatter));
-            event2.setDateTime(LocalDateTime.parse("03/08/2018 20:00", formatter));
-            event3.setDateTime(LocalDateTime.parse("25/03/2018 20:00", formatter));
+            event.setStart(LocalDateTime.parse("03/06/2018 20:00", formatter));
+            event1.setStart(LocalDateTime.parse("29/06/2018 20:00", formatter));
+            event2.setStart(LocalDateTime.parse("03/08/2018 20:00", formatter));
+            event3.setStart(LocalDateTime.parse("25/03/2018 20:00", formatter));
 
             eventService.createEvent(event);
             eventService.createEvent(event1);
             eventService.createEvent(event2);
             eventService.createEvent(event3);
 
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getName().toUpperCase(), event.getDateTime().toString(), event.getPlace(), event.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event1.getName().toUpperCase(), event1.getDateTime().toString(), event1.getPlace(), event1.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event2.getName().toUpperCase(), event2.getDateTime().toString(), event2.getPlace(), event2.getBand().getName()));
-            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event3.getName().toUpperCase(), event3.getDateTime().toString(), event3.getPlace(), event3.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event.getTitle().toUpperCase(), event.getStart().toString(), event.getPlace(), event.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event1.getTitle().toUpperCase(), event1.getStart().toString(), event1.getPlace(), event1.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event2.getTitle().toUpperCase(), event2.getStart().toString(), event2.getPlace(), event2.getBand().getName()));
+            LOG.info(String.format("%-6s ADDED || date: %-15s || place: %-15s || band: %s", event3.getTitle().toUpperCase(), event3.getStart().toString(), event3.getPlace(), event3.getBand().getName()));
         }
     }
 
