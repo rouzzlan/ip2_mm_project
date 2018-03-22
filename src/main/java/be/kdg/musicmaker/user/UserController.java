@@ -20,18 +20,19 @@ public class UserController {
 
     @PostMapping(value = "/add")
     public ResponseEntity<String> postUser(@RequestBody UserDTO user){
+        user.setEnabled(true);
         userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(value = "/id/{id}")
-    public HttpEntity<User> getUser(@PathVariable Long id) throws UserNotFoundException {
-        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+    public HttpEntity<UserDTO> getUser(@PathVariable Long id) throws UserNotFoundException {
+        return new ResponseEntity<>(userService.getUserDTO(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/email/{email:.+}")
-    public HttpEntity<User> getUser(@PathVariable String email) throws UserNotFoundException {
-        return new ResponseEntity<>(userService.getUser(email), HttpStatus.OK);
+    public HttpEntity<UserDTO> getUser(@PathVariable String email) throws UserNotFoundException {
+        return new ResponseEntity<>(userService.getUserDTO(email), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get")

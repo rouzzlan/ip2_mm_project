@@ -1,9 +1,15 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.band.BandNotFoundException;
+import be.kdg.musicmaker.instrument.dto.InstrumentDTO;
+import be.kdg.musicmaker.model.Instrument;
 import be.kdg.musicmaker.model.Language;
 import be.kdg.musicmaker.model.MusicPiece;
+import be.kdg.musicmaker.model.MusicPieceRating;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
+import be.kdg.musicmaker.musiclib.dto.RatingDTO;
 import be.kdg.musicmaker.musiclib.repo.LanguagesRepository;
+import be.kdg.musicmaker.musiclib.repo.MusicLibraryRatingRepository;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -20,17 +26,40 @@ import java.util.List;
 
 @Service
 public class MusicLibraryService {
-    private MusicLibraryRepository musicLibraryRepository;
-
-    private LanguagesRepository languagesRepository;
     @Autowired
-    public MusicLibraryService(MusicLibraryRepository musicLibraryRepository, LanguagesRepository languagesRepository) {
-        this.musicLibraryRepository = musicLibraryRepository;
-        this.languagesRepository = languagesRepository;
-    }
+    private MusicLibraryRepository musicLibraryRepository;
+    @Autowired
+    private MusicLibraryRatingRepository musicRatingRepository;
+    @Autowired
+    private LanguagesRepository languagesRepository;
 
+    //ADD
     public void addMusicPiece(MusicPiece musicPiece) {
         musicLibraryRepository.save(musicPiece);
+    }
+
+    public MusicPiece addMusicPiece(MusicPieceDTO musicPiece) {
+        MusicPiece mp= map(musicPiece, MusicPiece.class);
+        musicLibraryRepository.save(mp);
+        return mp;
+    }
+    public void addMusicPieceEnPartituur(MusicPieceDTO musicPieceDTO, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
+    public void addMusicPieceEnMusicFile(MusicPieceDTO musicPieceDTO, MultipartFile musicFile) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
+    public void addMusicPieceFull(MusicPieceDTO musicPieceDTO, MultipartFile musicFile, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setMusicFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
     }
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
@@ -38,29 +67,52 @@ public class MusicLibraryService {
         mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
         musicLibraryRepository.save(mp);
     }
+
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
-        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
+//        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
+    public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
+        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        return musicLibraryRepository.save(mp).getId();
+    }
+
+    //VIEW
     public List<MusicPiece> getMusicPiecesByTitle(String title) {
         return musicLibraryRepository.findByTitle(title);
     }
 
-    public MusicPieceDTO getMusicPieceDTOById(Long id) {
-        MusicPiece musicPiece = musicLibraryRepository.findOne(id);
-        return map(musicPiece, MusicPieceDTO.class);
+    public MusicPieceDTO getMusicPieceDTOById(Long mpId){
+        MusicPiece musicPieces = musicLibraryRepository.findOne(mpId);
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO = map(musicPieces, MusicPieceDTO.class);
+        return musicPieceDTO;
+        /*List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        for (MusicPiece musicPiece : musicPieces) {
+            if(musicPiece.getId() == mpId){
+                musicPieceDTO = map(musicPiece, MusicPieceDTO.class);
+              //  musicPieceDTO.setMyRating(getYourRating(mpId, userId).getRating());
+                musicPieceDTO.setRating(getAllMprs(mpId));
+                musicPieceDTO.setLanguage(musicPiece.getLanguage().getLanguageName());
+            }
+        }
+       return musicPieceDTO;*/
     }
 
     public MusicPiece getMusicPiecesById(Long id) {
         return musicLibraryRepository.findOne(id);
     }
 
-
-    public Collection<MusicPieceDTO> getMusicPieces() {
+    /**
+     * public List<MusicPiece> getMusicPieces() {
+     return  musicLibraryRepository.findAll();
+     }     */
+    public List<MusicPieceDTO> getMusicPieces() {
         List<MusicPiece> musicPieces = musicLibraryRepository.findAll();
         List<MusicPieceDTO> dtoMusicPieces = new ArrayList<>(musicPieces.size());
         for (MusicPiece musicPiece : musicPieces) {
@@ -70,15 +122,41 @@ public class MusicLibraryService {
         return dtoMusicPieces;
     }
 
-    public boolean isMusicLibEmpty() {
-        return musicLibraryRepository.count() == 0;
+
+    //EDIT
+    public void update(MusicPieceDTO musicPieceDTO, Long id) {
+        MusicPiece musicPiece = musicLibraryRepository.getOne(id);
+        mapDTO(musicPieceDTO, musicPiece);
+        musicLibraryRepository.save(musicPiece);
     }
 
-    public long createMusicPiece(MusicPieceDTO musicPieceDTO) {
-        MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
-        return musicLibraryRepository.save(mp).getId();
+    public void updateRating(RatingDTO ratingDTO) {
+        MusicPieceRating rating = musicRatingRepository.getOne(ratingDTO.getId());
+        musicRatingRepository.save(rating);
+    }
 
+    //RATING
+    public List<RatingDTO> getRatings(Long id) {
+        List<MusicPieceRating> ratings = musicRatingRepository.findAllratings(id);
+        List<RatingDTO> list = new ArrayList<>();
+        for(MusicPieceRating mpr: ratings){
+            RatingDTO dto =map(mpr, RatingDTO.class);
+            list.add(dto);
 
+        }
+        return list;
+    }
+    private Double getAverage(Collection<MusicPieceRating> mprs) {
+        Double count = 0.0;
+        for(MusicPieceRating mpr: mprs){
+            count += mpr.getRating();
+        }
+        return count/ mprs.size();
+    }
+
+    //OTHER
+    public boolean isMusicLibEmpty() {
+        return musicLibraryRepository.count() == 0;
     }
 
     public File getPartituur(Long id) throws IOException {
@@ -95,19 +173,15 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
     }
 
-    public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
+  /*  public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
         if (musicLibraryRepository.exists(id)) {
             musicLibraryRepository.delete(id);
         } else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
-    }
+    }*/
 
-    public void update(MusicPieceDTO musicPieceDTO, Long id) {
-        MusicPiece musicPiece = musicLibraryRepository.getOne(id);
-        mapDTO(musicPieceDTO, musicPiece);
-        musicLibraryRepository.save(musicPiece);
-    }
+
     public boolean isLanguagesEmpty() {
         return musicLibraryRepository.count() == 0;
     }
@@ -136,9 +210,18 @@ public class MusicLibraryService {
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
                 mapNulls(false).
                 mapNullsInReverse(false)
-                .exclude("language")
                 .byDefault()
                 .register();
         return mapperFactory.getMapperFacade().map(s, type);
+    }
+
+
+    public void addRating(MusicPieceRating mpr) {
+        musicRatingRepository.save(mpr);
+    }
+    public MusicPieceRating addRating(RatingDTO dto) {
+        MusicPieceRating mpr = map(dto, MusicPieceRating.class);
+        musicRatingRepository.save(mpr);
+        return mpr;
     }
 }

@@ -28,6 +28,12 @@ public class LessonController {
         return new ResponseEntity<>(lessonService.getLessons(), HttpStatus.OK);
     }
 
+    //region lesson
+    @RequestMapping(method = RequestMethod.GET, value = "/get")
+    public HttpEntity<Lesson> getLesson(@RequestParam String lessonid) {
+        return new ResponseEntity<>(lessonService.getLesson(lessonid), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/mine")
     public HttpEntity<List<Lesson>> getMyLesson(@RequestParam String email) {
         return new ResponseEntity<>(lessonService.getLessonsFromUser(email), HttpStatus.OK);
