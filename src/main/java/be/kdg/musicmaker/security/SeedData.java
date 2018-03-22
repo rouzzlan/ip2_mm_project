@@ -73,14 +73,14 @@ public class SeedData {
     private LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
 
     //LESSONS
-    private Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");

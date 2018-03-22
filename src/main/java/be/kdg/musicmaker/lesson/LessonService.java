@@ -133,4 +133,8 @@ public class LessonService {
 
         exerciseRepository.save(new Exercise(beginTime, deadlineTime, lesson, musicPiece));
     }
+
+    public Lesson getLesson(String lessonid) {
+        return lessonRepository.findOne(Long.parseLong(lessonid));
+    }
 }
