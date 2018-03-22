@@ -18,7 +18,6 @@ public class InstrumentController {
 
     @PostMapping(value = "/add")
     public ResponseEntity postInstrument(@RequestBody InstrumentDTO instrumentDTO) {
-        instrumentService.createInstrument(instrumentDTO);
         return new ResponseEntity<>(instrumentService.createInstrument(instrumentDTO), HttpStatus.CREATED);
     }
 
