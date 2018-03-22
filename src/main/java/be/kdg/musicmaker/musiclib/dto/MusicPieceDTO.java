@@ -15,6 +15,7 @@ public class MusicPieceDTO {
     private Double rating;
     private Double myRating;
 
+
     public MusicPieceDTO() {
     }
 

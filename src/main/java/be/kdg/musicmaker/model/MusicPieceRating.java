@@ -1,12 +1,7 @@
 package be.kdg.musicmaker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,14 +10,14 @@ public class MusicPieceRating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+   // @ManyToOne(cascade = CascadeType.REMOVE)
     @Column(name = "user")
     private Long user;
-    @NotNull
+   // @ManyToOne(cascade = CascadeType.REMOVE)
     @Column(name = "musicpiece")
     private Long musicpiece;
     @Column(name="personal_rating")
-    private Double rating;
+    private int rating;
 
     public Long getId() {
         return id;
@@ -48,11 +43,11 @@ public class MusicPieceRating {
         this.musicpiece = musicpiece;
     }
 
-    public Double getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 }

@@ -2,6 +2,7 @@ package be.kdg.musicmaker.musiclib;
 
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
+import be.kdg.musicmaker.musiclib.dto.RatingDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -12,13 +13,19 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/music_library")
@@ -48,19 +55,36 @@ public class MusicLibraryController {
         return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
     }
 
+    @PostMapping(value = "/createmusicpiece")
+    public ResponseEntity postRating(@RequestBody MusicPieceDTO dto){
+        return new ResponseEntity<>(musicLibraryService.addMusicPiece(dto), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/setRating")
+    public ResponseEntity postRating(@RequestBody RatingDTO dto){
+        return new ResponseEntity<>(musicLibraryService.addRating(dto), HttpStatus.CREATED);
+    }
+
+
+
     //VIEW
+
+    @GetMapping(value="/ratings/{id}")
+    public HttpEntity<List<RatingDTO>> getRatings(@PathVariable Long id){
+        return new ResponseEntity<List<RatingDTO>>(musicLibraryService.getRatings(id), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/musicpiece/{id}")
-    public HttpEntity<MusicPieceDTO> getMusicPiece(@PathVariable("musicPieceId") Long mpId, @PathVariable("userId") Long userId) {
-        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceDTOById(mpId, userId);
-        return new ResponseEntity<MusicPieceDTO>(musicPiece, HttpStatus.OK);
+    public  HttpEntity<MusicPieceDTO> getMusicPiece(@PathVariable Long id) {
+        return new ResponseEntity<MusicPieceDTO>(musicLibraryService.getMusicPieceDTOById(id), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/musicpieces")
-    public HttpEntity<Collection<MusicPieceDTO>> getMusicPieces() {
-        Collection<MusicPieceDTO> musicpieces = musicLibraryService.getMusicPieces();
-        return new ResponseEntity<>(musicpieces, HttpStatus.OK);
+    public HttpEntity<List<MusicPieceDTO>> getMusicPieces() {
+        return new ResponseEntity<List<MusicPieceDTO>>(musicLibraryService.getMusicPieces(), HttpStatus.OK);
     }
+
 
     //EDIT
     @PatchMapping("/update/musicpiece/{id}")
@@ -81,8 +105,14 @@ public class MusicLibraryController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping(value="/editRating")
+    public ResponseEntity<?> updaterating(@RequestBody RatingDTO rating){
+        musicLibraryService.updateRating(rating);
+        return ResponseEntity.ok("resource address updated");
+    }
 
-    @RequestMapping(value = "/get_partituur_file/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+
+    @RequestMapping(value = "/get_partituur_file/{id}", method = GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getPartituurFile(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
         File file = musicLibraryService.getPartituur(id);
@@ -124,7 +154,7 @@ public class MusicLibraryController {
       http://javasampleapproach.com/spring-framework/spring-boot/angular-4-uploadget-multipartfile-tofrom-spring-boot-server
        */
     //TODO niet met files werken maar met bytestreams
-    @RequestMapping(value = "/get_music_piece", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @RequestMapping(value = "/get_music_piece", method = GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getSteamingFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String musicPieceName = request.getParameter("title");
@@ -141,7 +171,7 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
-    @RequestMapping(value = "/get_music_piece/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @RequestMapping(value = "/get_music_piece/{id}", method = GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getSteamingFile(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
         MusicPiece musicPiece = musicLibraryService.getMusicPiecesById(id);
