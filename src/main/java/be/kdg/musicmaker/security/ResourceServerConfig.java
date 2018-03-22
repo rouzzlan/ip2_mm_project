@@ -31,10 +31,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 .antMatchers("/lesson/**").hasAnyRole("LESGEVER","BEHEERDER")
 
                 //INSTRUMENT
-               /* .antMatchers("/instrument/get",
+                .antMatchers("/instrument/get",
                                         "/instrument/id/**",
                                         "/instrument/email/**").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
-                .antMatchers("/instrument/**").hasAnyRole("LESGEVER","BEHEERDER")*/
+                .antMatchers("/instrument/**").hasAnyRole("LESGEVER","BEHEERDER")
 
 
                 //=============================================================================================
