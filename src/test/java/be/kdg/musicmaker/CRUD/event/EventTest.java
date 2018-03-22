@@ -1,9 +1,9 @@
 package be.kdg.musicmaker.CRUD.event;
 
 import be.kdg.musicmaker.MMAplication;
-import be.kdg.musicmaker.event.dto.EventDTO;
 import be.kdg.musicmaker.event.EventNotFoundException;
 import be.kdg.musicmaker.event.EventService;
+import be.kdg.musicmaker.event.dto.EventDTO;
 import be.kdg.musicmaker.model.Event;
 import be.kdg.musicmaker.security.CorsFilter;
 import be.kdg.musicmaker.util.TokenGetter;
@@ -26,10 +26,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -74,7 +74,8 @@ public class EventTest {
 
             localDateTime = LocalDateTime.now();
 
-            eventDTO = new EventDTO("testEvent", LocalDateTime.now().toString(), "KdG", "The X-Nuts");
+            eventDTO = new EventDTO("testEvent", "2018-03-22T18:46:37", "KdG", "The X-Nuts");
+
             ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
             ACCESS_TOKEN_Student = tokenGetter.obtainAccessToken("user@user.com", "user");
             ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
@@ -119,15 +120,15 @@ public class EventTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)).andReturn();
 
         List<EventDTO> result = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
-        assertEquals(result.get(0).getName(), "SportPladijsje");
-        assertEquals(result.get(3).getName(), "event3");
+        assertEquals(result.get(0).getTitle(), "SportPladijsje");
+        assertEquals(result.get(3).getTitle(), "event3");
 
         res = mockMvc.perform(get("/event/id/1")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andReturn();
 
         EventDTO result2 = objectMapper.readValue(res.getResponse().getContentAsString(), EventDTO.class);
-        assertEquals(result2.getName(), "SportPladijsje");
+        assertEquals(result2.getTitle(), "SportPladijsje");
 
         //deze gebruiker is door andere testen verwijderd dus zou null moeten geven
         res = mockMvc.perform(get("/event/email/user3@user.com")
@@ -135,8 +136,8 @@ public class EventTest {
                 .andReturn();
 
         List<EventDTO> result3 = objectMapper.readValue(res.getResponse().getContentAsString(), new TypeReference<List<EventDTO>>(){});
-        assertEquals(result3.get(0).getName(), "SportPladijsje");
-        assertEquals(result3.get(3).getName(), "event3");
+        assertEquals(result3.get(0).getTitle(), "SportPladijsje");
+        assertEquals(result3.get(3).getTitle(), "event3");
     }
 
     //UPDATE
