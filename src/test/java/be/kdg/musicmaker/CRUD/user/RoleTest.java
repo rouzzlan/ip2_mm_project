@@ -47,6 +47,7 @@ public class RoleTest {
         ACCESS_TOKEN_Teacher = tokenGetter.obtainAccessToken("user2@user.com", "user2");
         ACCESS_TOKEN_Admin = tokenGetter.obtainAccessToken("user3@user.com", "user3");
     }
+
     //READ
 
     @Test

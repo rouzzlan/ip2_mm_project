@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
@@ -79,12 +80,25 @@ public class MusicLibraryController {
     }
 
     @PostMapping(value = "/upload/music_piece")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
             musicLibraryService.addMusicPiece(musicPiecePostDTO, file);
+            return HttpStatus.CREATED;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+
+    @PostMapping(value = "/upload/music_piece_full")
+    @ResponseStatus(HttpStatus.OK)
+    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("music_file") MultipartFile musicFile, @RequestParam("partituur_file") MultipartFile partituur) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
+            musicLibraryService.addMusicPiece(musicPiecePostDTO, musicFile, partituur);
             return HttpStatus.OK;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;

@@ -196,4 +196,15 @@ public class EventService {
 
         return eventLessonDTOs;
     }
+
+    //UPDATE
+    public void updateEvent(EventDTO eventDTO) {
+        Event event = eventRepository.findByName(eventDTO.getName());
+        event.setDateTime(LocalDateTime.parse(eventDTO.getDateTime()));
+        event.setName(eventDTO.getName());
+        event.setPlace(eventDTO.getPlace());
+        event.setBand(getBand(eventDTO.getBand()));
+        eventRepository.save(event);
+    }
+
 }

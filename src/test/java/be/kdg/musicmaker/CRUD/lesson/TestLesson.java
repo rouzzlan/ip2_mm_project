@@ -86,7 +86,7 @@ public class TestLesson {
     public void getMyLessonAsAdmin() throws Exception {
         mockMvc.perform(get("/lesson/mine")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .param("userid", "3"))
+                .param("email", "user3@user.com"))
                 .andExpect(status().isOk());
     }
 
@@ -94,7 +94,7 @@ public class TestLesson {
     public void getMyLessonAsTeacher() throws Exception {
         mockMvc.perform(get("/lesson/mine")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                .param("userid", "2"))
+                .param("email", "user2#user.com"))
                 .andExpect(status().isOk());
     }
 
@@ -102,7 +102,7 @@ public class TestLesson {
     public void getMyLessonAsStudent() throws Exception {
         mockMvc.perform(get("/lesson/mine")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Student)
-                .param("userid", "1"))
+                .param("email", "user@user.comgit"))
                 .andExpect(status().isOk());
     }
 

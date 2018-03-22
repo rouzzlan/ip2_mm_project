@@ -27,12 +27,10 @@ public class User {
     )
     private List<Role> roles;
 
-    @ManyToMany(mappedBy = "students",
-            cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.ALL})
     private List<Band> BandAsStudent;
 
-    @OneToMany(mappedBy = "teacher",
-            cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "teacher", cascade = {CascadeType.ALL})
     private List<Band> BandAsTeacher;
 
     public User() {

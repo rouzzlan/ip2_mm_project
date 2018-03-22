@@ -31,8 +31,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,7 +106,7 @@ public class EventTest {
             e.printStackTrace();
         }
 
-        Event event = eventService.doesEventExist("testEvent");
+        Event event = eventService.getEvent("testEvent");
         assertNotNull(event);
     }
 
@@ -130,7 +129,6 @@ public class EventTest {
         EventDTO result2 = objectMapper.readValue(res.getResponse().getContentAsString(), EventDTO.class);
         assertEquals(result2.getTitle(), "SportPladijsje");
 
-        //deze gebruiker is door andere testen verwijderd dus zou null moeten geven
         res = mockMvc.perform(get("/event/email/user3@user.com")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andReturn();
@@ -141,8 +139,48 @@ public class EventTest {
     }
 
     //UPDATE
-    //TODO /event/update staat nog niet in de controller
+    @Test
+    public void UpdateEventAsAdmin() throws Exception {
+        EventDTO original = new EventDTO("event3", LocalDateTime.now().toString(), "Sportpaleis", "The X-Nuts");
+        EventDTO updateDTO = new EventDTO("event3", LocalDateTime.now().toString(), "BijSeppeThuis", "The X-Nuts");
+
+        Event event = eventService.getEvent(original.getName());
+        assertEquals("Sportpaleis", event.getPlace());
+
+        mockMvc.perform(put("/event/update")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+                .andDo(print())
+                .andExpect(status().isContinue());
+
+        event = eventService.getEvent(original.getName());
+        assertEquals("BijSeppeThuis", event.getPlace());
+        eventService.updateEvent(original);
+        event = eventService.getEvent(original.getName());
+        assertEquals("Sportpaleis", event.getPlace());
+    }
 
     //DELETE
-    //TODO Implement plox
+    @Test
+    public void DeleteEventAsAdmin() throws Exception {
+        Event original = eventService.getEvent("event3");
+        EventDTO originalDTO = new EventDTO(original.getName(), original.getDateTime().toString(), original.getPlace(), original.getBand().getName());
+
+        mockMvc.perform(delete("/event/delete/" + original.getId())
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Event event = null;
+        try {
+            event = eventService.getEvent("event3");
+        } catch (EventNotFoundException e) {
+            event = null;
+        }
+        assertNull(event);
+        eventService.createEvent(originalDTO);
+        assertNotNull(eventService.getEvent("event3"));
+    }
 }

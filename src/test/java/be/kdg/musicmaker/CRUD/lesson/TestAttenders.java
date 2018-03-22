@@ -59,32 +59,17 @@ public class TestAttenders {
     public void addStudentToLessonAsAdmin() throws Exception {
         mockMvc.perform(put("/lesson/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .param("userid", "1")
+                .param("email", "user@user.com")
                 .param("role", "leerling")
                 .param("lessonid", "3"))
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void addStudentTsoLessonAsAdmin() throws Exception {
-//        ArrayList<String> userids = new ArrayList<>(3);
-//        userids.add("1");
-//        userids.add("2");
-//        userids.add("3");
-//
-//        mockMvc.perform(put("/lesson/student/addmulti")
-//                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-//                .param("userid", "1")
-//                .param("role", "leerling")
-//                .param("lessonid", userids.toString()))
-//                .andExpect(status().isOk());
-//    }
-
     @Test
     public void addStudentToLessonAsTeacher() throws Exception {
         mockMvc.perform(put("/lesson/student/add")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Teacher)
-                .param("userid", "2")
+                .param("email", "user5@user.com")
                 .param("role", "leerling")
                 .param("lessonid", "7"))
                 .andExpect(status().isOk());

@@ -33,6 +33,8 @@ public class BandService {
 
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
+    //TODO opkuisen van hele klasse
+
     public Band doesBandExist(String name) throws BandNotFoundException {
         Band band = bandRepository.findByName(name);
         if (band != null) {
@@ -56,6 +58,14 @@ public class BandService {
         } else {
             throw new BandNotFoundException();
         }
+    }
+
+    //READ
+    public Band getBand(String naam) throws BandNotFoundException {
+        Band band = bandRepository.findByName(naam);
+        if (band != null) {
+            return band;
+        } else throw new BandNotFoundException();
     }
 
     public void createBand(BandDTO bandDTO) {
