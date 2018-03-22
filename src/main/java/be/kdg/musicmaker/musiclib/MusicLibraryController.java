@@ -147,6 +147,31 @@ public class MusicLibraryController {
             return HttpStatus.BAD_REQUEST;
         }
     }
+
+    @PostMapping(value = "/upload/music_piece_2")
+    @ResponseStatus(HttpStatus.OK)
+    public HttpStatus postMusicPiece2(@RequestParam(value = "musicpiece_info") String info, @RequestParam(value = "music_file", required = false) MultipartFile musicFile,
+                                      @RequestParam(value = "partituur_file", required = false) MultipartFile partituur) {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
+            if (musicFile == null && partituur == null){
+                musicLibraryService.addMusicPiece(musicPiecePostDTO);
+                return HttpStatus.OK;
+            }else if (musicFile == null){
+                musicLibraryService.addMusicPieceEnPartituur(musicPiecePostDTO, partituur);
+                return HttpStatus.OK;
+            }else if (partituur == null){
+                musicLibraryService.addMusicPieceEnMusicFile(musicPiecePostDTO, musicFile);
+                return HttpStatus.OK;
+            }else {
+                return HttpStatus.BAD_REQUEST;
+            }
+        }catch (IOException e){
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+
     /*
       goede informatie bron. toepassing: Download File via Resource
       https://memorynotfound.com/spring-mvc-download-file-examples/

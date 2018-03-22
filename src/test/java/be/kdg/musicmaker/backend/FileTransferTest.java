@@ -308,4 +308,73 @@ public class FileTransferTest {
         }
         return new MockMultipartFile(name, originalFileName, contentType, content);
     }
+
+
+    //todo propere gedeelte
+    @Test
+    public void UploadMusicPieceTest2() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
+        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        MockMultipartFile secondFile = new MockMultipartFile("partituur_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(firstFile)
+                .file(secondFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void UploadMusicPieceTest21() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
+        MockMultipartFile firstFile = new MockMultipartFile("music_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(firstFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void UploadMusicPieceTest22() throws Exception {
+        Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("other_file_structures/How_To_Save_A_Life_-_The_Fray.mxl")).toURI());
+        MockMultipartFile secondFile = new MockMultipartFile("partituur_file", path.getFileName().toString(), MediaType.APPLICATION_OCTET_STREAM_VALUE, Files.readAllBytes(path));
+
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .file(secondFile)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void UploadMusicPieceTest23() throws Exception {
+
+        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
+        musicPieceDTO.setArtist("Test2");
+        musicPieceDTO.setTitle("Test Music piece");
+        musicPieceDTO.setLanguage("English");
+
+        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece_2")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
+                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
+                .andExpect(status().isOk());
+    }
+
 }

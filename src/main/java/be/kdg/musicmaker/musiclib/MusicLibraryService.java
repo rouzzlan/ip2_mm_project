@@ -207,4 +207,15 @@ public class MusicLibraryService {
         return mpr;
     }
 
+    public void addMusicPieceEnPartituur(MusicPieceDTO musicPiecePostDTO, MultipartFile partituur) throws IOException {
+        MusicPiece mp = map(musicPiecePostDTO, MusicPiece.class);
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
+        musicLibraryRepository.save(mp);
+    }
+
+    public void addMusicPieceEnMusicFile(MusicPieceDTO musicPiecePostDTO, MultipartFile musicFile) throws IOException {
+        MusicPiece mp = map(musicPiecePostDTO, MusicPiece.class);
+        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        musicLibraryRepository.save(mp);
+    }
 }
