@@ -65,6 +65,24 @@ public class UserService {
             return user;
         }
     }
+    public UserDTO getUserDTO(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            UserDTO userDTO = userToDTO(user);
+            userDTO.setRoles(getRolesDTO(user.getRoles()));
+            return userDTO;
+        } else throw new UserNotFoundException();
+    }
+    public UserDTO getUserDTO(Long id) throws UserNotFoundException {
+        User user = userRepository.findOne(id);
+        if (user == null) {
+            throw new UserNotFoundException();
+        } else {
+            UserDTO userDTO = userToDTO(user);
+            userDTO.setRoles(getRolesDTO(user.getRoles()));
+            return userDTO;
+        }
+    }
     public User getUserByToken(String confirmationToken) throws UserNotFoundException {
         User user = userRepository.findByConfirmationToken(confirmationToken);
         if (user != null) {
@@ -135,12 +153,27 @@ public class UserService {
         MapperFacade mapperFacade = mapperFactory.getMapperFacade();
         return mapperFacade.map(userDTO, User.class);
     }
+
+    private UserDTO userToDTO(User user) {
+        mapperFactory.classMap(User.class, UserDTO.class).exclude("roles");
+        MapperFacade mapperFacade = mapperFactory.getMapperFacade();
+        return mapperFacade.map(user, UserDTO.class);
+    }
+
     private List<Role> getRoles(List<String> rolesString){
         List<Role> foundRoles = new ArrayList<>();
         for (String s : rolesString) {
             foundRoles.add(roleRepository.findByName(s));
         }
         return foundRoles;
+    }
+
+    private List<String> getRolesDTO(List<Role> roles){
+        List<String> rolesDTO = new ArrayList<>();
+        for (Role role : roles) {
+            rolesDTO.add(role.getName());
+        }
+        return rolesDTO;
     }
 
 }
