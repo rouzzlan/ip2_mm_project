@@ -45,7 +45,6 @@ public class BandService {
     }
 
     public BandDTO getBand(Long id) throws BandNotFoundException {
-        List<Band> nodigOmTeWerken = bandRepository.findAll();
         Band band = bandRepository.findOne(id);
         if (band != null) {
             BandDTO bandDTO = bandToDto(band);
