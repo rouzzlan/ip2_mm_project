@@ -122,7 +122,7 @@ public class EventService {
     }
 
     public LocalDateTime getDateTime(String dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return LocalDateTime.parse(dateTime, formatter);
     }
 
@@ -199,9 +199,9 @@ public class EventService {
 
     //UPDATE
     public void updateEvent(EventDTO eventDTO) {
-        Event event = eventRepository.findByName(eventDTO.getName());
-        event.setDateTime(LocalDateTime.parse(eventDTO.getDateTime()));
-        event.setName(eventDTO.getName());
+        Event event = eventRepository.findByTitle(eventDTO.getTitle());
+        event.setStart(LocalDateTime.parse(eventDTO.getStart()));
+        event.setTitle(eventDTO.getTitle());
         event.setPlace(eventDTO.getPlace());
         event.setBand(getBand(eventDTO.getBand()));
         eventRepository.save(event);
