@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -58,6 +59,7 @@ public class FileTransferTest {
     private File tempFile;
     private TokenGetter tokenGetter;
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    private Random rand = new Random();
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -116,7 +118,7 @@ public class FileTransferTest {
         miniMusicPiece.setTitle("unknown");
     }
 
-
+//todo OK
     @Test
     public void testFileDownload() throws Exception {
 
@@ -126,7 +128,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
     }
 
-
+//todo OK
     @Test
     public void testDownloadFileContent() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
@@ -138,7 +140,7 @@ public class FileTransferTest {
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
         assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
     }
-
+//todo OK
     @Test
     public void testDownloadFileContentByMusicPieceId() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/1")
@@ -149,21 +151,6 @@ public class FileTransferTest {
         tempFile = testFolder.newFile("Requiem-piano-mozart-lacrymosa2.mp3");
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
         assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
-    }
-
-    @Test
-    public void UploadMusicPieceTest() throws Exception {
-        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-        musicPieceDTO.setArtist("Test2");
-        musicPieceDTO.setTitle("Test Music piece");
-        musicPieceDTO.setLanguage("English");
-
-        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
-                .file(file)
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
-                .andExpect(status().isCreated());
     }
 
     @Test
@@ -190,7 +177,7 @@ public class FileTransferTest {
         Assert.assertArrayEquals(miniMusicMultiPartMock.getBytes(), byteArray);
     }
 
-
+//todo OK
     @Test
     public void getListOfMusicPiecesTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
@@ -198,7 +185,7 @@ public class FileTransferTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
     }
-
+//todo OK
     @Test
     public void getListOfMusicPiecesContentTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
@@ -210,26 +197,7 @@ public class FileTransferTest {
         assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
     }
 
-
-    @Test
-    public void muisPiecePostInfo() throws Exception {
-        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-        musicPieceDTO.setArtist("Test");
-        musicPieceDTO.setTitle("Test Music piece");
-        musicPieceDTO.setLanguage("English");
-
-        String jsonString = "";
-        try {
-            jsonString = objectMapper.writeValueAsString(musicPieceDTO);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        this.mockMvc.perform(post("/music_library/musicpiece/submit").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("MusicPiece", musicPieceDTO.getTitle()));
-    }
-
+//todo OK
     @Test
     public void musicFileUploadInSteps() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
@@ -256,7 +224,7 @@ public class FileTransferTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
-
+//todo OK
     @Test
     public void updateMusicPieceTest() throws Exception {
         final long musicPieceId = 1;
@@ -279,7 +247,7 @@ public class FileTransferTest {
         String artist = musicPiece.getArtist();
         Assert.assertTrue("Michael Jackson".equalsIgnoreCase(artist));
     }
-
+//todo OK
     @Test
     public void getPartituurTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_partituur_file/2")
