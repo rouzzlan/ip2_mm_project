@@ -118,7 +118,7 @@ public class FileTransferTest {
         miniMusicPiece.setTitle("unknown");
     }
 
-//todo OK
+
     @Test
     public void testFileDownload() throws Exception {
 
@@ -128,7 +128,6 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
     }
 
-//todo OK
     @Test
     public void testDownloadFileContent() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", existingMusicPieceName)
@@ -140,7 +139,7 @@ public class FileTransferTest {
         FileUtils.writeByteArrayToFile(tempFile, byteArray);
         assertEquals(FileUtils.checksumCRC32(motzartMusicFile), FileUtils.checksumCRC32(tempFile));
     }
-//todo OK
+
     @Test
     public void testDownloadFileContentByMusicPieceId() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_music_piece/1")
@@ -177,7 +176,6 @@ public class FileTransferTest {
         Assert.assertArrayEquals(miniMusicMultiPartMock.getBytes(), byteArray);
     }
 
-//todo OK
     @Test
     public void getListOfMusicPiecesTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
@@ -185,7 +183,7 @@ public class FileTransferTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
     }
-//todo OK
+
     @Test
     public void getListOfMusicPiecesContentTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
@@ -197,7 +195,6 @@ public class FileTransferTest {
         assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
     }
 
-//todo OK
     @Test
     public void musicFileUploadInSteps() throws Exception {
         MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
@@ -224,7 +221,7 @@ public class FileTransferTest {
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
-//todo OK
+
     @Test
     public void updateMusicPieceTest() throws Exception {
         final long musicPieceId = 1;
@@ -247,7 +244,7 @@ public class FileTransferTest {
         String artist = musicPiece.getArtist();
         Assert.assertTrue("Michael Jackson".equalsIgnoreCase(artist));
     }
-//todo OK
+
     @Test
     public void getPartituurTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/get_partituur_file/2")
@@ -278,7 +275,6 @@ public class FileTransferTest {
     }
 
 
-    //todo propere gedeelte
     @Test
     public void UploadMusicPieceTest2() throws Exception {
         Path path = Paths.get(Objects.requireNonNull(classLoader.getResource("audio_files/musicTestFile.MP3")).toURI());
