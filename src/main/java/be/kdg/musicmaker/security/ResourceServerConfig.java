@@ -53,7 +53,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 //todo tijdig voor te testen toegevoegd
                 //Chat
                 .antMatchers("/chatjs").permitAll()
-                .antMatchers("//app/chat/**").permitAll()
+                .antMatchers("/app/chat/**").permitAll()
                 .antMatchers("/topic/chat/**").permitAll()
 
                 .and()
