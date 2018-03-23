@@ -60,7 +60,11 @@ public class MusicLibraryController {
 
     @GetMapping(value = "/musicpiece/{id}")
     public  HttpEntity<MusicPieceDTO> getMusicPiece(@PathVariable Long id) {
-        return new ResponseEntity<MusicPieceDTO>(musicLibraryService.getMusicPieceDTOById(id), HttpStatus.OK);
+        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceDTOById(id);
+        if(musicPiece == null){
+            return new ResponseEntity<>(musicPiece, HttpStatus.GONE);
+        }
+        return new ResponseEntity<>(musicPiece, HttpStatus.OK);
     }
 
 
@@ -188,10 +192,8 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
-    //OTHER
-
-  /* //DELETE
-  @DeleteMapping(value = "/musicpiece/submit/file/{id}")
+   //DELETE
+  @DeleteMapping(value = "/musicpiece/delete/{id}")
     public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id) {
         try {
             musicLibraryService.deleteMusicPiece(id);
@@ -200,5 +202,5 @@ public class MusicLibraryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-*/
+
 }

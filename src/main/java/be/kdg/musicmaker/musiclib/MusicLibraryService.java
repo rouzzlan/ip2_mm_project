@@ -187,13 +187,13 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
     }
 
-  /*  public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
         if (musicLibraryRepository.exists(id)) {
             musicLibraryRepository.delete(id);
         } else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
-    }*/
+    }
 
 
     public boolean isLanguagesEmpty() {

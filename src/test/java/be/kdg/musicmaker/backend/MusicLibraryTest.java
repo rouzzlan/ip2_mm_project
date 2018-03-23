@@ -43,9 +43,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = MMAplication.class)
-public class FileTransferTest {
+public class MusicLibraryTest {
     private static String ACCESS_TOKEN_Admin = "";
     private ObjectMapper objectMapper = new ObjectMapper();
     private ClassLoader classLoader;
@@ -65,6 +63,7 @@ public class FileTransferTest {
     private TokenGetter tokenGetter;
     private MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
     private Random rand = new Random();
+
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -159,7 +158,7 @@ public class FileTransferTest {
 
     @Test
     public void getListOfMusicPiecesTest() throws Exception {
-        MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
+        mockMvc.perform(get("/music_library/musicpieces")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
@@ -404,6 +403,25 @@ public class FileTransferTest {
         String content = result.getResponse().getContentAsString();
         Language[] languagesReceived = objectMapper.readValue(content, Language[].class);
         assertTrue(languagesReceived!=null && content.contains("English"));
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(delete("/music_library//musicpiece/delete/"+id)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void deleteTestAndVerify() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(delete("/music_library//musicpiece/delete/"+id)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/music_library/musicpiece/" + id)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isGone());
     }
 
 }
