@@ -57,8 +57,8 @@ public class MusicLibraryService {
 
     public void addMusicPieceFull(MusicPieceDTO musicPieceDTO, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
-        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
-        mp.setMusicFile(partituur.getOriginalFilename(), partituur.getBytes());
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
         musicLibraryRepository.save(mp);
     }
 
@@ -223,5 +223,10 @@ public class MusicLibraryService {
         MusicPieceRating mpr = map(dto, MusicPieceRating.class);
         musicRatingRepository.save(mpr);
         return mpr;
+    }
+
+    public MusicPieceDTO getMusicPieceByTitle(String musicPieceName) {
+        MusicPiece musicPiece = musicLibraryRepository.getMusicPieceByTitle(musicPieceName);
+        return map(musicPiece, MusicPieceDTO.class);
     }
 }
