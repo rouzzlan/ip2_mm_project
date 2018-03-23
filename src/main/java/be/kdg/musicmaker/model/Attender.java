@@ -12,9 +12,9 @@ public class Attender {
 
     private String role;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User user;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Lesson lesson;
 
     public Attender() {

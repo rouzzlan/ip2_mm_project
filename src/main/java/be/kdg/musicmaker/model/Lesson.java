@@ -4,6 +4,7 @@ import be.kdg.musicmaker.lesson.dto.LessonDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Lesson")
@@ -23,6 +24,12 @@ public class Lesson {
     private LessonType lessonType;
     @ManyToOne(cascade = CascadeType.ALL)
     private SeriesOfLessons seriesOfLessons;
+
+    @OneToMany(mappedBy = "lesson", cascade = {CascadeType.ALL})
+    private List<Attender> attenders;
+
+    @OneToMany(mappedBy = "lesson", cascade = {CascadeType.ALL})
+    private List<Exercise> exercises;
 
     public Lesson(LessonDTO lessonDTO) {
         this.date = LocalDateTime.parse(lessonDTO.getDate());
