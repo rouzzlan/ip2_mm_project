@@ -1,5 +1,7 @@
 package be.kdg.musicmaker.model;
 
+import org.apache.commons.codec.language.bm.Lang;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -14,11 +16,11 @@ public class MusicPiece {
     private String title;
     @NotNull
     private String artist;
-   /* @ManyToOne(optional = true, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = true, cascade = CascadeType.DETACH)
     @JoinColumn(name="language_id")
-    private Language language;*/
-   @Column(name="language")
-   private String language;
+    private Language language;
+//   @Column(name="language")
+//   private String language;
     @Column(name="topic")
     private String topic;
     @Column(name="chord_text")
@@ -50,7 +52,7 @@ public class MusicPiece {
     }
 
 
-    public MusicPiece(String title, String artist, String language, String topic, String chordText, String genre, String instrumentType, String youtubeUrl, String typeofpiece, String difficulty, String fileName, String partituurFileName) {
+    public MusicPiece(String title, String artist, Language language, String topic, String chordText, String genre, String instrumentType, String youtubeUrl, String typeofpiece, String difficulty, String fileName, String partituurFileName) {
         this.title = title;
         this.artist = artist;
         this.language = language;
@@ -85,11 +87,11 @@ public class MusicPiece {
         this.artist = artist;
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 

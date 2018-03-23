@@ -13,6 +13,7 @@ import be.kdg.musicmaker.musiclib.repo.MusicLibraryRatingRepository;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.apache.commons.codec.language.bm.Lang;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,19 @@ import java.util.List;
 
 @Service
 public class MusicLibraryService {
-    @Autowired
+
     private MusicLibraryRepository musicLibraryRepository;
-    @Autowired
+
     private MusicLibraryRatingRepository musicRatingRepository;
-    @Autowired
+
     private LanguagesRepository languagesRepository;
+
+    @Autowired
+    public MusicLibraryService(MusicLibraryRepository musicLibraryRepository, MusicLibraryRatingRepository musicRatingRepository, LanguagesRepository languagesRepository) {
+        this.musicLibraryRepository = musicLibraryRepository;
+        this.musicRatingRepository = musicRatingRepository;
+        this.languagesRepository = languagesRepository;
+    }
 
     //ADD
     public void addMusicPiece(MusicPiece musicPiece) {
@@ -40,39 +48,43 @@ public class MusicLibraryService {
 
     public MusicPiece addMusicPiece(MusicPieceDTO musicPiece) {
         MusicPiece mp= map(musicPiece, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
+        mp.setLanguage(language);
         musicLibraryRepository.save(mp);
         return mp;
     }
     public void addMusicPieceEnPartituur(MusicPieceDTO musicPieceDTO, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPieceEnMusicFile(MusicPieceDTO musicPieceDTO, MultipartFile musicFile) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPieceFull(MusicPieceDTO musicPieceDTO, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
-        mp.setPartituurFile(musicFile.getOriginalFilename(), musicFile.getBytes());
-        mp.setMusicFile(partituur.getOriginalFilename(), partituur.getBytes());
-        musicLibraryRepository.save(mp);
-    }
-
-    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
-        MusicPiece mp = map(musicPiece, MusicPiece.class);
-        mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
+        mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
+        mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
-//        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
+        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
@@ -127,6 +139,8 @@ public class MusicLibraryService {
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
         mapDTO(musicPieceDTO, musicPiece);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        musicPiece.setLanguage(language);
         musicLibraryRepository.save(musicPiece);
     }
 
@@ -173,13 +187,13 @@ public class MusicLibraryService {
         musicLibraryRepository.save(mp);
     }
 
-  /*  public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
+    public void deleteMusicPiece(Long id) throws ResouceNotFoundException {
         if (musicLibraryRepository.exists(id)) {
             musicLibraryRepository.delete(id);
         } else {
             throw new ResouceNotFoundException("Music piece does not exist");
         }
-    }*/
+    }
 
 
     public boolean isLanguagesEmpty() {
@@ -210,6 +224,7 @@ public class MusicLibraryService {
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
                 mapNulls(false).
                 mapNullsInReverse(false)
+                .exclude("language")
                 .byDefault()
                 .register();
         return mapperFactory.getMapperFacade().map(s, type);
@@ -223,5 +238,14 @@ public class MusicLibraryService {
         MusicPieceRating mpr = map(dto, MusicPieceRating.class);
         musicRatingRepository.save(mpr);
         return mpr;
+    }
+
+    public MusicPieceDTO getMusicPieceByTitle(String musicPieceName) {
+        MusicPiece musicPiece = musicLibraryRepository.getMusicPieceByTitle(musicPieceName);
+        return map(musicPiece, MusicPieceDTO.class);
+    }
+
+    public List<Language> getLanguages() {
+        return languagesRepository.findAll();
     }
 }
