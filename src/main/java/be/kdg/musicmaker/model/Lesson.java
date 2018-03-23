@@ -19,7 +19,7 @@ public class Lesson {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Playlist playlist;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private LessonType lessonType;
     @ManyToOne(cascade = CascadeType.ALL)
     private SeriesOfLessons seriesOfLessons;
@@ -29,9 +29,9 @@ public class Lesson {
         this.time = lessonDTO.getTime();
         this.price = lessonDTO.getPrice();
         this.state = lessonDTO.getState();
-        this.playlist = lessonDTO.getPlaylist();
-        this.lessonType = lessonDTO.getLessonType();
-        this.seriesOfLessons = lessonDTO.getSeriesOfLessons();
+        this.playlist = new Playlist();
+        this.lessonType = new LessonType();
+        this.seriesOfLessons = new SeriesOfLessons();
     }
 
     public Lesson() {

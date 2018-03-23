@@ -73,14 +73,14 @@ public class SeedData {
     private LessonType lessonType3 = new LessonType(new LessonTypeDTO(15.50, "gitaar", "samenspel voor gitaar", "gitaar 3"));
 
     //LESSONS
-    private Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType3, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "open", new Playlist(), lessonType1, new SeriesOfLessons(), LocalDateTime.now().toString()));
-    private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "open", new Playlist(), lessonType2, new SeriesOfLessons(), LocalDateTime.now().toString()));
+    private Lesson lesson1 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson2 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson3 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson4 = new Lesson(new LessonDTO(60, 50, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson5 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson6 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson7 = new Lesson(new LessonDTO(60, 45, "open", "", LocalDateTime.now().toString()));
+    private Lesson lesson8 = new Lesson(new LessonDTO(60, 90.0, "open", "", LocalDateTime.now().toString()));
 
     private static final Logger LOG = LoggerFactory.getLogger(SeedData.class);
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -215,7 +215,7 @@ public class SeedData {
     }
 
     private void seedMuziekstukken() throws URISyntaxException, IOException {
-        if(musicLibService.isLanguagesEmpty()){
+        if (musicLibService.isLanguagesEmpty()) {
             LanguagesImporter languagesImporter = new LanguagesImporter();
             List<Language> languageList = languagesImporter.getLanguagesList();
             musicLibService.updateLanguageList(languageList);
@@ -293,6 +293,15 @@ public class SeedData {
         lesson6.setDate(LocalDateTime.parse("23/03/2018 15:30", formatter));
         lesson7.setDate(LocalDateTime.parse("24/03/2018 13:30", formatter));
         lesson8.setDate(LocalDateTime.parse("23/03/2018 20:30", formatter));
+
+        lesson1.setLessonType(lessonType1);
+        lesson2.setLessonType(lessonType2);
+        lesson3.setLessonType(lessonType3);
+        lesson4.setLessonType(lessonType3);
+        lesson5.setLessonType(lessonType2);
+        lesson6.setLessonType(lessonType1);
+        lesson7.setLessonType(lessonType2);
+        lesson8.setLessonType(lessonType1);
 
         lessonService.addLesson(lesson1);
         lessonService.addLesson(lesson2);

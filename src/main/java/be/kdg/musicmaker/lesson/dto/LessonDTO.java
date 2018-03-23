@@ -11,18 +11,14 @@ public class LessonDTO {
     private int time; // duurtijd
     private double price;
     private String state;
-    private Playlist playlist;
-    private LessonType lessonType;
-    private SeriesOfLessons seriesOfLessons;
+    private String lessonType;
     private String date;
 
-    public LessonDTO(int time, double price, String state, Playlist playlist, LessonType lessonType, SeriesOfLessons seriesOfLessons, String date) {
+    public LessonDTO(int time, double price, String state, String lessonType, String date) {
         this.time = time;
         this.price = price;
         this.state = state;
-        this.playlist = playlist;
         this.lessonType = lessonType;
-        this.seriesOfLessons = seriesOfLessons;
         this.date = date;
     }
 
@@ -57,28 +53,12 @@ public class LessonDTO {
         this.state = state;
     }
 
-    public Playlist getPlaylist() {
-        return playlist;
-    }
-
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-    }
-
-    public LessonType getLessonType() {
+    public String getLessonType() {
         return lessonType;
     }
 
-    public void setLessonType(LessonType lessonType) {
+    public void setLessonType(String lessonType) {
         this.lessonType = lessonType;
-    }
-
-    public SeriesOfLessons getSeriesOfLessons() {
-        return seriesOfLessons;
-    }
-
-    public void setSeriesOfLessons(SeriesOfLessons seriesOfLessons) {
-        this.seriesOfLessons = seriesOfLessons;
     }
 
     public void setDate(String date) {
