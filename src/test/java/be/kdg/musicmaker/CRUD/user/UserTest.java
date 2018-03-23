@@ -154,7 +154,7 @@ public class UserTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andDo(print())
-                .andExpect(status().isContinue());
+                .andExpect(status().isOk());
 
         user = userService.getUser((long)1);
         assertEquals("update", user.getUsername());
@@ -176,7 +176,7 @@ public class UserTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andDo(print())
-                .andExpect(status().isContinue());
+                .andExpect(status().isOk());
 
         user = userService.getUser((long)1);
         assertEquals("update", user.getUsername());
@@ -198,7 +198,7 @@ public class UserTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andDo(print())
-                .andExpect(status().isContinue());
+                .andExpect(status().isOk());
 
         user = userService.getUser((long)1);
         assertEquals("update", user.getUsername());
