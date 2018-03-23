@@ -1,6 +1,7 @@
 package be.kdg.musicmaker.backend;
 
 import be.kdg.musicmaker.MMAplication;
+import be.kdg.musicmaker.model.Language;
 import be.kdg.musicmaker.musiclib.MusicLibraryService;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.model.MusicPiece;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.apache.commons.codec.language.bm.Lang;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,6 +38,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -440,6 +444,17 @@ public class FileTransferTest {
         File originalFile = testFolder.newFile("How_To_Save_A_Life_-_The_Fray2"+rand.nextInt() +".mxl");
         FileUtils.writeByteArrayToFile(originalFile, secondFile.getBytes());
         assertEquals(FileUtils.checksumCRC32(originalFile), FileUtils.checksumCRC32(receivedFile));
+    }
+
+    @Test
+    public void getListOfLanguages() throws Exception {
+        MvcResult result = mockMvc.perform(get("/music_library/languages")
+                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).andReturn();
+        String content = result.getResponse().getContentAsString();
+        Language[] languagesReceived = objectMapper.readValue(content, Language[].class);
+        assertTrue(languagesReceived!=null && content.contains("English"));
     }
 
 }

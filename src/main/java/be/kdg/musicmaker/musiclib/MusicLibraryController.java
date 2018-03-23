@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.model.Language;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.musiclib.dto.RatingDTO;
@@ -32,8 +33,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/music_library")
 @SessionAttributes("music_piece")
 public class MusicLibraryController {
-    @Autowired
     MusicLibraryService musicLibraryService;
+    @Autowired
+    public MusicLibraryController(MusicLibraryService musicLibraryService) {
+        this.musicLibraryService = musicLibraryService;
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(MusicLibraryController.class);
 
@@ -88,6 +92,11 @@ public class MusicLibraryController {
     }
 
 
+    @GetMapping(value = "/languages")
+    public HttpEntity<List<Language>> getLanguages() {
+        return new ResponseEntity<>(musicLibraryService.getLanguages(), HttpStatus.OK);
+    }
+
     //EDIT
     @PatchMapping("/update/musicpiece/{id}")
     public ResponseEntity<?> partialUpdateName(@RequestBody MusicPieceDTO musicPieceDTO, @PathVariable("id") Long id) {
@@ -130,7 +139,7 @@ public class MusicLibraryController {
         try {
             ObjectMapper mapper = new ObjectMapper();
             MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
-            musicLibraryService.addMusicPiece(musicPiecePostDTO, file);
+            musicLibraryService.addMusicPieceEnMusicFile(musicPiecePostDTO, file);
             return HttpStatus.CREATED;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;

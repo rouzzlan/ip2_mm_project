@@ -27,12 +27,19 @@ import java.util.List;
 
 @Service
 public class MusicLibraryService {
-    @Autowired
+
     private MusicLibraryRepository musicLibraryRepository;
-    @Autowired
+
     private MusicLibraryRatingRepository musicRatingRepository;
-    @Autowired
+
     private LanguagesRepository languagesRepository;
+
+    @Autowired
+    public MusicLibraryService(MusicLibraryRepository musicLibraryRepository, MusicLibraryRatingRepository musicRatingRepository, LanguagesRepository languagesRepository) {
+        this.musicLibraryRepository = musicLibraryRepository;
+        this.musicRatingRepository = musicRatingRepository;
+        this.languagesRepository = languagesRepository;
+    }
 
     //ADD
     public void addMusicPiece(MusicPiece musicPiece) {
@@ -68,14 +75,6 @@ public class MusicLibraryService {
         mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
-        musicLibraryRepository.save(mp);
-    }
-
-    public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
-        MusicPiece mp = map(musicPiece, MusicPiece.class);
-        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
-        mp.setLanguage(language);
-        mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
         musicLibraryRepository.save(mp);
     }
 
@@ -244,5 +243,9 @@ public class MusicLibraryService {
     public MusicPieceDTO getMusicPieceByTitle(String musicPieceName) {
         MusicPiece musicPiece = musicLibraryRepository.getMusicPieceByTitle(musicPieceName);
         return map(musicPiece, MusicPieceDTO.class);
+    }
+
+    public List<Language> getLanguages() {
+        return languagesRepository.findAll();
     }
 }
