@@ -124,7 +124,7 @@ public class SeedData {
     public void seed(ContextRefreshedEvent event) throws IOException, URISyntaxException, BandNotFoundException, EventNotFoundException {
         seedRoles();
         seedInstruments();
-        seedMuziekstukken();
+        //seedMuziekstukken();
         seedUsers();
         seedBands();
         seedEvents();
