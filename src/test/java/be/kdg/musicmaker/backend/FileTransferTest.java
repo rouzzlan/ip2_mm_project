@@ -158,30 +158,6 @@ public class FileTransferTest {
     }
 
     @Test
-    public void UploadMusicPieceAndVerifyTest() throws Exception {
-        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-        musicPieceDTO.setArtist("Test3");
-        musicPieceDTO.setTitle("Test 2 Music piece");
-        musicPieceDTO.setLanguage("English");
-
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/upload/music_piece")
-                .file(miniMusicMultiPartMock)
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .param("musicpiece_info", objectMapper.writeValueAsString(musicPieceDTO)))
-                .andExpect(status().isCreated());
-
-        MvcResult result = mockMvc.perform(get("/music_library/get_music_piece").param("title", musicPieceDTO.getTitle())
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-                .andExpect(status().isOk())
-                .andExpect(header().string("Content-Disposition",
-                        "inline; filename=" + miniMusicMultiPartMock.getOriginalFilename()))
-                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE)).andReturn();
-
-        byte[] byteArray = result.getResponse().getContentAsByteArray();
-        Assert.assertArrayEquals(miniMusicMultiPartMock.getBytes(), byteArray);
-    }
-
-    @Test
     public void getListOfMusicPiecesTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/music_library/musicpieces")
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
@@ -198,33 +174,6 @@ public class FileTransferTest {
         MusicPieceDTO[] musicPieceGetDTOS = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceDTO[].class);
         MusicPieceDTO musicPieceGetDTO = musicPieceGetDTOS[0];
         assertTrue(musicPieceGetDTO.getTitle().equalsIgnoreCase(existingMusicPieceName));
-    }
-
-    @Test
-    public void musicFileUploadInSteps() throws Exception {
-        MusicPieceDTO musicPieceDTO = new MusicPieceDTO();
-        musicPieceDTO.setArtist("Test2");
-        musicPieceDTO.setTitle("Test Music piece");
-        musicPieceDTO.setLanguage("English");
-
-        String jsonString = "";
-        try {
-            jsonString = objectMapper.writeValueAsString(musicPieceDTO);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        MvcResult result = this.mockMvc.perform(post("/music_library/musicpiece/submit").header("Authorization", "Bearer " + ACCESS_TOKEN_Admin)
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("MusicPiece", musicPieceDTO.getTitle())).andReturn();
-
-        Long id = Long.parseLong(result.getResponse().getHeader("musicPieceId"));
-
-        MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
-        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/music_library/musicpiece/submit/file/" + id)
-                .file(file)
-                .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
-                .andExpect(status().isOk());
     }
 
     @Test

@@ -43,28 +43,6 @@ public class MusicLibraryController {
 
 
     //ADD
-  /*  @PostMapping(value = "/musicpiece/submit")
-    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
-        Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("musicPieceId", id.toString());
-        responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
-    }
-*/
-    @PostMapping(value = "/musicpiece/submit")
-    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
-        Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("musicPieceId", id.toString());
-        responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
-    }
-
-    @PostMapping(value = "/createmusicpiece")
-    public ResponseEntity postRating(@RequestBody MusicPieceDTO dto){
-        return new ResponseEntity<>(musicLibraryService.addMusicPiece(dto), HttpStatus.CREATED);
-    }
 
     @PostMapping(value = "/setRating")
     public ResponseEntity postRating(@RequestBody RatingDTO dto){
@@ -131,32 +109,6 @@ public class MusicLibraryController {
         response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
         response.setHeader("Content-Length", String.valueOf(file.length()));
         return new FileSystemResource(file);
-    }
-
-    @PostMapping(value = "/upload/music_piece")
-    @ResponseStatus(HttpStatus.CREATED)
-    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
-            musicLibraryService.addMusicPieceEnMusicFile(musicPiecePostDTO, file);
-            return HttpStatus.CREATED;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
-    }
-
-    @PostMapping(value = "/upload/music_piece_full")
-    @ResponseStatus(HttpStatus.OK)
-    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("music_file") MultipartFile musicFile, @RequestParam("partituur_file") MultipartFile partituur) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
-            musicLibraryService.addMusicPiece(musicPiecePostDTO, musicFile, partituur);
-            return HttpStatus.OK;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
     }
 
     @PostMapping(value = "/upload/music_piece_2")
