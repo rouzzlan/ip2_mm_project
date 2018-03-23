@@ -6,9 +6,11 @@ import be.kdg.musicmaker.lesson.repo.*;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import be.kdg.musicmaker.model.*;
 import be.kdg.musicmaker.user.repo.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,8 @@ public class LessonService {
     private UserRepository userRepository;
     private MusicLibraryRepository musicLibraryRepository;
     private ExerciseRepository exerciseRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public LessonService(LessonTypeRepository lessonTypeRepository,
@@ -68,6 +72,9 @@ public class LessonService {
 
     public void addLesson(LessonDTO lessonDTO) {
         Lesson lesson = new Lesson(lessonDTO);
+        LessonType lessonType = lessonTypeRepository.findOne(Long.parseLong(lessonDTO.getLessonType()));
+        lesson.setLessonType(lessonType);
+
         lessonRepository.save(lesson);
     }
 
@@ -88,13 +95,12 @@ public class LessonService {
         return lessons;
     }
 
-    public void updateLesson(LessonDTO lessonDTO, long idLong) {
+    public void updateLesson(LessonDTO lessonDTO, long idLong) throws IOException {
         Lesson lesson = lessonRepository.findOne(idLong);
+        LessonType lessonType = lessonTypeRepository.findOne(Long.parseLong(lessonDTO.getLessonType()));
 
-        lesson.setLessonType(lessonDTO.getLessonType());
-        lesson.setPlaylist(lessonDTO.getPlaylist());
+        lesson.setLessonType(lessonType);
         lesson.setPrice(lessonDTO.getPrice());
-        lesson.setSeriesOfLessons(lessonDTO.getSeriesOfLessons());
         lesson.setState(lessonDTO.getState());
         lesson.setTime(lessonDTO.getTime());
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -46,7 +47,7 @@ public class LessonController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateLesson(@RequestBody LessonDTO lessonDTO, @RequestParam String id) {
+    public ResponseEntity<String> updateLesson(@RequestBody LessonDTO lessonDTO, @RequestParam String id) throws IOException {
         long idLong = Long.parseLong(id);
         lessonService.updateLesson(lessonDTO, idLong);
         return ResponseEntity.status(HttpStatus.CONTINUE).build();
