@@ -407,14 +407,14 @@ public class MusicLibraryTest {
 
     @Test
     public void deleteTest() throws Exception {
-        Long id = 1L;
+        Long id = 2L;
         mockMvc.perform(delete("/music_library//musicpiece/delete/"+id)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
     }
     @Test
     public void deleteTestAndVerify() throws Exception {
-        Long id = 1L;
+        Long id = 3L;
         mockMvc.perform(delete("/music_library//musicpiece/delete/"+id)
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
                 .andExpect(status().isOk());
