@@ -42,7 +42,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 //=============================================================================================
 
                 //MUSIC-LIB
-                .antMatchers("/music_library/**").authenticated()
+                //.antMatchers("/music_library/**").hasAnyRole("LEERLING", "LESGEVER", "BEHEERDER")
 
                 //EVENT
                 .antMatchers("/event/**").authenticated()
@@ -55,6 +55,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
                 .antMatchers("/chatjs").permitAll()
                 .antMatchers("/app/chat/**").permitAll()
                 .antMatchers("/topic/chat/**").permitAll()
+                //SEARCHBAR
+               // .antMatchers("/search").authenticated()
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler())

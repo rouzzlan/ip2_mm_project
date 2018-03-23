@@ -12,5 +12,8 @@ public interface MusicLibraryRepository extends JpaRepository<MusicPiece, Long> 
     @Query("select mp from MusicPiece mp where mp.title = ?1")
     List<MusicPiece> findByTitle(String title);
 
+    @Query("select mp from MusicPiece mp where mp.id = ?1")
+    List<MusicPiece> findById(Long id);
 
+    MusicPiece getMusicPieceByTitle(String title);
 }

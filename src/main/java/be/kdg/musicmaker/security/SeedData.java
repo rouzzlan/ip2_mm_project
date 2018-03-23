@@ -54,6 +54,19 @@ public class SeedData {
     private Instrument instrument3 = new Instrument("gitaar", "klassiek", InstrumentSort.SNAAR, "6 snaren");
     private Instrument instrument4 = new Instrument("ukelele", "klassiek", InstrumentSort.SNAAR, "5 snaren");
 
+    //MUSICPIECES
+/*    private MusicPiece musicpiece = new MusicPiece("Sweet Home Alabama", "Lynyrd Skynyrd", l, "Love",    " [D]Big[Cadd9] wheels [G]keep on turning\n[D]Carry [Cadd9] me home [G]to see my kin\n[D]Singing[Cadd9]  songs [G]about the south land\n[D]I miss [Cadd9] 'ole' [G]'bamy once again and I think it's a sin\n\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]\n\n[D]Well I heard [Cadd9] Mr. Young [G]sing about her\n[D]Well I heard [Cadd9] old Neil [G]put her down\n[D]Well I hope Neil[Cadd9]  [G]Young will remember\n[D]A southern[Cadd9]  man don’t [G]need him around, anyhow\n\n[D]Sweet [Cadd9] home Alabama[D], [Cadd9] where [G]the skies are so blue\n[D]Sweet [Cadd9] home Alabama, lord I’m [Cadd9] coming [G]home to you.\n\n[F] [C]\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]\n\n[D]In Birmin[Cadd9] gham they [G]love the [F]Gov'nor, [C]boo-hoo[D]-hoo\n[D]Now we all [Cadd9] did what [G]we could do\n[D]Now water[Cadd9] gate [G]doesn't bother me\n[D]Does you [Cadd9] conscience [G]bother you, (now tell the truth!)\n\n[D]Sweet [Cadd9] home [G]Alabama[D], where the skies [G]are so blue\n[D]Sweet [Cadd9] home [G]Alabama[D], lord I’m coming [G]home to you. Here I come\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n   [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n\n[D]Now [Cadd9]Muscle Shoals has got the[G] Swappers\n[D] And they've been known to pick a song or [G]two (yes we do)\n[D]Lord they get me off so [G]much\n[D]They pick me up when I'm feeling [G]blue, Now how about you?\n\n[D]Sweet [Cadd9]home [D]Alab[G]ama, where the[Cadd9] skies are so [G]blue\n[D]Sweet [Cadd9]home [D]Alab[G]ama, lord I’m[Cadd9] coming home to [G]you\n\n[D]Sweet [Cadd9]home Alab[G]ama (Oh sweet home baby)\n[D]Where the [Cadd9]skies are so [G]blue (And the governor's true)\n[D]Sweet [Cadd9]Home Alab[G]ama, (Lord, yeah)\n[D]Lord, I'm [Cadd9]coming home to [G]you\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]", "rock", "gitaarakkoorden", "https://www.youtube.com/watch?v=2fntQxhkht4","akkoord","easy",null,null);
+    private MusicPiece musicpiece1 = new MusicPiece("Havana","Camilla Cabello", l,"Longing", "test[a]", "Pop","gitaarakkoorden", "https://www.youtube.com/watch?v=6tEZoZOh8MM", "akkoord","easy",null,null);
+    private MusicPiece musicpiece2 = new MusicPiece("You'll be in my heart", "Phil Collins", l, "Disney",null, "Pop","pianoakkoorden", null, "muziekstuk","average","../../../../../../resources/musicFiles/Youll_Be_In_My_Heart.mp3","../../../../../../resources/musicFiles/Youll_Be_In_My_Heart.mxl");
+   private MusicPiece musicpiece3 = new MusicPiece();
+    private MusicPiece musicpiece4 = new MusicPiece();
+    private MusicPiece musicpiece5 = new MusicPiece();
+    private MusicPiece musicpiece6 = new MusicPiece();*/
+
+
+
+
+
     //BANDS
     private Band band = new Band("The X-Nuts");
     private Band band1 = new Band("Band1");
@@ -118,7 +131,9 @@ public class SeedData {
         seedLessonTypes();
         seedLessons();
         addStudentsoLessons();
+       seedratings();
     }
+
 
     private void seedRoles() {
         if (userService.isRolesEmpty()) {
@@ -214,6 +229,9 @@ public class SeedData {
         }
     }
 
+
+
+
     private void seedMuziekstukken() throws URISyntaxException, IOException {
         if (musicLibService.isLanguagesEmpty()) {
             LanguagesImporter languagesImporter = new LanguagesImporter();
@@ -223,33 +241,89 @@ public class SeedData {
             LOG.info("Languages added");
         }
         if (musicLibService.isMusicLibEmpty()) {
+            Language musipieceLanguage = musicLibService.getLanguage("English");
+
             ClassLoader classLoader = getClass().getClassLoader();
+            Language language = musicLibService.getLanguage("English");
             File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
             byte[] fileArray = Files.readAllBytes(musicFile.toPath());
             MusicPiece musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("Mozart");
             musicPiece1.setTitle("Requiem piano Mozart. Lacrymosa, requiem in D minor, K 626 III sequence");
             musicPiece1.setMusicFile("Requiem-piano-mozart-lacrymosa.mp3", fileArray);
+            musicPiece1.setTypeofpiece("muziekpartituren");
+            musicPiece1.setTopic("klassiek");
+            musicPiece1.setGenre("Klassieke muziek");
+            musicPiece1.setLanguage(musipieceLanguage);
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
 
             // 2e musicfile
-            Language language = musicLibService.getLanguage("English");
             musicFile = new File(classLoader.getResource("musicFiles/how_to_save_a_life_-_the_fray.mp3").toURI());
             fileArray = Files.readAllBytes(musicFile.toPath());
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("The fray");
             musicPiece1.setTitle("How to save a life");
-            musicPiece1.setLanguage(language);
+            musicPiece1.setLanguage(musipieceLanguage);
+            musicPiece1.setTypeofpiece("muziekpartituren");
+            musicPiece1.setTopic("klassiek");
+            musicPiece1.setGenre("Klassieke muziek");
             musicPiece1.setMusicFile(musicFile.getName(), fileArray);
             File partituur = new File(classLoader.getResource("partituren/How_To_Save_A_Life_-_The_Fray.mxl").toURI());
             fileArray = Files.readAllBytes(partituur.toPath());
             musicPiece1.setPartituurFile(partituur.getName(), fileArray);
-
             musicLibService.addMusicPiece(musicPiece1);
-
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+
+            musicPiece1 = new MusicPiece();
+            musicPiece1.setTitle("Sweet Home Alabama");
+            musicPiece1.setArtist("Lynyrd Skynyrd");
+            musicPiece1.setTopic("love");
+            musicPiece1.setChordText("[D]Big[Cadd9] wheels [G]keep on turning\n[D]Carry [Cadd9] me home [G]to see my kin\n[D]Singing[Cadd9]  songs [G]about the south land\n[D]I miss [Cadd9] 'ole' [G]'bamy once again and I think it's a sin\n\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]"/*\n\n[D]Well I heard [Cadd9] Mr. Young [G]sing about her\n[D]Well I heard [Cadd9] old Neil [G]put her down\n[D]Well I hope Neil[Cadd9]  [G]Young will remember\n[D]A southern[Cadd9]  man don’t [G]need him around, anyhow\n\n[D]Sweet [Cadd9] home Alabama[D], [Cadd9] where [G]the skies are so blue\n[D]Sweet [Cadd9] home Alabama, lord I’m [Cadd9] coming [G]home to you.\n\n[F] [C]\n[D] [Cadd9] [G]\n[D] [Cadd9] [G]\n\n[D]In Birmin[Cadd9] gham they [G]love the [F]Gov'nor, [C]boo-hoo[D]-hoo\n[D]Now we all [Cadd9] did what [G]we could do\n[D]Now water[Cadd9] gate [G]doesn't bother me\n[D]Does you [Cadd9] conscience [G]bother you, (now tell the truth!)\n\n[D]Sweet [Cadd9] home [G]Alabama[D], where the skies [G]are so blue\n[D]Sweet [Cadd9] home [G]Alabama[D], lord I’m coming [G]home to you. Here I come\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n   [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]\n\n[D]Now [Cadd9]Muscle Shoals has got the[G] Swappers\n[D] And they've been known to pick a song or [G]two (yes we do)\n[D]Lord they get me off so [G]much\n[D]They pick me up when I'm feeling [G]blue, Now how about you?\n\n[D]Sweet [Cadd9]home [D]Alab[G]ama, where the[Cadd9] skies are so [G]blue\n[D]Sweet [Cadd9]home [D]Alab[G]ama, lord I’m[Cadd9] coming home to [G]you\n\n[D]Sweet [Cadd9]home Alab[G]ama (Oh sweet home baby)\n[D]Where the [Cadd9]skies are so [G]blue (And the governor's true)\n[D]Sweet [Cadd9]Home Alab[G]ama, (Lord, yeah)\n[D]Lord, I'm [Cadd9]coming home to [G]you\n\n[D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G] [D] [Cadd9] [G]"*/);
+            musicPiece1.setGenre( "rock");
+            musicPiece1.setInstrumentType("gitaarakkoorden");
+            musicPiece1.setYoutubeUrl("https://www.youtube.com/watch?v=2fntQxhkht4");
+            musicPiece1.setTypeofpiece("akkoord");
+            musicPiece1.setDifficulty("easy");
+            musicLibService.addMusicPiece(musicPiece1);
+            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+
+            musicPiece1 = new MusicPiece();
+            musicPiece1.setTitle("Havana");
+            musicPiece1.setArtist("Camilla Cabello");
+            musicPiece1.setTopic("Ode");
+            musicPiece1.setChordText("[A]test");
+            musicPiece1.setGenre( "pop");
+            musicPiece1.setInstrumentType("gitaarakkoorden");
+            musicPiece1.setYoutubeUrl("https://www.youtube.com/watch?v=6tEZoZOh8MM");
+            musicPiece1.setTypeofpiece("akkoord");
+            musicPiece1.setLanguage(musipieceLanguage);
+
+            musicPiece1.setDifficulty("easy");
+            musicLibService.addMusicPiece(musicPiece1);
+            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+
+
+            musicFile = new File(classLoader.getResource("musicFiles/Youll_Be_In_My_Heart.mp3").toURI());
+            fileArray = Files.readAllBytes(musicFile.toPath());
+            musicPiece1 = new MusicPiece();
+            musicPiece1.setArtist("Phil Collins");
+            musicPiece1.setTitle("You'll be in my heart");
+            musicPiece1.setLanguage(musipieceLanguage);
+            musicPiece1.setTypeofpiece("muziekpartituren");
+            musicPiece1.setTopic("Disney");
+            musicPiece1.setGenre("Pop");
+            musicPiece1.setDifficulty("average");
+            musicPiece1.setInstrumentType("pianoakkoorden");
+            musicPiece1.setMusicFile(musicFile.getName(), fileArray);
+            partituur = new File(classLoader.getResource("musicFiles/Youll_Be_In_My_Heart.mxl").toURI());
+            fileArray = Files.readAllBytes(partituur.toPath());
+            musicPiece1.setPartituurFile(partituur.getName(), fileArray);
+            musicLibService.addMusicPiece(musicPiece1);
+            LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
+
+
 //
         }
 
@@ -358,4 +432,89 @@ public class SeedData {
 
         LOG.info(String.format("%-6s ADDED TO LESSONS", "TEACHERS"));
     }
+
+    private void seedratings() {
+        MusicPieceRating mpr;
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(1));
+        mpr.setUser(new Long(1));
+        mpr.setRating(4);
+        musicLibService.addRating(mpr);
+
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(2));
+        mpr.setUser(new Long(1));
+        mpr.setRating(3);
+        musicLibService.addRating(mpr);
+
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(3));
+        mpr.setUser(new Long(1));
+        mpr.setRating(5);
+        musicLibService.addRating(mpr);
+
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(4));
+        mpr.setUser(new Long(1));
+        mpr.setRating(4);
+        musicLibService.addRating(mpr);
+
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(1));
+        mpr.setUser(new Long(2));
+        mpr.setRating(2);
+        musicLibService.addRating(mpr);
+
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(6));
+        mpr.setUser(new Long(6));
+        mpr.setRating(4);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(3));
+        mpr.setUser(new Long(2));
+        mpr.setRating(3);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(4));
+        mpr.setUser(new Long(8));
+        mpr.setRating(2);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(2));
+        mpr.setUser(new Long(5));
+        mpr.setRating(1);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(6));
+        mpr.setUser(new Long(3));
+        mpr.setRating(0);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(5));
+        mpr.setUser(new Long(8));
+        mpr.setRating(5);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(4));
+        mpr.setUser(new Long(3));
+        mpr.setRating(4);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(3));
+        mpr.setUser(new Long(5));
+        mpr.setRating(3);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(2));
+        mpr.setUser(new Long(4));
+        mpr.setRating(2);
+        musicLibService.addRating(mpr);
+        mpr = new MusicPieceRating();
+        mpr.setMusicpiece(new Long(1));
+        mpr.setUser(new Long(7));
+        mpr.setRating(3);
+        musicLibService.addRating(mpr);
+    }
+
 }
