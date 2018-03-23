@@ -119,9 +119,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
-                                new Playlist(),
-                                null,
-                                new SeriesOfLessons(), LocalDateTime.now().toString()
+                                "1",
+                                LocalDateTime.now().toString()
                         )))).andExpect(status().isCreated());
     }
 
@@ -132,9 +131,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
-                                new Playlist(),
-                                null,
-                                new SeriesOfLessons(), LocalDateTime.now().toString()
+                                "1",
+                                LocalDateTime.now().toString()
                         )))).andExpect(status().isCreated());
     }
 
@@ -145,9 +143,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(
                         new LessonDTO(50, 25.0, "open",
-                                new Playlist(),
-                                null,
-                                new SeriesOfLessons(), LocalDateTime.now().toString()
+                                "1",
+                                LocalDateTime.now().toString()
                         )))).andExpect(status().isForbidden());
     }
 
@@ -162,9 +159,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
-                        new Playlist(),
-                        null,
-                        new SeriesOfLessons(), LocalDateTime.now().toString()
+                        "1",
+                        LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isContinue());
@@ -185,9 +181,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
-                        new Playlist(),
-                        null,
-                        new SeriesOfLessons(), LocalDateTime.now().toString()
+                        "1",
+                        LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isContinue());
@@ -208,9 +203,8 @@ public class TestLesson {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("id", lesson.getId().toString())
                 .content(objectMapper.writeValueAsString(new LessonDTO(50, 35.0, "open",
-                        new Playlist(),
-                        null,
-                        new SeriesOfLessons(), LocalDateTime.now().toString()
+                        "1",
+                        LocalDateTime.now().toString()
                 ))))
                 .andDo(print())
                 .andExpect(status().isForbidden());
