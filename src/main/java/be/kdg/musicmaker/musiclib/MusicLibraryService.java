@@ -13,6 +13,7 @@ import be.kdg.musicmaker.musiclib.repo.MusicLibraryRatingRepository;
 import be.kdg.musicmaker.musiclib.repo.MusicLibraryRepository;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.apache.commons.codec.language.bm.Lang;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,23 +41,31 @@ public class MusicLibraryService {
 
     public MusicPiece addMusicPiece(MusicPieceDTO musicPiece) {
         MusicPiece mp= map(musicPiece, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
+        mp.setLanguage(language);
         musicLibraryRepository.save(mp);
         return mp;
     }
     public void addMusicPieceEnPartituur(MusicPieceDTO musicPieceDTO, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPieceEnMusicFile(MusicPieceDTO musicPieceDTO, MultipartFile musicFile) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPieceFull(MusicPieceDTO musicPieceDTO, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPieceDTO, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
         musicLibraryRepository.save(mp);
@@ -64,15 +73,19 @@ public class MusicLibraryService {
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile file) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(file.getOriginalFilename(), file.getBytes());
         musicLibraryRepository.save(mp);
     }
 
     public void addMusicPiece(MusicPieceDTO musicPiece, MultipartFile musicFile, MultipartFile partituur) throws IOException {
         MusicPiece mp = map(musicPiece, MusicPiece.class);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPiece.getLanguage());
+        mp.setLanguage(language);
         mp.setMusicFile(musicFile.getOriginalFilename(), musicFile.getBytes());
         mp.setPartituurFile(partituur.getOriginalFilename(), partituur.getBytes());
-//        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
+        mp.setLanguage(getLanguage(musicPiece.getLanguage()));
         musicLibraryRepository.save(mp);
     }
 
@@ -127,6 +140,8 @@ public class MusicLibraryService {
     public void update(MusicPieceDTO musicPieceDTO, Long id) {
         MusicPiece musicPiece = musicLibraryRepository.getOne(id);
         mapDTO(musicPieceDTO, musicPiece);
+        Language language = languagesRepository.findLanguageByLanguageName(musicPieceDTO.getLanguage());
+        musicPiece.setLanguage(language);
         musicLibraryRepository.save(musicPiece);
     }
 
@@ -210,6 +225,7 @@ public class MusicLibraryService {
         mapperFactory.classMap(MusicPiece.class, MusicPieceDTO.class).
                 mapNulls(false).
                 mapNullsInReverse(false)
+                .exclude("language")
                 .byDefault()
                 .register();
         return mapperFactory.getMapperFacade().map(s, type);

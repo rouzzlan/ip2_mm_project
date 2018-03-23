@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -422,8 +423,7 @@ public class FileTransferTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andReturn();
         MusicPieceDTO musicPieceGetDTOReceived = objectMapper.readValue(result.getResponse().getContentAsString(), MusicPieceDTO.class);
 
-
-
+        assertNotNull(musicPieceGetDTOReceived.getId());
 
         result = mockMvc.perform(get("/music_library/get_partituur_file/"+ musicPieceGetDTOReceived.getId())
                 .header("Authorization", "Bearer " + ACCESS_TOKEN_Admin))
