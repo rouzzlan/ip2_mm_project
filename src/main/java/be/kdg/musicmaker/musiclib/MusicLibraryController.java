@@ -1,5 +1,6 @@
 package be.kdg.musicmaker.musiclib;
 
+import be.kdg.musicmaker.model.Language;
 import be.kdg.musicmaker.model.MusicPiece;
 import be.kdg.musicmaker.musiclib.dto.MusicPieceDTO;
 import be.kdg.musicmaker.musiclib.dto.RatingDTO;
@@ -32,35 +33,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/music_library")
 @SessionAttributes("music_piece")
 public class MusicLibraryController {
-    @Autowired
     MusicLibraryService musicLibraryService;
+    @Autowired
+    public MusicLibraryController(MusicLibraryService musicLibraryService) {
+        this.musicLibraryService = musicLibraryService;
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(MusicLibraryController.class);
 
 
     //ADD
-  /*  @PostMapping(value = "/musicpiece/submit")
-    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
-        Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("musicPieceId", id.toString());
-        responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
-    }
-*/
-    @PostMapping(value = "/musicpiece/submit")
-    public ResponseEntity<?> postUser(@RequestBody MusicPieceDTO musicPieceDTO) {
-        Long id = musicLibraryService.createMusicPiece(musicPieceDTO);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("musicPieceId", id.toString());
-        responseHeaders.set("MusicPiece", musicPieceDTO.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).headers(responseHeaders).build();
-    }
-
-    @PostMapping(value = "/createmusicpiece")
-    public ResponseEntity postRating(@RequestBody MusicPieceDTO dto){
-        return new ResponseEntity<>(musicLibraryService.addMusicPiece(dto), HttpStatus.CREATED);
-    }
 
     @PostMapping(value = "/setRating")
     public ResponseEntity postRating(@RequestBody RatingDTO dto){
@@ -78,7 +60,11 @@ public class MusicLibraryController {
 
     @GetMapping(value = "/musicpiece/{id}")
     public  HttpEntity<MusicPieceDTO> getMusicPiece(@PathVariable Long id) {
-        return new ResponseEntity<MusicPieceDTO>(musicLibraryService.getMusicPieceDTOById(id), HttpStatus.OK);
+        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceDTOById(id);
+        if(musicPiece == null){
+            return new ResponseEntity<>(musicPiece, HttpStatus.GONE);
+        }
+        return new ResponseEntity<>(musicPiece, HttpStatus.OK);
     }
 
 
@@ -87,6 +73,11 @@ public class MusicLibraryController {
         return new ResponseEntity<List<MusicPieceDTO>>(musicLibraryService.getMusicPieces(), HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/languages")
+    public HttpEntity<List<Language>> getLanguages() {
+        return new ResponseEntity<>(musicLibraryService.getLanguages(), HttpStatus.OK);
+    }
 
     //EDIT
     @PatchMapping("/update/musicpiece/{id}")
@@ -122,32 +113,6 @@ public class MusicLibraryController {
         response.setHeader("Content-Disposition", "inline; filename=" + file.getName());
         response.setHeader("Content-Length", String.valueOf(file.length()));
         return new FileSystemResource(file);
-    }
-
-    @PostMapping(value = "/upload/music_piece")
-    @ResponseStatus(HttpStatus.CREATED)
-    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("file") MultipartFile file) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
-            musicLibraryService.addMusicPiece(musicPiecePostDTO, file);
-            return HttpStatus.CREATED;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
-    }
-
-    @PostMapping(value = "/upload/music_piece_full")
-    @ResponseStatus(HttpStatus.OK)
-    public HttpStatus postMusicPiece(@RequestParam(value = "musicpiece_info") String info, @RequestParam("music_file") MultipartFile musicFile, @RequestParam("partituur_file") MultipartFile partituur) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            MusicPieceDTO musicPiecePostDTO = mapper.readValue(info, MusicPieceDTO.class);
-            musicLibraryService.addMusicPiece(musicPiecePostDTO, musicFile, partituur);
-            return HttpStatus.OK;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
     }
 
     @PostMapping(value = "/upload/music_piece_2")
@@ -203,6 +168,14 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
+    @RequestMapping(value = "/get_music_piece/title", method = GET)
+    public HttpEntity<MusicPieceDTO> getMusicPieceByTitle(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String musicPieceName = request.getParameter("title");
+        MusicPieceDTO musicPiece = musicLibraryService.getMusicPieceByTitle(musicPieceName);
+
+        return new ResponseEntity<MusicPieceDTO>(musicPiece, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/get_music_piece/{id}", method = GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public @ResponseBody
     Resource getSteamingFile(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
@@ -219,10 +192,8 @@ public class MusicLibraryController {
         return new FileSystemResource(file);
     }
 
-    //OTHER
-
-  /* //DELETE
-  @DeleteMapping(value = "/musicpiece/submit/file/{id}")
+   //DELETE
+  @DeleteMapping(value = "/musicpiece/delete/{id}")
     public ResponseEntity<?> deleteMusicPiece(@PathVariable("id") Long id) {
         try {
             musicLibraryService.deleteMusicPiece(id);
@@ -231,5 +202,5 @@ public class MusicLibraryController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-*/
+
 }

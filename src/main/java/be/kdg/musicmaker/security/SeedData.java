@@ -241,6 +241,8 @@ public class SeedData {
             LOG.info("Languages added");
         }
         if (musicLibService.isMusicLibEmpty()) {
+            Language musipieceLanguage = musicLibService.getLanguage("English");
+
             ClassLoader classLoader = getClass().getClassLoader();
             Language language = musicLibService.getLanguage("English");
             File musicFile = new File(classLoader.getResource("musicFiles/Requiem-piano-mozart-lacrymosa.mp3").toURI());
@@ -252,7 +254,7 @@ public class SeedData {
             musicPiece1.setTypeofpiece("muziekpartituren");
             musicPiece1.setTopic("klassiek");
             musicPiece1.setGenre("Klassieke muziek");
-            musicPiece1.setLanguage("Engels");
+            musicPiece1.setLanguage(musipieceLanguage);
             musicLibService.addMusicPiece(musicPiece1);
 
             LOG.info(String.format("%-6s ADDED ", musicPiece1.getTitle()));
@@ -263,7 +265,7 @@ public class SeedData {
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("The fray");
             musicPiece1.setTitle("How to save a life");
-            musicPiece1.setLanguage("Engels");
+            musicPiece1.setLanguage(musipieceLanguage);
             musicPiece1.setTypeofpiece("muziekpartituren");
             musicPiece1.setTopic("klassiek");
             musicPiece1.setGenre("Klassieke muziek");
@@ -296,7 +298,7 @@ public class SeedData {
             musicPiece1.setInstrumentType("gitaarakkoorden");
             musicPiece1.setYoutubeUrl("https://www.youtube.com/watch?v=6tEZoZOh8MM");
             musicPiece1.setTypeofpiece("akkoord");
-            musicPiece1.setLanguage("Engels");
+            musicPiece1.setLanguage(musipieceLanguage);
 
             musicPiece1.setDifficulty("easy");
             musicLibService.addMusicPiece(musicPiece1);
@@ -308,7 +310,7 @@ public class SeedData {
             musicPiece1 = new MusicPiece();
             musicPiece1.setArtist("Phil Collins");
             musicPiece1.setTitle("You'll be in my heart");
-            musicPiece1.setLanguage("Engels");
+            musicPiece1.setLanguage(musipieceLanguage);
             musicPiece1.setTypeofpiece("muziekpartituren");
             musicPiece1.setTopic("Disney");
             musicPiece1.setGenre("Pop");

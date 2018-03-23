@@ -58,7 +58,7 @@ public class UserController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<String> updateLesson(@RequestBody UserDTO userDTO) {
         userService.updateUser(userDTO);
-        return ResponseEntity.status(HttpStatus.CONTINUE).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
