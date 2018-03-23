@@ -3,6 +3,7 @@ package be.kdg.musicmaker.model;
 import be.kdg.musicmaker.lesson.dto.LessonTypeDTO;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "LessonType")
@@ -61,6 +62,9 @@ public class LessonType {
     public void setName(String name) {
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "lessonType", cascade = {CascadeType.ALL})
+    private List<Lesson> lessons;
 
     @Override
     public String toString() {
